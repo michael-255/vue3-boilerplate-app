@@ -7,22 +7,38 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Build files
 node_modules
-.DS_Store
 dist
 dist-ssr
-coverage
-*.local
 
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test suite files
+coverage
 /cypress/videos/
 /cypress/screenshots/
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+# .vscode/* # Leaving .vscode on purpose
+# !.vscode/extensions.json # Leaving .vscode on purpose
 .idea
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env
+.env.test
+*.local

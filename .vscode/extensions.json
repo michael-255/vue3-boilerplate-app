@@ -1,3 +1,23 @@
 {
-  "recommendations": ["johnsoncodehk.volar", "johnsoncodehk.vscode-typescript-vue-plugin"]
+  // See http://go.microsoft.com/fwlink/?LinkId=827846
+  // for the documentation about the extensions.json format
+  "recommendations": [
+    // Syntax highlighting for Vue/TypeScript
+    "johnsoncodehk.volar",
+    "johnsoncodehk.vscode-typescript-vue-plugin",
+    // JavaScript linting
+    "dbaeumer.vscode-eslint",
+    // CSS, LESS, SCSS linting
+    "stylelint.vscode-stylelint",
+    // MarkDown linting
+    "DavidAnson.vscode-markdownlint",
+    // Code formatting
+    "esbenp.prettier-vscode",
+    // Git information in editor
+    "eamodio.gitlens",
+    // Open server in browser
+    "ritwickdey.liveserver",
+    // Better VSCode icons
+    "pkief.material-icon-theme"
+  ]
 }

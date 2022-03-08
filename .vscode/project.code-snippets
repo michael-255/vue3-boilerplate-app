@@ -1,0 +1,19 @@
+{
+  "test": {
+    "scope": "typescript",
+    "prefix": "test (Jest 'it' func)",
+    "description": "Jest test function",
+    "body": [
+      "it('${0:should test example...}', () => {",
+      "\texpect(true).toBe(false)",
+      "})"
+    ]
+  },
+
+  "describe": {
+    "scope": "typescript",
+    "prefix": "describe (Jest describe func)",
+    "description": "Jest 'describe' function",
+    "body": ["describe('${0:example}', () => {", "\t", "})"]
+  }
+}
