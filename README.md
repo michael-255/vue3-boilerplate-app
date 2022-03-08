@@ -67,8 +67,8 @@ install the `c8` package when you first run `vitest`.
 Recommended extensions file.
 
 ```json
+// FILE: ~/.vscode/extensions.json
 {
-  // FILE: ~/.vscode/extensions.json
   // See http://go.microsoft.com/fwlink/?LinkId=827846
   // for the documentation about the extensions.json format
   "recommendations": [
@@ -118,7 +118,7 @@ Code snippets file.
 
 Good default ignore setup for this Vue 3 project.
 
-```sh
+```bash
 # FILE: ~/.gitignore
 # Logs
 logs
@@ -193,7 +193,7 @@ module.exports = {
 
 Create Prettier ignore file so it won't format anything in the defined directories.
 
-```sh
+```bash
 # FILE: ~/.prettierignore
 /node_modules/**
 /dist/**
