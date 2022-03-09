@@ -2,6 +2,30 @@
 
 This template should help get you started developing with Vue 3 in Vite.
 
+```bash
+###############################################################################
+#                                                                             #
+#                           POST CLONING REMINDERS:                           #
+#                                                                             #
+#  - Update package.json file                                                 #
+#    - "name"                                                                 #
+#    - "description"                                                          #
+#    - "version"                                                              #
+#    - "repository"                                                           #
+#    - "bugs"                                                                 #
+#    - "homepage"                                                             #
+#  - Update this README.md file                                               #
+#    - Remove unneeded sections (even this one)                               #
+#    - Add detailed project description below heading                         #
+#  - Update GitHub repository settings                                        #
+#    - Description                                                            #
+#    - Website                                                                #
+#    - Topics                                                                 #
+#    - The "Include in the home page" section                                 #
+#                                                                             #
+###############################################################################
+```
+
 ## Table of Contents
 
 - [Usage](#usage)
@@ -38,6 +62,18 @@ Build and deploy the `dist` directory.
 
 ```sh
 npm run deploy
+```
+
+Check for outdated packages.
+
+```sh
+npm outdated
+```
+
+Update packages based on `package.json` version settings.
+
+```sh
+npm upgrade
 ```
 
 ## Project Setup

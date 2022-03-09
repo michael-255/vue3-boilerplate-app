@@ -1,9 +1,10 @@
 {
   "name": "vue3-boilerplate-app",
-  "description": "",
+  "description": "Vue 3 Boilerplate app setup with packages I want to use and more!",
   "version": "0.0.0",
   "author": "Michael Joy",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
