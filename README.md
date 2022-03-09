@@ -251,6 +251,12 @@ you'll need to copy over based on your selection.
 
 <https://quasar.dev/start/vite-plugin>
 
+### Utils
+
+Ported several utils with tests over that I've built over time.
+
+`~/src/utils`
+
 ## Additional Notes
 
 ### Recommended IDE Setup
