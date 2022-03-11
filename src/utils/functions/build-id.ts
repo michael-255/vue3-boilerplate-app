@@ -1,3 +1,5 @@
+import { BuildIdOptions } from '../../app.config'
+
 type buildIdParams = {
   segmentLengths?: number[]
   delimiter?: string
@@ -12,7 +14,7 @@ type buildIdParams = {
 export function buildIdFunction({
   segmentLengths = [4, 4, 4],
   delimiter = '-',
-}: buildIdParams = {}): Function {
+}: buildIdParams = {}): () => string {
   if (segmentLengths.length < 1) {
     throw new Error('segmentLengths parameter must have at least one element')
   } else if (segmentLengths.some((el) => typeof el !== 'number' || el < 1)) {
@@ -44,3 +46,8 @@ export function buildIdFunction({
     return idStr.toUpperCase()
   }
 }
+
+/**
+ * Preconfigured createId
+ */
+export const createId = buildIdFunction(BuildIdOptions)

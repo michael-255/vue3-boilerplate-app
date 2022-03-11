@@ -1,3 +1,5 @@
+import { LoggerOptions } from '../../app.config'
+
 type styleProps = {
   log: string
   warn: string
@@ -15,15 +17,15 @@ type loggerParams = {
  * @param debug Debug boolean hides logger messages when false
  */
 export class Logger {
-  name: string
-  debug: boolean
-  style: styleProps
+  private name: string
+  private debug: boolean
+  private style: styleProps
 
   constructor({ name = 'Logger', debug = true }: loggerParams = {}) {
     this.name = `%c${name}`
     this.debug = !!debug
 
-    const baseStyle: string = 'border-radius: 3px; padding: 2px 4px; color: white;'
+    const baseStyle = 'border-radius: 3px; padding: 2px 4px; color: white;'
     this.style = {
       log: `${baseStyle} background-color: #2196F3;`,
       warn: `${baseStyle} background-color: #FF9800;`,
@@ -61,3 +63,8 @@ export class Logger {
     }
   }
 }
+
+/**
+ * Preconfigured Logger
+ */
+export const logger = new Logger(LoggerOptions)

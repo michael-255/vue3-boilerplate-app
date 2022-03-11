@@ -287,11 +287,20 @@ you'll need to copy over based on your selection.
 
 <https://quasar.dev/start/vite-plugin>
 
+### Dexie (IndexedDB)
+
+Using this package to store the apps data in a structured, easy to use way. The files for it are at
+`~/src/database/LocalDatabase.ts` in this project.
+
+Installing the package.
+
+```sh
+npm i dexie
+```
+
 ### Utils
 
-Ported several utils with tests over that I've built over time.
-
-`~/src/utils`
+A handful of utilities that I've built with tests located at `~/src/utils/*` in the project.
 
 ## Additional Notes
 
