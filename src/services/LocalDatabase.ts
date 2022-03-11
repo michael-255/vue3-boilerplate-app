@@ -1,6 +1,6 @@
 import Dexie from 'dexie'
 import type { Table } from 'dexie'
-import { LocalDatabaseOptions } from '../app.config'
+import { LocalDatabaseOptions } from '../config'
 // Database Stores
 import { User, UserStore } from '../models/User'
 import type { IUser } from '../models/User'

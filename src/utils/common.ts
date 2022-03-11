@@ -31,18 +31,6 @@ export function downloadFile({
 }
 
 /**
- * Forces any non-array value into an array.
- * @param value Any value
- * @returns Value wrapped in an array
- */
-export function arrayWrap(value: any): any[] {
-  if (!Array.isArray(value)) {
-    value = [value]
-  }
-  return value
-}
-
-/**
  * Checks if an object or array has at least one element or property in it.
  * @param value Any object or array
  * @returns Boolean result

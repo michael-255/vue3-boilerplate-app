@@ -1,4 +1,4 @@
-import { LocalStorageOptions } from '../../app.config'
+import { LocalStorageOptions } from '../config'
 
 export type localStorageParams = {
   prefix?: string
@@ -23,7 +23,7 @@ export class LocalStorage {
     this.initialValue = initialValue
   }
 
-  initItems(itemKeys: string[]): void {
+  initItems(...itemKeys: string[]): void {
     itemKeys.forEach((key) => {
       const existingItemData = this.get(key)
       if (!existingItemData) {
@@ -32,7 +32,7 @@ export class LocalStorage {
     })
   }
 
-  clearItems(itemKeys: string[]): void {
+  clearItems(...itemKeys: string[]): void {
     itemKeys.forEach((key) => this.set(key, this.initialValue))
   }
 

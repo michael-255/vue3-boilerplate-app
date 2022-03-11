@@ -1,4 +1,4 @@
-import { createId } from '../utils/functions/build-id'
+import { createId } from '../utils/build-id'
 
 // Exports for LocalDatabase
 export const ExampleStore = Object.freeze({ examples: '&id, createdDate' })

@@ -1,4 +1,4 @@
-import { LoggerOptions } from '../../app.config'
+import { LoggerOptions } from '../config'
 
 type styleProps = {
   log: string

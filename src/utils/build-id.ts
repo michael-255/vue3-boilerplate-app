@@ -1,4 +1,4 @@
-import { BuildIdOptions } from '../../app.config'
+import { BuildIdOptions } from '../config'
 
 type buildIdParams = {
   segmentLengths?: number[]

@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { buildIdFunction } from '../functions/build-id'
+import { buildIdFunction } from '../build-id'
 
 describe('buildIdFunction', () => {
   test('should throw error if segmentLengths param has less then 1 element', () => {
