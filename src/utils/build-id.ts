@@ -1,5 +1,3 @@
-import { BuildIdOptions } from '../config'
-
 type buildIdParams = {
   segmentLengths?: number[]
   delimiter?: string
@@ -23,7 +21,7 @@ export function buildIdFunction({
     throw new Error('delimiter must be a string of length 1 or an empty string')
   }
 
-  // Returns new create id function that can be renamed and reused
+  // Returns new create id function that can be reused
   return () => {
     const createIdSeg = (len: number): string => {
       // Note: Math.random only consistently produces 8 unique characters
@@ -50,4 +48,4 @@ export function buildIdFunction({
 /**
  * Preconfigured createId
  */
-export const createId = buildIdFunction(BuildIdOptions)
+export const createId = buildIdFunction()

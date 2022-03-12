@@ -31,26 +31,25 @@ export function downloadFile({
 }
 
 /**
- * Checks if an object or array has at least one element or property in it.
- * @param value Any object or array
+ * Checks if the object has at least one property in it.
+ * @param obj Any object
  * @returns Boolean result
  */
-export function hasData(value: object | any[]): boolean {
-  // For array
-  if (value !== null && value !== undefined && Array.isArray(value) && value.length !== 0) {
-    return true
-  }
+export function isDataInObject(obj: object): boolean {
+  return (
+    obj !== null &&
+    obj !== undefined &&
+    typeof obj === 'object' &&
+    !Array.isArray(obj) &&
+    Object.keys(obj).length !== 0
+  )
+}
 
-  // For object
-  if (
-    value !== null &&
-    value !== undefined &&
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    Object.keys(value).length !== 0
-  ) {
-    return true
-  }
-
-  return false
+/**
+ * Checks if the array has at least one element in it.
+ * @param arr Any array
+ * @returns Boolean result
+ */
+export function isDataInArray(arr: any[]): boolean {
+  return arr !== null && arr !== undefined && Array.isArray(arr) && arr.length !== 0
 }

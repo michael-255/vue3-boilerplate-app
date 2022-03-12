@@ -298,9 +298,21 @@ Installing the package.
 npm i dexie
 ```
 
+### Services
+
+Services you can reuse in other projects located at `~/src/services/*`
+
+- `LocalDatabase`
+- `LocalStorage`
+- `Logger`
+
 ### Utils
 
-A handful of utilities that I've built with tests located at `~/src/utils/*` in the project.
+Utilities you can reuse in other projects located at `~/src/utils/*`
+
+- `build-id`
+- `common`
+- `date-time`
 
 ## Additional Notes
 

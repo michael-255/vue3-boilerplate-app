@@ -19,29 +19,34 @@ describe('downloadFile', () => {
     expect(docSpy).toHaveBeenCalledWith('a')
     expect(attrSpy).toHaveBeenNthCalledWith(1, 'href', 'data:text/csv;charset=utf-8,1%2C2%2C3')
     expect(attrSpy).toHaveBeenNthCalledWith(2, 'download', 'test.csv')
-    // expect(appendSpy).toHaveBeenCalled()
+    // expect(appendSpy).toHaveBeenCalled() // Not working
     expect(HTMLElement.prototype.click).toHaveBeenCalled()
   })
 })
 
-describe('hasData', () => {
+describe('isDataInObject', () => {
   test('should return true when the object has properties', () => {
-    expect(common.hasData({})).toBe(false)
-    expect(common.hasData({ test: 123 })).toBe(true)
-    expect(
-      common.hasData({
-        test: 123,
-        more: null,
-        str: 'test',
-      })
-    ).toBe(true)
+    // Incorrect type of object or no properties
+    expect(common.isDataInObject({})).toBe(false)
+    expect(common.isDataInObject([])).toBe(false)
+    expect(common.isDataInObject(() => 'test')).toBe(false)
+    // Correct object type with at least one property
+    expect(common.isDataInObject({ test: 123 })).toBe(true)
+    expect(common.isDataInObject({ 0: 'a' })).toBe(true)
+    expect(common.isDataInObject({ test: 123, more: null, str: 'test' })).toBe(true)
   })
+})
 
+describe('isDataInArray', () => {
   test('should return true when the array has elements', () => {
-    expect(common.hasData([])).toBe(false)
-    expect(common.hasData([1])).toBe(true)
-    expect(common.hasData([{}])).toBe(true)
-    expect(common.hasData([[]])).toBe(true)
-    expect(common.hasData(['test'])).toBe(true)
+    // Empty array
+    expect(common.isDataInArray([])).toBe(false)
+    // Array with elements
+    expect(common.isDataInArray([undefined])).toBe(true)
+    expect(common.isDataInArray([null])).toBe(true)
+    expect(common.isDataInArray([1])).toBe(true)
+    expect(common.isDataInArray([{}])).toBe(true)
+    expect(common.isDataInArray([[]])).toBe(true)
+    expect(common.isDataInArray(['test'])).toBe(true)
   })
 })

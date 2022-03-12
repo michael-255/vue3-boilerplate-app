@@ -1,5 +1,3 @@
-import { LocalStorageOptions } from '../config'
-
 export type localStorageParams = {
   prefix?: string
   suffix?: string
@@ -55,4 +53,4 @@ export class LocalStorage {
 /**
  * Preconfigured LocalStorage
  */
-export const webStorage = new LocalStorage(LocalStorageOptions)
+export const webStorage = new LocalStorage()

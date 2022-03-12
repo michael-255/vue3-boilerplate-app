@@ -1,4 +1,4 @@
-import { LoggerOptions } from '../config'
+import { DEBUG } from '../constants'
 
 type styleProps = {
   log: string
@@ -67,4 +67,7 @@ export class Logger {
 /**
  * Preconfigured Logger
  */
-export const logger = new Logger(LoggerOptions)
+export const logger = new Logger({
+  name: 'ExampleLogger',
+  debug: DEBUG,
+})

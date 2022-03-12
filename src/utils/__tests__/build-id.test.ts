@@ -47,11 +47,9 @@ describe('buildIdFunction', () => {
       delimiter: '_',
     })()
 
-    expect(defaultId).toMatch(/[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}/)
-    expect(bigId).toMatch(
-      /[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}:[a-zA-Z0-9]{2}/
-    )
-    expect(packedId).toMatch(/[a-zA-Z0-9]{24}/)
-    expect(upcId).toMatch(/[a-zA-Z0-9]{2}_[a-zA-Z0-9]{8}_[a-zA-Z0-9]{8}_[a-zA-Z0-9]{2}/)
+    expect(defaultId).toMatch(/[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}/)
+    expect(bigId).toMatch(/[A-Z0-9]{2}:[A-Z0-9]{2}:[A-Z0-9]{2}:[A-Z0-9]{2}:[A-Z0-9]{2}:[A-Z0-9]{2}/)
+    expect(packedId).toMatch(/[A-Z0-9]{24}/)
+    expect(upcId).toMatch(/[A-Z0-9]{2}_[A-Z0-9]{8}_[A-Z0-9]{8}_[A-Z0-9]{2}/)
   })
 })
