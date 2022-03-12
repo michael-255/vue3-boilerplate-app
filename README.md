@@ -131,7 +131,7 @@ Recommended extensions file.
 
 Code snippets file.
 
-```json
+```jsonc
 // FILE: ~/.vscode/project.code-snippets
 {
   "test": {
@@ -247,7 +247,7 @@ npm i -D gh-pages
 
 Use the following script to build and deploy your project.
 
-```json
+```jsonc
 // FILE: ~/package.json
 "scripts": {
   "deploy": "npm run build && gh-pages -d dist -m Deployment"
