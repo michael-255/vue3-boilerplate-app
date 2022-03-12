@@ -23,7 +23,13 @@ export class LocalDatabase extends Dexie {
     this.examples.mapToClass(Example)
   }
 
-  /* DB wrapper methods here??? */
+  /*
+  DB wrapper methods here???
+  - database.getAllUsers() {...}
+  - database.getAllExamples() {...}
+  - database.getUserByName(name) {...}
+  - database.getMostRecentExample() {...}
+  */
 }
 
 /**
