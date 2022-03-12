@@ -91,7 +91,7 @@ npm init vue@latest
 Add the coverage flag to the test script to generate code coverage reports. You may be required to
 install the `c8` package when you first run `vitest`.
 
-```json
+```jsonc
 // FILE: ~/package.json
 "scripts": {
   "test": "vitest --environment jsdom --coverage"
@@ -102,7 +102,7 @@ install the `c8` package when you first run `vitest`.
 
 Recommended extensions file.
 
-```json
+```jsonc
 // FILE: ~/.vscode/extensions.json
 {
   // See http://go.microsoft.com/fwlink/?LinkId=827846
