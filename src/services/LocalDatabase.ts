@@ -1,20 +1,13 @@
 import Dexie from 'dexie'
 import type { Table } from 'dexie'
-import { logger } from './Logger'
 // Database Stores
 import { User, UserStore } from '../models/User'
 import type { IUser } from '../models/User'
 import { Example, ExampleStore } from '../models/Example'
 import type { IExample } from '../models/Example'
 
-type LocalDatabaseParams = {
-  logger?: any
-  name?: string
-}
-
 /**
  * Wrapper for Dexie IndexedDB.
- * @param logger Logging utility (dependency)
  * @param name Database name in the browser dev tools
  */
 export class LocalDatabase extends Dexie {
@@ -23,10 +16,8 @@ export class LocalDatabase extends Dexie {
   users!: Table<IUser>
   examples!: Table<IExample>
 
-  constructor({ logger = console, name = 'LocalDatabase' }: LocalDatabaseParams = {}) {
+  constructor(name = 'LocalDatabase') {
     super(name)
-
-    this.logger = logger
 
     this.version(1).stores({
       ...UserStore,
@@ -69,7 +60,4 @@ export class LocalDatabase extends Dexie {
 /**
  * Preconfigured LocalDatabase
  */
-export const database = new LocalDatabase({
-  logger,
-  name: 'ExampleDatabase',
-})
+export const database = new LocalDatabase('ExampleDatabase')
