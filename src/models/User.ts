@@ -16,6 +16,13 @@ type UserParams = {
   attributes?: object
 }
 
+/**
+ * User class for Vue 3 Boilerplate app.
+ * @param id
+ * @param createdDate
+ * @param name
+ * @param attributes
+ */
 export class User implements IUser {
   id: string
   createdDate: string
@@ -42,8 +49,8 @@ export class User implements IUser {
     return `Hello ${this.name}!`
   }
 
-  displayCreatedDate() {
-    return new Date(this.createdDate)
+  getDate() {
+    return this.createdDate
   }
 
   getAttributes() {

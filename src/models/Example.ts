@@ -14,6 +14,12 @@ type ExampleParams = {
   data?: object
 }
 
+/**
+ * Example class for Vue 3 Boilerplate app.
+ * @param id
+ * @param createdDate
+ * @param data
+ */
 export class Example implements IExample {
   id: string
   createdDate: string
@@ -33,8 +39,8 @@ export class Example implements IExample {
     return this.id
   }
 
-  displayCreatedDate() {
-    return new Date(this.createdDate)
+  getDate() {
+    return this.createdDate
   }
 
   getData() {

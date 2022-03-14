@@ -10,31 +10,31 @@ describe('Logger', () => {
     vi.clearAllMocks()
   })
 
-  test('should call console.log function', () => {
+  test('should call console.log function when using logger.log', () => {
     const logSpy = spyOn(console, 'log')
     logger.log('log')
     expect(logSpy).toHaveBeenCalledWith(`%c${loggerName}`, `${css} #2196F3;`, 'log')
   })
 
-  test('should call console.warn function', () => {
+  test('should call console.warn function when using logger.warn', () => {
     const logSpy = spyOn(console, 'warn')
     logger.warn('warn')
     expect(logSpy).toHaveBeenCalledWith(`%c${loggerName}`, `${css} #FF9800;`, 'warn')
   })
 
-  test('should call console.error function', () => {
+  test('should call console.error function when using logger.error', () => {
     const logSpy = spyOn(console, 'error')
     logger.error('error')
     expect(logSpy).toHaveBeenCalledWith(`%c${loggerName}`, `${css} #F44336;`, 'error')
   })
 
-  test('should call console.trace function', () => {
+  test('should call console.trace function when using logger.trace', () => {
     const logSpy = spyOn(console, 'trace')
     logger.trace('trace')
     expect(logSpy).toHaveBeenCalledWith(`%c${loggerName}`, `${css} #2196F3;`, 'trace')
   })
 
-  test('should call console.table function', () => {
+  test('should call console.table function when using logger.table', () => {
     const logSpy = spyOn(console, 'table')
     logger.table('table')
     expect(logSpy).toHaveBeenCalledWith('table')
