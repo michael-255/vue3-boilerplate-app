@@ -28,11 +28,11 @@ export class LocalDatabase extends Dexie {
     this.examples.mapToClass(Example)
   }
 
-  async addUser() {
+  async addUser(): Promise<void> {
     await this.users.add(new User())
   }
 
-  async addExample() {
+  async addExample(): Promise<void> {
     await this.examples.add(new Example())
   }
 
