@@ -314,24 +314,29 @@ Initialize in a project only **once**. You should see a `~/_templates` directory
 hygen init self
 ```
 
-Create a new generator. This command will create a folder in `~/_templates` with the **NAME** value.
+Create a new Hygen generator with the following steps:
 
-- **ACTION** can be `new` or `with-prompt` (you can rename it after)
-- **NAME** can be anything (`classes`, `components`, `utils`, etc.)
+1. Create a generator **NAME** directory in `~/_templates`
 
-```sh
-hygen generator {ACTION} {NAME}
-```
+   - Like `classes`, `components`, or `utils`
 
-You can run your generator with the following command.
+2. Create a generator **ACTION** directory in the **NAME** directory
+
+   - Like `new`, `add`, or `help`
+
+3. Add your generator files to the **ACTION** directory
+
+   - `*.ejf.t`
+   - `*.test.ejs.t`
+   - `prompt.js` (if using console prompts)
+
+You can run your generators with the following command.
 
 ```sh
 hygen {NAME} {ACTION}
 ```
 
-Create a `help` directory with an `index.ejs.t` file inside to document your generators. Look at the
-basic example in `~/_templates/generator/help/index.ejs.t` to see how it works. You can run your
-`help` file with the following command.
+You can run your ACTION help files with the following command.
 
 ```sh
 hygen {NAME} help
