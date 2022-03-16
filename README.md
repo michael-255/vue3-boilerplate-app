@@ -298,6 +298,45 @@ Installing the package.
 npm i dexie
 ```
 
+### Hygen
+
+Code generator that internally makes use of the `inquirer` (or `enquirer`) package.
+
+Install the latest version globally.
+
+```sh
+npm i -g hygen
+```
+
+Initialize in a project only **once**. You should see a `~/_templates` directory.
+
+```sh
+hygen init self
+```
+
+Create a new generator. This command will create a folder in `~/_templates` with the **NAME** value.
+
+- **ACTION** can be `new` or `with-prompt` (you can rename it after)
+- **NAME** can be anything (`classes`, `components`, `utils`, etc.)
+
+```sh
+hygen generator {ACTION} {NAME}
+```
+
+You can run your generator with the following command.
+
+```sh
+hygen {NAME} {ACTION}
+```
+
+Create a `help` directory with an `index.ejs.t` file inside to document your generators. Look at the
+basic example in `~/_templates/generator/help/index.ejs.t` to see how it works. You can run your
+`help` file with the following command.
+
+```sh
+hygen {NAME} help
+```
+
 ### Services
 
 Services you can reuse in other projects located at `~/src/services/*`

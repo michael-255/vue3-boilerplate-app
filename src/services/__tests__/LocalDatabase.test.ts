@@ -1,7 +1,10 @@
 import { describe, test, expect } from 'vitest'
 import { LocalDatabase } from '../LocalDatabase'
 
-// This just confirms my wrapper functions exist since Dexie is already well tested
+/**
+ * Only confirms wrapper methods exist on new LocalDatabase instance.
+ * @todo Need a Dexie mocking solution to improve these tests.
+ */
 describe('LocalDatabase', () => {
   const db = new LocalDatabase()
 
