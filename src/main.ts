@@ -12,12 +12,12 @@ import router from './router'
 // Testing...
 import { database } from './services/LocalDatabase'
 // console.log(await database.addUser())
-console.log('addExample:', await database.addExample())
-console.log('getAllUsers:', await database.getAllUsers())
-console.log('getAllExamples:', await database.getAllExamples())
-console.log('getUserByName:', await database.getUserByName('My User'))
-console.log('getNewestExample:', await database.getNewestExample())
-console.log('getOldestExample:', await database.getOldestExample())
+// console.log('addExample:', await database.addExample())
+// console.log('getAllUsers:', await database.getAllUsers())
+// console.log('getAllExamples:', await database.getAllExamples())
+// console.log('getUserByName:', await database.getUserByName('My User'))
+// console.log('getNewestExample:', await database.getNewestExample())
+// console.log('getOldestExample:', await database.getOldestExample())
 
 const app = createApp(App)
 

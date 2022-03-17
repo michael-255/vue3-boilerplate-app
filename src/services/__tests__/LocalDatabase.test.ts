@@ -1,38 +1,28 @@
-import { describe, test, expect } from 'vitest'
+import { describe, test, expect, beforeEach, vi } from 'vitest'
+import { User } from '../../models/User'
 import { LocalDatabase } from '../LocalDatabase'
 
-/**
- * Only confirms wrapper methods exist on new LocalDatabase instance.
- * @todo Need a Dexie mocking solution to improve these tests.
- */
+const isoDateRegex = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})Z/
+const idRegex = /[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}/
+
 describe('LocalDatabase', () => {
-  const db = new LocalDatabase()
+  let db: any
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    db = new LocalDatabase()
+    db.users.add = vi.fn()
+  })
 
   test('should have addUser method', () => {
-    expect(db.addUser instanceof Function).toBe(true)
-  })
-
-  test('should have addExample method', () => {
-    expect(db.addExample instanceof Function).toBe(true)
-  })
-
-  test('should have getAllUsers method', () => {
-    expect(db.getAllUsers instanceof Function).toBe(true)
-  })
-
-  test('should have getAllExamples method', () => {
-    expect(db.getAllExamples instanceof Function).toBe(true)
-  })
-
-  test('should have getUserByName method', () => {
-    expect(db.getUserByName instanceof Function).toBe(true)
-  })
-
-  test('should have getNewestExample method', () => {
-    expect(db.getNewestExample instanceof Function).toBe(true)
-  })
-
-  test('should have getOldestExample method', () => {
-    expect(db.getOldestExample instanceof Function).toBe(true)
+    db.addUser()
+    expect(db.users.add).toHaveBeenCalledWith([
+      Object.assign(new User(), {
+        attributes: {},
+        createdDate: expect.stringMatching(isoDateRegex),
+        id: expect.stringMatching(idRegex),
+        name: 'My User',
+      }),
+    ])
   })
 })

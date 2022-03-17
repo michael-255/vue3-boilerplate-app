@@ -28,20 +28,16 @@ export class LocalDatabase extends Dexie {
     this.examples.mapToClass(Example)
   }
 
-  async addUser(): Promise<void> {
-    await this.users.add(new User())
+  async addUser(user: IUser): Promise<void> {
+    await this.users.add(user)
   }
 
-  async addExample(): Promise<void> {
-    await this.examples.add(new Example())
+  async addExample(example: IExample): Promise<void> {
+    await this.examples.add(example)
   }
 
-  async getAllUsers(): Promise<IUser[]> {
-    return await this.table('users').toArray()
-  }
-
-  async getAllExamples(): Promise<IExample[]> {
-    return await this.table('examples').toArray()
+  async getAllFromStore(store: string): Promise<any[]> {
+    return await this.table(store).toArray()
   }
 
   async getUserByName(name: string): Promise<IUser | undefined> {
