@@ -1,163 +1,170 @@
 // eslint-disable-next-line
 module.exports = {
   prompt: ({ prompter, args }) => {
-    // Initial questions
-    let questions = [nameQuestion()]
-    let allAnswers = {}
-
-    return prompter.prompt(questions).then((answers) => {
-      allAnswers = {
-        ...answers,
-      }
-      questions = [descriptionQuestion(allAnswers.name), localDBQuestion(allAnswers.name)]
-
-      return prompter.prompt(questions).then((answers) => {
-        allAnswers = {
-          ...allAnswers,
-          ...answers,
-        }
-        questions = []
-
-        if (answers.isLocalDBStore) {
-          questions.push(localDBKeyQuestion(allAnswers.name))
-          questions.push(localDBIndicesQuestion())
-        }
-
-        questions.push(paramCountQuestion())
-
-        return prompter.prompt(questions).then((answers) => {
-          allAnswers = {
-            ...allAnswers,
-            ...answers,
-          }
-          questions = []
-
-          for (let i = 0; i < answers.parameterCount; i++) {
-            questions.push(parameterNameQuestion(i + 1))
-            questions.push(parameterTypeQuestion(i + 1))
-            questions.push(parameterDefaultQuestion(i + 1))
-          }
-
-          return prompter.prompt(questions).then((answers) => {
-            allAnswers = {
-              ...allAnswers,
-              ...answers,
-            }
-            console.log(allAnswers)
-          })
-        })
-      })
-    })
+    return generatorPrompts(prompter, Q)
   },
 }
 
-function nameQuestion() {
-  return {
-    type: 'input',
-    name: 'name',
-    message: 'Class name:',
-    initial: 'Example',
-  }
+/**
+ * All prompts for this generator.
+ * @param prompter
+ * @param Q Questions
+ * @param A Answers
+ */
+async function generatorPrompts(prompter, Q, A = {}) {
+  A = { ...(await Q.single.name(prompter)) }
+  A = { ...(await Q.single.description(prompter, A.name)), ...A }
+  A = { ...(await Q.single.localDB(prompter)), ...A }
+  A = { ...(await Q.single.localDBKey(prompter, A.name)), ...A }
+  A = { ...(await Q.single.localDBIndicies(prompter)), ...A }
+
+  console.log(A)
+
+  return prompter
 }
 
-function descriptionQuestion(className) {
-  return {
-    type: 'input',
-    name: 'description',
-    message: 'Class description:',
-    initial: `${className} class JSDocs.`,
-  }
-}
-
-function localDBQuestion() {
-  return {
-    type: 'confirm',
-    name: 'isLocalDBStore',
-    message: 'Is class a LocalDatabase store?',
-  }
-}
-
-function localDBKeyQuestion(className) {
-  return {
-    type: 'input',
-    name: 'localDBStoreKey',
-    message: 'LocalDatabase store key:',
-    initial: `${className.toLowerCase()}s`,
-  }
-}
-
-function localDBIndicesQuestion() {
-  return {
-    type: 'input',
-    name: 'localDBStoreIndices',
-    message: 'LocalDatabase store indices:',
-    initial: '&id',
-  }
-}
-
-function paramCountQuestion() {
-  return {
-    type: 'numeral',
-    name: 'parameterCount',
-    message: 'Number of class parameters:',
-    result(value) {
-      if (value < 0) {
-        return 0
-      } else if (value > 20) {
-        return 20
-      } else {
-        return Math.floor(value)
-      }
+// Questions for the prompter
+const Q = {
+  // One time questions
+  single: {
+    name: async (prompter) => {
+      return await prompter.prompt({
+        type: 'input',
+        name: 'name',
+        message: 'Class name:',
+        initial: 'Example',
+      })
     },
-  }
-}
 
-function parameterNameQuestion(parameterNumber) {
-  return {
-    type: 'input',
-    name: `paramName_${parameterNumber}`,
-    message: `Parameter ${parameterNumber} name:`,
-  }
-}
-
-function parameterTypeQuestion(parameterNumber) {
-  return {
-    type: 'input',
-    name: `paramType_${parameterNumber}`,
-    message: `Parameter ${parameterNumber} type:`,
-    initial: 'string',
-  }
-}
-
-function parameterDefaultQuestion(parameterNumber) {
-  return {
-    type: 'input',
-    name: `paramDefault_${parameterNumber}`,
-    message: `Parameter ${parameterNumber} default value:`,
-  }
-}
-
-function methodCountQuestion() {
-  return {
-    type: 'numeral',
-    name: 'methodCount',
-    message: 'Number of class methods:',
-    result(value) {
-      if (value < 0) {
-        return 0
-      } else if (value > 20) {
-        return 20
-      } else {
-        return Math.floor(value)
-      }
+    description: async (prompter, className) => {
+      return await prompter.prompt({
+        type: 'input',
+        name: 'description',
+        message: 'Class description:',
+        initial: `${className} class JSDocs description.`,
+      })
     },
-  }
+
+    localDB: async (prompter) => {
+      return await prompter.prompt({
+        type: 'confirm',
+        name: 'isLocalDBStore',
+        message: 'Is class a LocalDatabase store?',
+      })
+    },
+
+    localDBKey: async (prompter, className) => {
+      return await prompter.prompt({
+        type: 'input',
+        name: 'localDBStoreKey',
+        message: 'LocalDatabase store key:',
+        initial: `${className.toLowerCase()}s`,
+      })
+    },
+
+    localDBIndicies: async (prompter) => {
+      return await prompter.prompt({
+        type: 'input',
+        name: 'localDBStoreIndices',
+        message: 'LocalDatabase store indices:',
+        initial: '&id',
+      })
+    },
+
+    // Likely to deprecate this...
+    parameterCount: async (prompter) => {
+      return await prompter.prompt({
+        type: 'numeral',
+        name: 'parameterCount',
+        message: 'Number of class parameters:',
+        result(value) {
+          if (value < 0) {
+            return 0
+          } else if (value > 20) {
+            return 20
+          } else {
+            return Math.floor(value)
+          }
+        },
+      })
+    },
+
+    // Likely to deprecate this...
+    methodCount: async (prompter) => {
+      return await prompter.prompt({
+        type: 'numeral',
+        name: 'methodCount',
+        message: 'Number of class methods:',
+        result(value) {
+          if (value < 0) {
+            return 0
+          } else if (value > 20) {
+            return 20
+          } else {
+            return Math.floor(value)
+          }
+        },
+      })
+    },
+  }, // Single End
+
+  // Repeated questions (looped)
+  repeat: {
+    parameterName: async (prompter, parameterNumber) => {
+      return await prompter.prompt({
+        type: 'input',
+        name: `paramName_${parameterNumber}`,
+        message: `Parameter ${parameterNumber} name:`,
+      })
+    },
+
+    parameterType: async (prompter, parameterNumber) => {
+      return await prompter.prompt({
+        type: 'input',
+        name: `paramType_${parameterNumber}`,
+        message: `Parameter ${parameterNumber} type:`,
+        initial: 'string',
+      })
+    },
+
+    parameterDefault: async (prompter, parameterNumber) => {
+      return await prompter.prompt({
+        type: 'input',
+        name: `paramDefault_${parameterNumber}`,
+        message: `Parameter ${parameterNumber} default value:`,
+      })
+    },
+
+    methodName: async (prompter, methodNumber) => {
+      return await prompter.prompt({
+        type: 'input',
+        name: `methodName_${methodNumber}`,
+        message: `Method ${methodNumber} name:`,
+      })
+    },
+  }, // Repeat End
 }
 
-function methodNameQuestion(methodNumber) {
-  return {
-    type: 'input',
-    name: `methodName_${methodNumber}`,
-    message: `Method ${methodNumber} name:`,
-  }
+/**
+ * Question looping example with confirmation!
+ */
+const collectInputs = async (prompter, inputs = []) => {
+  const prompts = [
+    {
+      type: 'input',
+      name: 'inputValue',
+      message: 'Enter some input: ',
+      initial: 'Hello World!',
+    },
+    {
+      type: 'confirm',
+      name: 'again',
+      message: 'Enter another input? ',
+      initial: false,
+    },
+  ]
+
+  const { again, ...answers } = await prompter.prompt(prompts)
+  const newInputs = [...inputs, answers]
+  return again ? collectInputs(prompter, newInputs) : newInputs
 }
