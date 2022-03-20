@@ -5,6 +5,27 @@ module.exports = {
   },
 }
 
+class HygenGenerator {
+  constructor(Q = {}, A = {}, P = {}) {
+    this.Q = Q // questions
+    this.A = A // answers
+    this.P = P // prompter
+  }
+
+  async updateAnswers(newAnswers) {
+    this.A = await { ...this.A, ...newAnswers }
+  }
+
+  async runAllPrompts() {
+    await updateAnswers(await initalPrompts())
+  }
+
+  async initalPrompts() {
+    await updateAnswers(await Q.className())
+    await updateAnswers(await Q.classDescription(A))
+  }
+}
+
 /**
  * All prompts for this generator.
  * @param prompter
@@ -43,51 +64,44 @@ async function localDBPrompts(prompter, Q, A) {
 
 // Class Parameter prompts.
 async function parameterPrompts(prompter, Q, A) {
-  // Ask for first parameter
-  A = { ...A, ...(await Q.addParameter(prompter, true)) }
+  let parameters = []
+  let paramNumber = 0
+  let isFirst = true
 
-  if (A.addParam) {
+  while ((await Q.addParameter(prompter, isFirst)).addParam) {
     const nextParam = {}
-    let parameters = []
-    let paramNumber = 0
-
-    // Keep asking for parameters until user doesn't want any more
-    while (A.addParam) {
-      nextParam.paramName = (await Q.parameterName(prompter, paramNumber + 1)).paramName
-      nextParam.paramType = (await Q.parameterType(prompter, paramNumber + 1)).paramType
-      nextParam.paramDefault = (await Q.parameterDefault(prompter, paramNumber + 1)).paramDefault
-      console.log(nextParam)
-      parameters[paramNumber] = nextParam
-      paramNumber += 1
-      A = { ...A, ...(await Q.addParameter(prompter, false)) } // Do another parameter?
-    }
-
+    nextParam.paramName = (await Q.parameterName(prompter, paramNumber + 1)).paramName
+    nextParam.paramType = (await Q.parameterType(prompter, paramNumber + 1)).paramType
+    nextParam.paramDefault = (await Q.parameterDefault(prompter, paramNumber + 1)).paramDefault
+    parameters[paramNumber] = nextParam
+    paramNumber += 1
+    isFirst = false
     A = { ...A, parameters }
   }
 
   return A
 }
 
+// Class Method prompts.
 async function methodPrompts(prompter, Q, A) {
-  // Ask for first method
-  A = { ...A, ...(await Q.addMethod(prompter, true)) }
+  let methods = []
+  let methodNumber = 0
+  let isFirst = true
 
-  if (A.addMethod) {
-    let methods = []
-    let methodNumber = 0
-
-    // Keep asking for methods until user doesn't want any more
-    while (A.addMethod) {
-      const formResult = await Q.methodForm(prompter, methodNumber + 1)
-      methods[methodNumber] = { ...formResult.method }
-      methodNumber += 1
-      A = { ...A, ...(await Q.addMethod(prompter, false)) } // Do another method?
-    }
-
+  while ((await Q.addMethod(prompter, isFirst)).addMethod) {
+    const nextMethod = {}
+    nextMethod.methodName = (await Q.methodName(prompter, methodNumber + 1)).methodName
+    methods[methodNumber] = nextMethod
+    methodNumber += 1
+    isFirst = false
     A = { ...A, methods }
   }
 
   return A
+}
+
+async function updateAnswers(A, results) {
+  return await { ...A, ...results }
 }
 
 // Questions for the prompter
@@ -192,16 +206,11 @@ const Q = {
     })
   },
 
-  methodForm: async (prompter, methodNumber) => {
+  methodName: async (prompter, methodNumber) => {
     return await prompter.prompt({
-      type: 'form',
-      name: 'method',
-      message: `Enter method ${methodNumber} details:`,
-      choices: [
-        { name: 'methodName', message: 'Name', initial: 'id' },
-        { name: 'methodType', message: 'Type', initial: 'string' },
-        { name: 'methodDefault', message: 'Default', initial: '' },
-      ],
+      type: 'input',
+      name: 'methodName',
+      message: `Method ${methodNumber} name:`,
     })
   },
 }
