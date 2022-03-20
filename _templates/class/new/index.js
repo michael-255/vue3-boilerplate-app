@@ -5,27 +5,6 @@ module.exports = {
   },
 }
 
-class HygenGenerator {
-  constructor(Q = {}, A = {}, P = {}) {
-    this.Q = Q // questions
-    this.A = A // answers
-    this.P = P // prompter
-  }
-
-  async updateAnswers(newAnswers) {
-    this.A = await { ...this.A, ...newAnswers }
-  }
-
-  async runAllPrompts() {
-    await updateAnswers(await initalPrompts())
-  }
-
-  async initalPrompts() {
-    await updateAnswers(await Q.className())
-    await updateAnswers(await Q.classDescription(A))
-  }
-}
-
 /**
  * All prompts for this generator.
  * @param prompter
@@ -33,36 +12,38 @@ class HygenGenerator {
  * @param A Answers
  */
 async function classGeneratorPrompts(prompter, Q, A = {}) {
-  A = { ...A, ...(await initalPrompts(prompter, Q, A)) }
-  A = { ...A, ...(await localDBPrompts(prompter, Q, A)) }
-  A = { ...A, ...(await parameterPrompts(prompter, Q, A)) }
-  A = { ...A, ...(await methodPrompts(prompter, Q, A)) }
+  A = await updateAnswers(A, await initalPrompts(prompter, Q, A))
+  A = await updateAnswers(A, await localDBPrompts(prompter, Q, A))
+  A = await updateAnswers(A, await parameterPrompts(prompter, Q, A))
+  A = await updateAnswers(A, await methodPrompts(prompter, Q, A))
+  A = await updateAnswers(A, await importPrompts(prompter, Q, A))
 
   console.log(A)
 
   return prompter
 }
 
-// Prompts for basic inital information.
+// Initial Information Prompts
 async function initalPrompts(prompter, Q, A) {
-  A = { ...A, ...(await Q.className(prompter)) }
-  A = { ...A, ...(await Q.classDescription(prompter, A)) }
+  A = await updateAnswers(A, await Q.className(prompter))
+  A = await updateAnswers(A, await Q.classDescription(prompter, A))
   return A
 }
 
-// Prompts related to LocalDatabase.
+// LocalDatabase Prompts
 async function localDBPrompts(prompter, Q, A) {
-  A = { ...A, ...(await Q.localDB(prompter)) }
-
-  if (A.isLocalDBStore) {
-    A = { ...A, ...(await Q.localDBKey(prompter, A)) }
-    A = { ...A, ...(await Q.localDBIndicies(prompter)) }
+  if ((await Q.localDB(prompter)).isLocalDBStore) {
+    let LocalDatabase = {
+      storeKey: (await Q.localDBKey(prompter, A)).storeKey,
+      storeIndices: (await Q.localDBIndicies(prompter)).storeIndices,
+    }
+    A = await updateAnswers(A, { LocalDatabase })
   }
 
   return A
 }
 
-// Class Parameter prompts.
+// Parameter Prompts
 async function parameterPrompts(prompter, Q, A) {
   let parameters = []
   let paramNumber = 0
@@ -76,13 +57,13 @@ async function parameterPrompts(prompter, Q, A) {
     parameters[paramNumber] = nextParam
     paramNumber += 1
     isFirst = false
-    A = { ...A, parameters }
+    A = await updateAnswers(A, { parameters })
   }
 
   return A
 }
 
-// Class Method prompts.
+// Method Prompts
 async function methodPrompts(prompter, Q, A) {
   let methods = []
   let methodNumber = 0
@@ -94,14 +75,32 @@ async function methodPrompts(prompter, Q, A) {
     methods[methodNumber] = nextMethod
     methodNumber += 1
     isFirst = false
-    A = { ...A, methods }
+    A = await updateAnswers(A, { methods })
   }
 
   return A
 }
 
-async function updateAnswers(A, results) {
-  return await { ...A, ...results }
+// Import Prompts
+async function importPrompts(prompter, Q, A) {
+  let imports = []
+  let importNumber = 0
+  let isFirst = true
+
+  while ((await Q.addImport(prompter, isFirst)).addImport) {
+    const nextImport = await Q.importForm(prompter, importNumber + 1)
+    imports[importNumber] = nextImport
+    importNumber += 1
+    isFirst = false
+    A = await updateAnswers(A, { imports })
+  }
+
+  return A
+}
+
+// Helper that makes answer updates easier to read in code
+async function updateAnswers(A, newAnswers) {
+  return await { ...A, ...newAnswers }
 }
 
 // Questions for the prompter
@@ -135,7 +134,7 @@ const Q = {
   localDBKey: async (prompter, A) => {
     return await prompter.prompt({
       type: 'input',
-      name: 'localDBStoreKey',
+      name: 'storeKey',
       message: 'LocalDatabase store key:',
       initial: `${A.className.toLowerCase()}s`,
     })
@@ -144,7 +143,7 @@ const Q = {
   localDBIndicies: async (prompter) => {
     return await prompter.prompt({
       type: 'input',
-      name: 'localDBStoreIndices',
+      name: 'storeIndices',
       message: 'LocalDatabase store indices:',
       initial: '&id',
     })
@@ -211,6 +210,28 @@ const Q = {
       type: 'input',
       name: 'methodName',
       message: `Method ${methodNumber} name:`,
+    })
+  },
+
+  addImport: async (prompter, isFirst) => {
+    const another = isFirst ? 'an' : 'another'
+
+    return await prompter.prompt({
+      type: 'confirm',
+      name: 'addImport',
+      message: `Add ${another} import?`,
+    })
+  },
+
+  importForm: async (prompter, importNumber) => {
+    return await prompter.prompt({
+      type: 'form',
+      name: 'import',
+      message: `Enter import ${importNumber} details:`,
+      choices: [
+        { name: 'part1', message: 'import', initial: '* as example' },
+        { name: 'pasrt2', message: 'from', initial: './example' },
+      ],
     })
   },
 }
