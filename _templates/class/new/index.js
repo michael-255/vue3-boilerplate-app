@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 module.exports = {
   prompt: ({ prompter, args }) => {
-    return generatorPrompts(prompter, Q)
+    return classGeneratorPrompts(prompter, Q)
   },
 }
 
@@ -11,160 +11,197 @@ module.exports = {
  * @param Q Questions
  * @param A Answers
  */
-async function generatorPrompts(prompter, Q, A = {}) {
-  A = { ...(await Q.single.name(prompter)) }
-  A = { ...(await Q.single.description(prompter, A.name)), ...A }
-  A = { ...(await Q.single.localDB(prompter)), ...A }
-  A = { ...(await Q.single.localDBKey(prompter, A.name)), ...A }
-  A = { ...(await Q.single.localDBIndicies(prompter)), ...A }
+async function classGeneratorPrompts(prompter, Q, A = {}) {
+  A = { ...A, ...(await initalPrompts(prompter, Q, A)) }
+  A = { ...A, ...(await localDBPrompts(prompter, Q, A)) }
+  A = { ...A, ...(await parameterPrompts(prompter, Q, A)) }
+  A = { ...A, ...(await methodPrompts(prompter, Q, A)) }
 
   console.log(A)
 
   return prompter
 }
 
-// Questions for the prompter
-const Q = {
-  // One time questions
-  single: {
-    name: async (prompter) => {
-      return await prompter.prompt({
-        type: 'input',
-        name: 'name',
-        message: 'Class name:',
-        initial: 'Example',
-      })
-    },
-
-    description: async (prompter, className) => {
-      return await prompter.prompt({
-        type: 'input',
-        name: 'description',
-        message: 'Class description:',
-        initial: `${className} class JSDocs description.`,
-      })
-    },
-
-    localDB: async (prompter) => {
-      return await prompter.prompt({
-        type: 'confirm',
-        name: 'isLocalDBStore',
-        message: 'Is class a LocalDatabase store?',
-      })
-    },
-
-    localDBKey: async (prompter, className) => {
-      return await prompter.prompt({
-        type: 'input',
-        name: 'localDBStoreKey',
-        message: 'LocalDatabase store key:',
-        initial: `${className.toLowerCase()}s`,
-      })
-    },
-
-    localDBIndicies: async (prompter) => {
-      return await prompter.prompt({
-        type: 'input',
-        name: 'localDBStoreIndices',
-        message: 'LocalDatabase store indices:',
-        initial: '&id',
-      })
-    },
-
-    // Likely to deprecate this...
-    parameterCount: async (prompter) => {
-      return await prompter.prompt({
-        type: 'numeral',
-        name: 'parameterCount',
-        message: 'Number of class parameters:',
-        result(value) {
-          if (value < 0) {
-            return 0
-          } else if (value > 20) {
-            return 20
-          } else {
-            return Math.floor(value)
-          }
-        },
-      })
-    },
-
-    // Likely to deprecate this...
-    methodCount: async (prompter) => {
-      return await prompter.prompt({
-        type: 'numeral',
-        name: 'methodCount',
-        message: 'Number of class methods:',
-        result(value) {
-          if (value < 0) {
-            return 0
-          } else if (value > 20) {
-            return 20
-          } else {
-            return Math.floor(value)
-          }
-        },
-      })
-    },
-  }, // Single End
-
-  // Repeated questions (looped)
-  repeat: {
-    parameterName: async (prompter, parameterNumber) => {
-      return await prompter.prompt({
-        type: 'input',
-        name: `paramName_${parameterNumber}`,
-        message: `Parameter ${parameterNumber} name:`,
-      })
-    },
-
-    parameterType: async (prompter, parameterNumber) => {
-      return await prompter.prompt({
-        type: 'input',
-        name: `paramType_${parameterNumber}`,
-        message: `Parameter ${parameterNumber} type:`,
-        initial: 'string',
-      })
-    },
-
-    parameterDefault: async (prompter, parameterNumber) => {
-      return await prompter.prompt({
-        type: 'input',
-        name: `paramDefault_${parameterNumber}`,
-        message: `Parameter ${parameterNumber} default value:`,
-      })
-    },
-
-    methodName: async (prompter, methodNumber) => {
-      return await prompter.prompt({
-        type: 'input',
-        name: `methodName_${methodNumber}`,
-        message: `Method ${methodNumber} name:`,
-      })
-    },
-  }, // Repeat End
+// Prompts for basic inital information.
+async function initalPrompts(prompter, Q, A) {
+  A = { ...A, ...(await Q.className(prompter)) }
+  A = { ...A, ...(await Q.classDescription(prompter, A)) }
+  return A
 }
 
-/**
- * Question looping example with confirmation!
- */
-const collectInputs = async (prompter, inputs = []) => {
-  const prompts = [
-    {
-      type: 'input',
-      name: 'inputValue',
-      message: 'Enter some input: ',
-      initial: 'Hello World!',
-    },
-    {
-      type: 'confirm',
-      name: 'again',
-      message: 'Enter another input? ',
-      initial: false,
-    },
-  ]
+// Prompts related to LocalDatabase.
+async function localDBPrompts(prompter, Q, A) {
+  A = { ...A, ...(await Q.localDB(prompter)) }
 
-  const { again, ...answers } = await prompter.prompt(prompts)
-  const newInputs = [...inputs, answers]
-  return again ? collectInputs(prompter, newInputs) : newInputs
+  if (A.isLocalDBStore) {
+    A = { ...A, ...(await Q.localDBKey(prompter, A)) }
+    A = { ...A, ...(await Q.localDBIndicies(prompter)) }
+  }
+
+  return A
+}
+
+// Class Parameter prompts.
+async function parameterPrompts(prompter, Q, A) {
+  // Ask for first parameter
+  A = { ...A, ...(await Q.addParameter(prompter, true)) }
+
+  if (A.addParam) {
+    const nextParam = {}
+    let parameters = []
+    let paramNumber = 0
+
+    // Keep asking for parameters until user doesn't want any more
+    while (A.addParam) {
+      nextParam.paramName = (await Q.parameterName(prompter, paramNumber + 1)).paramName
+      nextParam.paramType = (await Q.parameterType(prompter, paramNumber + 1)).paramType
+      nextParam.paramDefault = (await Q.parameterDefault(prompter, paramNumber + 1)).paramDefault
+      console.log(nextParam)
+      parameters[paramNumber] = nextParam
+      paramNumber += 1
+      A = { ...A, ...(await Q.addParameter(prompter, false)) } // Do another parameter?
+    }
+
+    A = { ...A, parameters }
+  }
+
+  return A
+}
+
+async function methodPrompts(prompter, Q, A) {
+  // Ask for first method
+  A = { ...A, ...(await Q.addMethod(prompter, true)) }
+
+  if (A.addMethod) {
+    let methods = []
+    let methodNumber = 0
+
+    // Keep asking for methods until user doesn't want any more
+    while (A.addMethod) {
+      const formResult = await Q.methodForm(prompter, methodNumber + 1)
+      methods[methodNumber] = { ...formResult.method }
+      methodNumber += 1
+      A = { ...A, ...(await Q.addMethod(prompter, false)) } // Do another method?
+    }
+
+    A = { ...A, methods }
+  }
+
+  return A
+}
+
+// Questions for the prompter
+const Q = {
+  className: async (prompter) => {
+    return await prompter.prompt({
+      type: 'input',
+      name: 'className',
+      message: 'Class name:',
+      initial: 'Example',
+    })
+  },
+
+  classDescription: async (prompter, A) => {
+    return await prompter.prompt({
+      type: 'input',
+      name: 'classDescription',
+      message: 'Class description:',
+      initial: `${A.className} class JSDocs description.`,
+    })
+  },
+
+  localDB: async (prompter) => {
+    return await prompter.prompt({
+      type: 'confirm',
+      name: 'isLocalDBStore',
+      message: 'Is class a LocalDatabase store?',
+    })
+  },
+
+  localDBKey: async (prompter, A) => {
+    return await prompter.prompt({
+      type: 'input',
+      name: 'localDBStoreKey',
+      message: 'LocalDatabase store key:',
+      initial: `${A.className.toLowerCase()}s`,
+    })
+  },
+
+  localDBIndicies: async (prompter) => {
+    return await prompter.prompt({
+      type: 'input',
+      name: 'localDBStoreIndices',
+      message: 'LocalDatabase store indices:',
+      initial: '&id',
+    })
+  },
+
+  addParameter: async (prompter, isFirst) => {
+    const another = isFirst ? 'a' : 'another'
+
+    return await prompter.prompt({
+      type: 'confirm',
+      name: 'addParam',
+      message: `Add ${another} class parameter?`,
+    })
+  },
+
+  parameterName: async (prompter, paramNumber) => {
+    return await prompter.prompt({
+      type: 'input',
+      name: 'paramName',
+      message: `Parameter ${paramNumber} name:`,
+    })
+  },
+
+  parameterType: async (prompter, paramNumber) => {
+    return await prompter.prompt({
+      type: 'select',
+      name: 'paramType',
+      message: `Parameter ${paramNumber} type:`,
+      choices: [
+        'string',
+        'number',
+        'boolean',
+        'object',
+        'any',
+        'string[]',
+        'number[]',
+        'boolean[]',
+        'object[]',
+        'any[]',
+      ],
+    })
+  },
+
+  parameterDefault: async (prompter, paramNumber) => {
+    return await prompter.prompt({
+      type: 'confirm',
+      name: 'paramDefault',
+      message: `Will parameter ${paramNumber} have a default value?`,
+    })
+  },
+
+  addMethod: async (prompter, isFirst) => {
+    const another = isFirst ? 'a' : 'another'
+
+    return await prompter.prompt({
+      type: 'confirm',
+      name: 'addMethod',
+      message: `Add ${another} class method?`,
+    })
+  },
+
+  methodForm: async (prompter, methodNumber) => {
+    return await prompter.prompt({
+      type: 'form',
+      name: 'method',
+      message: `Enter method ${methodNumber} details:`,
+      choices: [
+        { name: 'methodName', message: 'Name', initial: 'id' },
+        { name: 'methodType', message: 'Type', initial: 'string' },
+        { name: 'methodDefault', message: 'Default', initial: '' },
+      ],
+    })
+  },
 }

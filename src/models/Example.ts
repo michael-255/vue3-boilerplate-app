@@ -35,15 +35,15 @@ export class Example implements IExample {
     this.data = data
   }
 
-  getId() {
+  getId(): string {
     return this.id
   }
 
-  getDate() {
+  getDate(): string {
     return this.createdDate
   }
 
-  getData() {
+  getData(): object {
     return this.data
   }
 }

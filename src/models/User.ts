@@ -41,19 +41,19 @@ export class User implements IUser {
     this.attributes = attributes
   }
 
-  getId() {
+  getId(): string {
     return this.id
   }
 
-  greeting() {
+  greeting(): string {
     return `Hello ${this.name}!`
   }
 
-  getDate() {
+  getDate(): string {
     return this.createdDate
   }
 
-  getAttributes() {
+  getAttributes(): object {
     return this.attributes
   }
 }
