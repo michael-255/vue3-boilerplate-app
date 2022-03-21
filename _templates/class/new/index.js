@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 module.exports = {
   prompt: ({ prompter, args }) => {
-    return classGeneratorPrompts(prompter, Q)
+    return hygenGenerator(prompter, Q)
   },
 }
 
@@ -11,16 +11,17 @@ module.exports = {
  * @param Q Questions
  * @param A Answers
  */
-async function classGeneratorPrompts(prompter, Q, A = {}) {
+async function hygenGenerator(prompter, Q, A = {}) {
+  // Prompts
   A = await updateAnswers(A, await initalPrompts(prompter, Q, A))
-  A = await updateAnswers(A, await localDBPrompts(prompter, Q, A))
+  A = await updateAnswers(A, await localDatabasePrompts(prompter, Q, A))
   A = await updateAnswers(A, await parameterPrompts(prompter, Q, A))
   A = await updateAnswers(A, await methodPrompts(prompter, Q, A))
   A = await updateAnswers(A, await importPrompts(prompter, Q, A))
 
-  console.log(A)
+  console.log('ANSWERS', A)
 
-  return prompter
+  return A
 }
 
 // Initial Information Prompts
@@ -31,13 +32,13 @@ async function initalPrompts(prompter, Q, A) {
 }
 
 // LocalDatabase Prompts
-async function localDBPrompts(prompter, Q, A) {
-  if ((await Q.localDB(prompter)).isLocalDBStore) {
-    let LocalDatabase = {
-      storeKey: (await Q.localDBKey(prompter, A)).storeKey,
-      storeIndices: (await Q.localDBIndicies(prompter)).storeIndices,
+async function localDatabasePrompts(prompter, Q, A) {
+  if ((await Q.localDatabase(prompter)).isLocalDatabaseStore) {
+    let localDatabase = {
+      storeKey: (await Q.localDatabaseKey(prompter, A)).storeKey,
+      storeIndices: (await Q.localDatabaseIndicies(prompter)).storeIndices,
     }
-    A = await updateAnswers(A, { LocalDatabase })
+    A = await updateAnswers(A, { localDatabase })
   }
 
   return A
@@ -70,9 +71,7 @@ async function methodPrompts(prompter, Q, A) {
   let isFirst = true
 
   while ((await Q.addMethod(prompter, isFirst)).addMethod) {
-    const nextMethod = {}
-    nextMethod.methodName = (await Q.methodName(prompter, methodNumber + 1)).methodName
-    methods[methodNumber] = nextMethod
+    methods[methodNumber] = (await Q.methodName(prompter, methodNumber + 1)).methodName
     methodNumber += 1
     isFirst = false
     A = await updateAnswers(A, { methods })
@@ -88,8 +87,7 @@ async function importPrompts(prompter, Q, A) {
   let isFirst = true
 
   while ((await Q.addImport(prompter, isFirst)).addImport) {
-    const nextImport = await Q.importForm(prompter, importNumber + 1)
-    imports[importNumber] = nextImport
+    imports[importNumber] = (await Q.importForm(prompter, importNumber + 1)).import
     importNumber += 1
     isFirst = false
     A = await updateAnswers(A, { imports })
@@ -123,15 +121,15 @@ const Q = {
     })
   },
 
-  localDB: async (prompter) => {
+  localDatabase: async (prompter) => {
     return await prompter.prompt({
       type: 'confirm',
-      name: 'isLocalDBStore',
+      name: 'isLocalDatabaseStore',
       message: 'Is class a LocalDatabase store?',
     })
   },
 
-  localDBKey: async (prompter, A) => {
+  localDatabaseKey: async (prompter, A) => {
     return await prompter.prompt({
       type: 'input',
       name: 'storeKey',
@@ -140,7 +138,7 @@ const Q = {
     })
   },
 
-  localDBIndicies: async (prompter) => {
+  localDatabaseIndicies: async (prompter) => {
     return await prompter.prompt({
       type: 'input',
       name: 'storeIndices',
@@ -164,6 +162,7 @@ const Q = {
       type: 'input',
       name: 'paramName',
       message: `Parameter ${paramNumber} name:`,
+      initial: `param${paramNumber}`,
     })
   },
 
@@ -210,6 +209,7 @@ const Q = {
       type: 'input',
       name: 'methodName',
       message: `Method ${methodNumber} name:`,
+      initial: `getExample${methodNumber}`,
     })
   },
 
@@ -229,9 +229,12 @@ const Q = {
       name: 'import',
       message: `Enter import ${importNumber} details:`,
       choices: [
-        { name: 'part1', message: 'import', initial: '* as example' },
-        { name: 'pasrt2', message: 'from', initial: './example' },
+        { name: 'part1', message: 'import', initial: `* as example${importNumber}` },
+        { name: 'part2', message: 'from', initial: `./example${importNumber}` },
       ],
+      result(value) {
+        return `import ${value.part1} from ${value.part2}`
+      },
     })
   },
 }

@@ -1,5 +1,5 @@
 ---
-to: src/models/__tests__/class.test.js
+to: src/models/__tests__/<%= className %>.test.ts
 ---
 import { describe, test, expect } from 'vitest'
 
