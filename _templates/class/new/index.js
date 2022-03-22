@@ -62,7 +62,6 @@ async function parameterPrompts(prompter, Q, A) {
     const nextParam = {}
     nextParam.paramName = (await Q.parameterName(prompter, paramNumber + 1)).paramName
     nextParam.paramType = (await Q.parameterType(prompter, paramNumber + 1)).paramType
-    nextParam.paramDefault = (await Q.parameterDefault(prompter, paramNumber + 1)).paramDefault
     parameters[paramNumber] = nextParam
     paramNumber += 1
     isFirst = false
@@ -191,14 +190,6 @@ const Q = {
         'object[]',
         'any[]',
       ],
-    })
-  },
-
-  parameterDefault: async (prompter, paramNumber) => {
-    return await prompter.prompt({
-      type: 'confirm',
-      name: 'paramDefault',
-      message: `Will parameter ${paramNumber} have a default value?`,
     })
   },
 
