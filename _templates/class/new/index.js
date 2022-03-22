@@ -1,7 +1,15 @@
 // eslint-disable-next-line
 module.exports = {
   prompt: ({ prompter, args }) => {
-    return hygenGenerator(prompter, Q)
+    const A = {
+      className: null,
+      callDescription: null,
+      localDatabase: null,
+      parameters: null,
+      methods: null,
+      imports: null,
+    }
+    return hygenGenerator(prompter, Q, A)
   },
 }
 
@@ -143,7 +151,7 @@ const Q = {
       type: 'input',
       name: 'storeIndices',
       message: 'LocalDatabase store indices:',
-      initial: '&id',
+      initial: 'id, createdDate',
     })
   },
 
@@ -232,9 +240,6 @@ const Q = {
         { name: 'part1', message: 'import', initial: `* as example${importNumber}` },
         { name: 'part2', message: 'from', initial: `./example${importNumber}` },
       ],
-      result(value) {
-        return `import ${value.part1} from ${value.part2}`
-      },
     })
   },
 }

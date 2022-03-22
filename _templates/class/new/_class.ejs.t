@@ -1,19 +1,66 @@
 ---
 to: src/models/<%= className %>.ts
 ---
-<% if (templates.imports) { %><%= templates.imports %><% } %>
-<% if (templates.localDatabase) { %>
+<%
+// IMPORTS -----------------------------------------------------------------------------------------
+if (imports) {
+  imports.forEach((imp) => {
+
+%>import <%= imp.part1 %> from '<%= imp.part2 %>'
+<%
+
+  })
+}
+
+// LOCALDATABASE -----------------------------------------------------------------------------------
+if (localDatabase) {
+
+%>
 // Exports for LocalDatabase
 export const <%= className %>Store = Object.freeze({ <%= localDatabase.storeKey %>: '&<%= localDatabase.storeIndices %>' })
-<% } %>
+<%
 
-const hello = ```
-Hello!
-This is your first prompt based hygen template.
+}
 
-Learn what it can do here:
+// LOCALDATABASE & PARAMETERS ----------------------------------------------------------------------
+if (localDatabase && parameters) {
 
-https://github.com/jondot/hygen
-```
+%>
+export interface I<%= className %> {
+<%
 
-console.log(hello)
+  parameters.forEach((param) => {
+
+%>  <%= param.paramName %>: <%= param.paramType %>
+<%
+
+  })
+
+%>}
+<%
+
+}
+
+// PARAMETERS --------------------------------------------------------------------------------------
+if (parameters) {
+
+%>
+type <%= className %>Params = {
+<%
+
+  parameters.forEach((param) => {
+
+%>  <%= param.paramName %>?: <%= param.paramType %>
+<%
+
+  })
+
+%>}
+<%
+
+}
+
+
+%>
+
+// WIP
