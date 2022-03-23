@@ -1,112 +1,332 @@
 // eslint-disable-next-line
 module.exports = {
   prompt: ({ prompter, args }) => {
-    return hygenGenerator(prompter, Q)
+    return generator(prompter) // Starts here...
   },
 }
 
 /**
- * All prompts for this generator.
+ * All prompts (questions) for this generator.
  * @param prompter
- * @param Q Questions
  * @param A Answers
  */
-async function hygenGenerator(prompter, Q, A = {}) {
-  // Prompts
-  A = await updateAnswers(A, await initalPrompts(prompter, Q, A))
-  A = await updateAnswers(A, await localDatabasePrompts(prompter, Q, A))
-  A = await updateAnswers(A, await parameterPrompts(prompter, Q, A))
-  A = await updateAnswers(A, await methodPrompts(prompter, Q, A))
-  A = await updateAnswers(A, await importPrompts(prompter, Q, A))
+async function generator(prompter, A = {}) {
+  console.log('##### Launching Class Generator #####')
 
-  console.log('ANSWERS', A)
+  // Class name
+  A = await question({
+    answers: A,
+    prompter,
+    type: 'input',
+    variableName: 'className',
+    message: 'Class name:',
+    initial: 'Example',
+  })
+
+  // Class description
+  A = await question({
+    answers: A,
+    prompter,
+    type: 'input',
+    variableName: 'classDescription',
+    message: 'Class description:',
+    initial: `${A.className} JSDocs description.`,
+  })
+
+  // Is LocalDatabase store?
+  A = await question({
+    answers: A,
+    prompter,
+    type: 'confirm',
+    variableName: 'isLocalDatabaseStore',
+    message: `Class used as LocalDatabase store?`,
+  })
+
+  if (A.isLocalDatabaseStore) {
+    // LocalDatabase store key name
+    A = await question({
+      answers: A,
+      prompter,
+      type: 'input',
+      variableName: 'storeKey',
+      message: 'LocalDatabase store key name:',
+      initial: `${A.className.toLowerCase()}s`,
+    })
+
+    // LocalDatabase store indicies
+    A = await question({
+      answers: A,
+      prompter,
+      type: 'input',
+      variableName: 'storeIndicies',
+      message: 'LocalDatabase store indicies:',
+      initial: '&id, createdDate',
+    })
+  }
+
+  let parameters = []
+  let questionCounter = 0
+
+  const paramQuestion = {
+    prompter,
+    type: 'confirm',
+    variableName: 'addParam',
+    message: 'Add class parameter?',
+  }
+
+  // Add parameters?
+  while ((await question(paramQuestion)).addParam) {
+    parameters[questionCounter] = {
+      // Parameter name
+      name: (
+        await question({
+          prompter,
+          type: 'input',
+          variableName: 'name',
+          message: `Parameter ${questionCounter + 1} name:`,
+          initial: `param${questionCounter + 1}`,
+        })
+      ).name,
+      // Parameter type
+      type: (
+        await question({
+          prompter,
+          type: 'select',
+          variableName: 'type',
+          message: `Parameter ${questionCounter + 1} type:`,
+          choices: [
+            'string',
+            'number',
+            'boolean',
+            'object',
+            'any',
+            'string[]',
+            'number[]',
+            'boolean[]',
+            'object[]',
+            'any[]',
+          ],
+        })
+      ).type,
+    }
+
+    questionCounter += 1
+  }
+
+  // Merge parameters into answers
+  A = { ...A, parameters }
+  let methods = []
+  questionCounter = 0
+
+  const methodQuestion = {
+    prompter,
+    type: 'confirm',
+    variableName: 'addMethod',
+    message: 'Add class method?',
+  }
+
+  // Add methods?
+  while ((await question(methodQuestion)).addMethod) {
+    // Method name
+    methods[questionCounter] = (
+      await question({
+        prompter,
+        type: 'input',
+        variableName: 'name',
+        message: `Method ${questionCounter + 1} name:`,
+        initial: `getMethod${questionCounter + 1}`,
+      })
+    ).name
+
+    questionCounter += 1
+  }
+
+  // Merge methods into answers
+  A = { ...A, methods }
+  let imports = []
+  questionCounter = 0
+
+  const importQuestion = {
+    prompter,
+    type: 'confirm',
+    variableName: 'addImport',
+    message: 'Add file import?',
+  }
+
+  // Add imports?
+  while ((await question(importQuestion)).addImport) {
+    // Method name
+    imports[questionCounter] = (
+      await question({
+        prompter,
+        type: 'form',
+        variableName: 'import',
+        message: `Enter import ${questionCounter + 1} details:`,
+        choices: [
+          { name: 'part1', message: 'import', initial: `* as example${questionCounter + 1}` },
+          { name: 'part2', message: 'from', initial: `./example${questionCounter + 1}` },
+        ],
+      })
+    ).import
+
+    questionCounter += 1
+  }
+
+  // Merge imports into answers
+  A = { ...A, imports }
+
+  console.log('Answers ::', A)
 
   const fileCodeLines = await buildFileCodeLines(A)
   const testCodeLines = await buildTestCodeLines(A)
 
-  console.log('FILELINES', fileCodeLines)
-  console.log('TESTLINES', testCodeLines)
+  console.log('File Code Lines ::', fileCodeLines)
+  console.log('Test Code Lines ::', testCodeLines)
 
   return { className: A.className, fileLines: fileCodeLines, testLines: testCodeLines }
 }
 
-// Initial Information Prompts
-async function initalPrompts(prompter, Q, A) {
-  A = await updateAnswers(A, await Q.className(prompter))
-  A = await updateAnswers(A, await Q.classDescription(prompter, A))
-  return A
-}
+/**
+ * Builds the main file code lines for the EJS template.
+ * @param A Answers
+ * @returns codeLines array
+ */
+async function buildFileCodeLines(A) {
+  const codeLines = []
 
-// LocalDatabase Prompts
-async function localDatabasePrompts(prompter, Q, A) {
-  if ((await Q.localDatabase(prompter)).isLocalDatabaseStore) {
-    let localDatabase = {
-      storeKey: (await Q.localDatabaseKey(prompter, A)).storeKey,
-      storeIndices: (await Q.localDatabaseIndicies(prompter)).storeIndices,
-    }
-    A = await updateAnswers(A, { localDatabase })
+  // File Imports
+  if (A.imports) {
+    A.imports.forEach((i) => {
+      codeLines.push(`import ${i.part1} from '${i.part2}'`)
+    })
+    codeLines.push('')
   }
 
-  return A
-}
-
-// Parameter Prompts
-async function parameterPrompts(prompter, Q, A) {
-  let parameters = []
-  let paramNumber = 0
-  let isFirst = true
-
-  while ((await Q.addParameter(prompter, isFirst)).addParam) {
-    const nextParam = {}
-    nextParam.paramName = (await Q.parameterName(prompter, paramNumber + 1)).paramName
-    nextParam.paramType = (await Q.parameterType(prompter, paramNumber + 1)).paramType
-    parameters[paramNumber] = nextParam
-    paramNumber += 1
-    isFirst = false
-    A = await updateAnswers(A, { parameters })
+  // LocalDatabase Exports
+  if (A.isLocalDatabaseStore) {
+    codeLines.push('// Exports for LocalDatabase')
+    codeLines.push(
+      `export const ${A.className}Store = Object.freeze({ ${A.storeKey}: '${A.storeIndicies}' })`
+    )
+    codeLines.push('')
+  }
+  if (A.isLocalDatabaseStore && A.parameters.length) {
+    codeLines.push(`export interface I${A.className} {`)
+    A.parameters.forEach((p) => {
+      codeLines.push(`  ${p.name}: ${p.type}`)
+    })
+    codeLines.push('}')
+    codeLines.push('')
   }
 
-  return A
-}
-
-// Method Prompts
-async function methodPrompts(prompter, Q, A) {
-  let methods = []
-  let methodNumber = 0
-  let isFirst = true
-
-  while ((await Q.addMethod(prompter, isFirst)).addMethod) {
-    methods[methodNumber] = (await Q.methodName(prompter, methodNumber + 1)).methodName
-    methodNumber += 1
-    isFirst = false
-    A = await updateAnswers(A, { methods })
+  // Type Params
+  if (A.parameters.length) {
+    codeLines.push(`type ${A.className}Params = {`)
+    A.parameters.forEach((p) => {
+      codeLines.push(`  ${p.name}?: ${p.type}`)
+    })
+    codeLines.push('}')
+    codeLines.push('')
   }
 
-  return A
-}
+  // Description
+  codeLines.push('/**')
+  codeLines.push(` * ${A.classDescription}`)
+  if (A.parameters) {
+    A.parameters.forEach((p) => {
+      codeLines.push(` * @param ${p.name}`)
+    })
+  }
+  codeLines.push(' */')
 
-// Import Prompts
-async function importPrompts(prompter, Q, A) {
-  let imports = []
-  let importNumber = 0
-  let isFirst = true
-
-  while ((await Q.addImport(prompter, isFirst)).addImport) {
-    imports[importNumber] = (await Q.importForm(prompter, importNumber + 1)).import
-    importNumber += 1
-    isFirst = false
-    A = await updateAnswers(A, { imports })
+  // Class Export
+  if (A.isLocalDatabaseStore && A.parameters.length) {
+    codeLines.push(`export class ${A.className} implements I${A.className} {`)
+  } else {
+    codeLines.push(`export class ${A.className} {`)
   }
 
-  return A
+  // Fields
+  if (A.parameters) {
+    A.parameters.forEach((p) => {
+      codeLines.push(`  ${p.name}: ${p.type}`)
+    })
+    codeLines.push('')
+  }
+
+  // Constructor
+  if (A.parameters.length) {
+    codeLines.push('  constructor({')
+    A.parameters.forEach((p) => {
+      codeLines.push(`    ${p.name} = ${getDefaultForType(p.type)},`)
+    })
+    codeLines.push(`  }: ${A.className}Params = {}) {`)
+    A.parameters.forEach((p) => {
+      codeLines.push(`    this.${p.name} = ${p.name}`)
+    })
+    codeLines.push('  }')
+    codeLines.push('')
+  } else {
+    codeLines.push('  constructor() {')
+    codeLines.push(`    console.log('empty constructor')`)
+    codeLines.push('  }')
+    codeLines.push('')
+  }
+
+  // Methods
+  if (A.methods.length) {
+    A.methods.forEach((m) => {
+      codeLines.push(`  ${m}(): Error {`)
+      codeLines.push(`    return new Error('Not Implemented')`)
+      codeLines.push('  }')
+      codeLines.push('')
+    })
+    codeLines.pop() // Remove last newline
+  }
+
+  // Class Export - Closing Bracket
+  codeLines.push('}')
+
+  return codeLines
 }
 
-// Helper that makes answer updates easier to read in code
-async function updateAnswers(A, newAnswers) {
-  return await { ...A, ...newAnswers }
+/**
+ * Builds the test file code lines for the EJS template.
+ * @param A Answers
+ * @returns codeLines array
+ */
+async function buildTestCodeLines(A) {
+  const codeLines = []
+
+  codeLines.push(`import { describe, test, expect } from 'vitest'`)
+  codeLines.push(`import { ${A.className} } from '../${A.className}'`)
+  codeLines.push('')
+  codeLines.push(`describe('${A.className}', () => {`)
+
+  codeLines.push(`  test('should test ${A.className}', () => {`)
+  codeLines.push(`    expect(new ${A.className}()).toBe(false)`)
+  codeLines.push('  })')
+  codeLines.push('')
+
+  if (A.methods) {
+    A.methods.forEach((m) => {
+      codeLines.push(`  test('should test ${m}', () => {`)
+      codeLines.push('    expect(true).toBe(false)')
+      codeLines.push('  })')
+      codeLines.push('')
+    })
+  }
+
+  codeLines.pop() // Remove last newline
+  codeLines.push('})')
+
+  return codeLines
 }
 
-// Lookup default type
+/**
+ * Default value getter for TypeScript type.
+ * @param type
+ */
 function getDefaultForType(type) {
   switch (type) {
     case 'string':
@@ -132,257 +352,45 @@ function getDefaultForType(type) {
   }
 }
 
-// Builds the main file code lines for the EJS template
-async function buildFileCodeLines(A) {
-  const codeLines = []
-
-  // File Imports
-  if (A.imports) {
-    A.imports.forEach((i) => {
-      codeLines.push(`import ${i.part1} from '${i.part2}'`)
-    })
-    codeLines.push('')
+/**
+ * Question Prompt Types:
+ * - AutoComplete   - Password
+ * - BasicAuth      - Quiz
+ * - Confirm        - Survey
+ * - Form           - Scale
+ * - Input          - Select
+ * - Invisible      - Sort
+ * - List           - Snippet
+ * - MultiSelect    - Toggle
+ * - Numeral
+ */
+async function question({
+  answers = {},
+  prompter = {},
+  type = 'input',
+  variableName = 'varName',
+  message = 'My message:',
+  choices = null,
+  initial = null,
+  skip = false,
+  formatFunc = null,
+  resultFunc = null,
+  validateFunc = null,
+} = {}) {
+  return await {
+    // Spread existing answers
+    ...answers,
+    // Spread results of prompt with existing answers
+    ...(await prompter.prompt({
+      type,
+      name: variableName,
+      message,
+      choices,
+      initial,
+      skip,
+      format: formatFunc,
+      result: resultFunc,
+      validate: validateFunc,
+    })),
   }
-
-  // LocalDatabase Exports
-  if (A.localDatabase) {
-    codeLines.push('// Exports for LocalDatabase')
-    codeLines.push(
-      `export const ${A.className}Store = Object.freeze({ ${A.localDatabase.storeKey}: '${A.localDatabase.storeIndices}' })`
-    )
-    codeLines.push('')
-  }
-  if (A.localDatabase && A.parameters) {
-    codeLines.push(`export interface I${A.className} {`)
-    A.parameters.forEach((p) => {
-      codeLines.push(`  ${p.paramName}: ${p.paramType}`)
-    })
-    codeLines.push('}')
-    codeLines.push('')
-  }
-
-  // Type Params
-  if (A.parameters) {
-    codeLines.push(`type ${A.className}Params = {`)
-    A.parameters.forEach((p) => {
-      codeLines.push(`  ${p.paramName}?: ${p.paramType}`)
-    })
-    codeLines.push('}')
-    codeLines.push('')
-  }
-
-  // Description
-  codeLines.push('/**')
-  codeLines.push(` * ${A.classDescription}`)
-  if (A.parameters) {
-    A.parameters.forEach((p) => {
-      codeLines.push(` * @param ${p.paramName}`)
-    })
-  }
-  codeLines.push(' */')
-
-  // Class Export
-  if (A.localDatabase && A.parameters) {
-    codeLines.push(`export class ${A.className} implements I${A.className} {`)
-  } else {
-    codeLines.push(`export class ${A.className} {`)
-  }
-
-  // Fields
-  if (A.parameters) {
-    A.parameters.forEach((p) => {
-      codeLines.push(`  ${p.paramName}: ${p.paramType}`)
-    })
-    codeLines.push('')
-  }
-
-  // Constructor
-  if (A.parameters) {
-    codeLines.push('  constructor({')
-    A.parameters.forEach((p) => {
-      codeLines.push(`    ${p.paramName} = ${getDefaultForType(p.paramType.toString())},`)
-    })
-    codeLines.push(`  }: ${A.className}Params = {}) {`)
-    A.parameters.forEach((p) => {
-      codeLines.push(`    this.${p.paramName} = ${p.paramName}`)
-    })
-    codeLines.push('  }')
-    codeLines.push('')
-  } else {
-    codeLines.push('  constructor() {')
-    codeLines.push(`    this.example = 'example`)
-    codeLines.push('  }')
-    codeLines.push('')
-  }
-
-  // Methods
-  if (A.methods) {
-    A.methods.forEach((m) => {
-      codeLines.push(`  ${m}(): Error {`)
-      codeLines.push(`    return new Error('Not Implemented')`)
-      codeLines.push('  }')
-      codeLines.push('')
-    })
-    codeLines.pop() // Remove last newline
-  }
-
-  // Class Export - Closing Bracket
-  codeLines.push('}')
-
-  return codeLines
-}
-
-// Builds the test file code lines for the EJS template
-async function buildTestCodeLines(A) {
-  const codeLines = []
-
-  codeLines.push(`import { describe, test, expect } from 'vitest'`)
-  codeLines.push('')
-  codeLines.push(`describe('${A.className}', () => {`)
-
-  codeLines.push(`  test('should test ${A.className}', () => {`)
-  codeLines.push('    expect(true).toBe(false)')
-  codeLines.push('  })')
-  codeLines.push('')
-
-  if (A.methods) {
-    A.methods.forEach((m) => {
-      codeLines.push(`  test('should test ${A.className}', () => {`)
-      codeLines.push('    expect(true).toBe(false)')
-      codeLines.push('  })')
-      codeLines.push('')
-    })
-  }
-
-  codeLines.pop() // Remove last newline
-  codeLines.push('})')
-
-  return codeLines
-}
-
-// Questions for the prompter
-const Q = {
-  className: async (prompter) => {
-    return await prompter.prompt({
-      type: 'input',
-      name: 'className',
-      message: 'Class name:',
-      initial: 'Example',
-    })
-  },
-
-  classDescription: async (prompter, A) => {
-    return await prompter.prompt({
-      type: 'input',
-      name: 'classDescription',
-      message: 'Class description:',
-      initial: `${A.className} class JSDocs description.`,
-    })
-  },
-
-  localDatabase: async (prompter) => {
-    return await prompter.prompt({
-      type: 'confirm',
-      name: 'isLocalDatabaseStore',
-      message: 'Is class a LocalDatabase store?',
-    })
-  },
-
-  localDatabaseKey: async (prompter, A) => {
-    return await prompter.prompt({
-      type: 'input',
-      name: 'storeKey',
-      message: 'LocalDatabase store key:',
-      initial: `${A.className.toLowerCase()}s`,
-    })
-  },
-
-  localDatabaseIndicies: async (prompter) => {
-    return await prompter.prompt({
-      type: 'input',
-      name: 'storeIndices',
-      message: 'LocalDatabase store indices:',
-      initial: '&id, createdDate',
-    })
-  },
-
-  addParameter: async (prompter, isFirst) => {
-    const another = isFirst ? 'a' : 'another'
-
-    return await prompter.prompt({
-      type: 'confirm',
-      name: 'addParam',
-      message: `Add ${another} class parameter?`,
-    })
-  },
-
-  parameterName: async (prompter, paramNumber) => {
-    return await prompter.prompt({
-      type: 'input',
-      name: 'paramName',
-      message: `Parameter ${paramNumber} name:`,
-      initial: `param${paramNumber}`,
-    })
-  },
-
-  parameterType: async (prompter, paramNumber) => {
-    return await prompter.prompt({
-      type: 'select',
-      name: 'paramType',
-      message: `Parameter ${paramNumber} type:`,
-      choices: [
-        'string',
-        'number',
-        'boolean',
-        'object',
-        'any',
-        'string[]',
-        'number[]',
-        'boolean[]',
-        'object[]',
-        'any[]',
-      ],
-    })
-  },
-
-  addMethod: async (prompter, isFirst) => {
-    const another = isFirst ? 'a' : 'another'
-
-    return await prompter.prompt({
-      type: 'confirm',
-      name: 'addMethod',
-      message: `Add ${another} class method?`,
-    })
-  },
-
-  methodName: async (prompter, methodNumber) => {
-    return await prompter.prompt({
-      type: 'input',
-      name: 'methodName',
-      message: `Method ${methodNumber} name:`,
-      initial: `getExample${methodNumber}`,
-    })
-  },
-
-  addImport: async (prompter, isFirst) => {
-    const another = isFirst ? 'an' : 'another'
-
-    return await prompter.prompt({
-      type: 'confirm',
-      name: 'addImport',
-      message: `Add ${another} import?`,
-    })
-  },
-
-  importForm: async (prompter, importNumber) => {
-    return await prompter.prompt({
-      type: 'form',
-      name: 'import',
-      message: `Enter import ${importNumber} details:`,
-      choices: [
-        { name: 'part1', message: 'import', initial: `* as example${importNumber}` },
-        { name: 'part2', message: 'from', initial: `./example${importNumber}` },
-      ],
-    })
-  },
 }
