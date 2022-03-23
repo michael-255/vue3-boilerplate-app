@@ -1,15 +1,7 @@
 // eslint-disable-next-line
 module.exports = {
   prompt: ({ prompter, args }) => {
-    const A = {
-      className: null,
-      callDescription: null,
-      localDatabase: null,
-      parameters: null,
-      methods: null,
-      imports: null,
-    }
-    return hygenGenerator(prompter, Q, A)
+    return hygenGenerator(prompter, Q)
   },
 }
 
@@ -29,7 +21,13 @@ async function hygenGenerator(prompter, Q, A = {}) {
 
   console.log('ANSWERS', A)
 
-  return A
+  const fileCodeLines = await buildFileCodeLines(A)
+  const testCodeLines = await buildTestCodeLines(A)
+
+  console.log('FILELINES', fileCodeLines)
+  console.log('TESTLINES', testCodeLines)
+
+  return { className: A.className, fileLines: fileCodeLines, testLines: testCodeLines }
 }
 
 // Initial Information Prompts
@@ -108,6 +106,160 @@ async function updateAnswers(A, newAnswers) {
   return await { ...A, ...newAnswers }
 }
 
+// Lookup default type
+function getDefaultForType(type) {
+  switch (type) {
+    case 'string':
+      return `''`
+    case 'number':
+      return '100'
+    case 'boolean':
+      return 'false'
+    case 'object':
+    case 'any':
+      return '{}'
+    case 'string[]':
+      return "['']"
+    case 'number[]':
+      return '[100]'
+    case 'boolean[]':
+      return '[false]'
+    case 'object[]':
+    case 'any[]':
+      return '[{}]'
+    default:
+      return 'null'
+  }
+}
+
+// Builds the main file code lines for the EJS template
+async function buildFileCodeLines(A) {
+  const codeLines = []
+
+  // File Imports
+  if (A.imports) {
+    A.imports.forEach((i) => {
+      codeLines.push(`import ${i.part1} from '${i.part2}'`)
+    })
+    codeLines.push('')
+  }
+
+  // LocalDatabase Exports
+  if (A.localDatabase) {
+    codeLines.push('// Exports for LocalDatabase')
+    codeLines.push(
+      `export const ${A.className}Store = Object.freeze({ ${A.localDatabase.storeKey}: '${A.localDatabase.storeIndices}' })`
+    )
+    codeLines.push('')
+  }
+  if (A.localDatabase && A.parameters) {
+    codeLines.push(`export interface I${A.className} {`)
+    A.parameters.forEach((p) => {
+      codeLines.push(`  ${p.paramName}: ${p.paramType}`)
+    })
+    codeLines.push('}')
+    codeLines.push('')
+  }
+
+  // Type Params
+  if (A.parameters) {
+    codeLines.push(`type ${A.className}Params = {`)
+    A.parameters.forEach((p) => {
+      codeLines.push(`  ${p.paramName}?: ${p.paramType}`)
+    })
+    codeLines.push('}')
+    codeLines.push('')
+  }
+
+  // Description
+  codeLines.push('/**')
+  codeLines.push(` * ${A.classDescription}`)
+  if (A.parameters) {
+    A.parameters.forEach((p) => {
+      codeLines.push(` * @param ${p.paramName}`)
+    })
+  }
+  codeLines.push(' */')
+
+  // Class Export
+  if (A.localDatabase && A.parameters) {
+    codeLines.push(`export class ${A.className} implements I${A.className} {`)
+  } else {
+    codeLines.push(`export class ${A.className} {`)
+  }
+
+  // Fields
+  if (A.parameters) {
+    A.parameters.forEach((p) => {
+      codeLines.push(`  ${p.paramName}: ${p.paramType}`)
+    })
+    codeLines.push('')
+  }
+
+  // Constructor
+  if (A.parameters) {
+    codeLines.push('  constructor({')
+    A.parameters.forEach((p) => {
+      codeLines.push(`    ${p.paramName} = ${getDefaultForType(p.paramType.toString())},`)
+    })
+    codeLines.push(`  }: ${A.className}Params = {}) {`)
+    A.parameters.forEach((p) => {
+      codeLines.push(`    this.${p.paramName} = ${p.paramName}`)
+    })
+    codeLines.push('  }')
+    codeLines.push('')
+  } else {
+    codeLines.push('  constructor() {')
+    codeLines.push(`    this.example = 'example`)
+    codeLines.push('  }')
+    codeLines.push('')
+  }
+
+  // Methods
+  if (A.methods) {
+    A.methods.forEach((m) => {
+      codeLines.push(`  ${m}(): Error {`)
+      codeLines.push(`    return new Error('Not Implemented')`)
+      codeLines.push('  }')
+      codeLines.push('')
+    })
+    codeLines.pop() // Remove last newline
+  }
+
+  // Class Export - Closing Bracket
+  codeLines.push('}')
+
+  return codeLines
+}
+
+// Builds the test file code lines for the EJS template
+async function buildTestCodeLines(A) {
+  const codeLines = []
+
+  codeLines.push(`import { describe, test, expect } from 'vitest'`)
+  codeLines.push('')
+  codeLines.push(`describe('${A.className}', () => {`)
+
+  codeLines.push(`  test('should test ${A.className}', () => {`)
+  codeLines.push('    expect(true).toBe(false)')
+  codeLines.push('  })')
+  codeLines.push('')
+
+  if (A.methods) {
+    A.methods.forEach((m) => {
+      codeLines.push(`  test('should test ${A.className}', () => {`)
+      codeLines.push('    expect(true).toBe(false)')
+      codeLines.push('  })')
+      codeLines.push('')
+    })
+  }
+
+  codeLines.pop() // Remove last newline
+  codeLines.push('})')
+
+  return codeLines
+}
+
 // Questions for the prompter
 const Q = {
   className: async (prompter) => {
@@ -150,7 +302,7 @@ const Q = {
       type: 'input',
       name: 'storeIndices',
       message: 'LocalDatabase store indices:',
-      initial: 'id, createdDate',
+      initial: '&id, createdDate',
     })
   },
 
