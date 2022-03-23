@@ -20,7 +20,13 @@ async function generator(prompter, A = {}) {
     type: 'input',
     variableName: 'className',
     message: 'Class name:',
-    initial: 'Example',
+    validateFunc: (val) => {
+      if (!val.length) {
+        return 'Must enter class name (Example: User)'
+      }
+      return true
+    },
+    resultFunc: (val) => val.charAt(0).toUpperCase() + val.slice(1),
   })
 
   // Class description
@@ -30,38 +36,63 @@ async function generator(prompter, A = {}) {
     type: 'input',
     variableName: 'classDescription',
     message: 'Class description:',
-    initial: `${A.className} JSDocs description.`,
+    initial: `${A.className} Class`,
   })
 
-  // Is LocalDatabase store?
+  // Class location
   A = await question({
     answers: A,
     prompter,
-    type: 'confirm',
-    variableName: 'isLocalDatabaseStore',
-    message: `Class used as LocalDatabase store?`,
+    type: 'select',
+    variableName: 'classLocation',
+    message: 'Class location:',
+    choices: ['src/models', 'src/services'],
   })
 
-  if (A.isLocalDatabaseStore) {
-    // LocalDatabase store key name
+  // Is LocalDatabase store?
+  if (A.classLocation == 'src/models') {
     A = await question({
       answers: A,
       prompter,
-      type: 'input',
-      variableName: 'storeKey',
-      message: 'LocalDatabase store key name:',
-      initial: `${A.className.toLowerCase()}s`,
+      type: 'confirm',
+      variableName: 'isLocalDatabaseStore',
+      message: `Class used as LocalDatabase store?`,
     })
 
-    // LocalDatabase store indicies
-    A = await question({
-      answers: A,
-      prompter,
-      type: 'input',
-      variableName: 'storeIndicies',
-      message: 'LocalDatabase store indicies:',
-      initial: '&id, createdDate',
-    })
+    if (A.isLocalDatabaseStore) {
+      // LocalDatabase store key name
+      A = await question({
+        answers: A,
+        prompter,
+        type: 'input',
+        variableName: 'storeKey',
+        message: 'LocalDatabase store key name:',
+        validateFunc: (val) => {
+          if (!val.length) {
+            return 'Must enter store key name (Example: users)'
+          }
+          return true
+        },
+      })
+
+      // LocalDatabase store indicies
+      A = await question({
+        answers: A,
+        prompter,
+        type: 'input',
+        variableName: 'storeIndicies',
+        message: 'LocalDatabase store indicies:',
+        validateFunc: (val) => {
+          if (!val.length) {
+            return 'Must enter store indices (Example: &id, createdDate)'
+          }
+          return true
+        },
+      })
+    }
+  } else {
+    // Only models can be LocalDatabase stores
+    A = { ...A, isLocalDatabaseStore: false }
   }
 
   let parameters = []
@@ -84,7 +115,12 @@ async function generator(prompter, A = {}) {
           type: 'input',
           variableName: 'name',
           message: `Parameter ${questionCounter + 1} name:`,
-          initial: `param${questionCounter + 1}`,
+          validateFunc: (val) => {
+            if (!val.length) {
+              return 'Must enter parameter name (Example: createdDate)'
+            }
+            return true
+          },
         })
       ).name,
       // Parameter type
@@ -134,7 +170,12 @@ async function generator(prompter, A = {}) {
         type: 'input',
         variableName: 'name',
         message: `Method ${questionCounter + 1} name:`,
-        initial: `getMethod${questionCounter + 1}`,
+        validateFunc: (val) => {
+          if (!val.length) {
+            return 'Must enter method name (Example: getDisplayDate)'
+          }
+          return true
+        },
       })
     ).name
 
@@ -160,14 +201,15 @@ async function generator(prompter, A = {}) {
       await question({
         prompter,
         type: 'form',
-        variableName: 'import',
-        message: `Enter import ${questionCounter + 1} details:`,
+        variableName: 'importLine',
+        message: `Enter file import ${questionCounter + 1} line:`,
         choices: [
           { name: 'part1', message: 'import', initial: `* as example${questionCounter + 1}` },
-          { name: 'part2', message: 'from', initial: `./example${questionCounter + 1}` },
+          { name: 'part2', message: 'from', initial: `./path/to/example${questionCounter + 1}` },
         ],
+        resultFunc: (val) => `import ${val.part1} from '${val.part2}'`,
       })
-    ).import
+    ).importLine
 
     questionCounter += 1
   }
@@ -183,7 +225,12 @@ async function generator(prompter, A = {}) {
   console.log('File Code Lines ::', fileCodeLines)
   console.log('Test Code Lines ::', testCodeLines)
 
-  return { className: A.className, fileLines: fileCodeLines, testLines: testCodeLines }
+  return {
+    className: A.className,
+    classLocation: A.classLocation,
+    fileLines: fileCodeLines,
+    testLines: testCodeLines,
+  }
 }
 
 /**
@@ -197,7 +244,7 @@ async function buildFileCodeLines(A) {
   // File Imports
   if (A.imports) {
     A.imports.forEach((i) => {
-      codeLines.push(`import ${i.part1} from '${i.part2}'`)
+      codeLines.push(i)
     })
     codeLines.push('')
   }
@@ -354,15 +401,23 @@ function getDefaultForType(type) {
 
 /**
  * Question Prompt Types:
- * - AutoComplete   - Password
- * - BasicAuth      - Quiz
- * - Confirm        - Survey
- * - Form           - Scale
- * - Input          - Select
- * - Invisible      - Sort
- * - List           - Snippet
- * - MultiSelect    - Toggle
+ * - AutoComplete
+ * - BasicAuth
+ * - Confirm
+ * - Form
+ * - Input
+ * - Invisible
+ * - List
+ * - MultiSelect
  * - Numeral
+ * - Password
+ * - Quiz
+ * - Survey
+ * - Scale
+ * - Select
+ * - Sort
+ * - Snippet
+ * - Toggle
  */
 async function question({
   answers = {},

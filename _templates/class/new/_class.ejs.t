@@ -1,5 +1,5 @@
 ---
-to: src/models/<%= className %>.ts
+to: <%= classLocation %>/<%= className %>.ts
 ---
 <%_ fileLines.forEach((line) => { _%>
 <%- line %>
