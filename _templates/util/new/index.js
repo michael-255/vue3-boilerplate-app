@@ -11,181 +11,25 @@ module.exports = {
  * @param A Answers
  */
 async function generator(prompter, A = {}) {
-  console.log('##### Launching Class File Generator #####')
+  console.log('##### Launching Utility File Generator #####')
 
-  // Class name
+  // File name
   A = await question({
     answers: A,
     prompter,
     type: 'input',
-    variableName: 'className',
-    message: 'Class name:',
+    variableName: 'fileName',
+    message: 'Utility file name:',
     validateFunc: (val) => {
       if (!val.length) {
-        return 'Must enter class name (Example: User)'
+        return 'Must enter a file name (Example: my-utils)'
       }
       return true
     },
-    resultFunc: (val) => val.charAt(0).toUpperCase() + val.slice(1),
   })
 
-  // Class description
-  A = await question({
-    answers: A,
-    prompter,
-    type: 'input',
-    variableName: 'classDescription',
-    message: 'Class description:',
-    initial: `${A.className} Class`,
-  })
-
-  // Class location
-  A = await question({
-    answers: A,
-    prompter,
-    type: 'select',
-    variableName: 'classLocation',
-    message: 'Class location:',
-    choices: ['src/models', 'src/services'],
-  })
-
-  // Is LocalDatabase store?
-  if (A.classLocation == 'src/models') {
-    A = await question({
-      answers: A,
-      prompter,
-      type: 'confirm',
-      variableName: 'isLocalDatabaseStore',
-      message: `Class used as LocalDatabase store?`,
-    })
-
-    if (A.isLocalDatabaseStore) {
-      // LocalDatabase store key name
-      A = await question({
-        answers: A,
-        prompter,
-        type: 'input',
-        variableName: 'storeKey',
-        message: 'LocalDatabase store key name:',
-        validateFunc: (val) => {
-          if (!val.length) {
-            return 'Must enter store key name (Example: users)'
-          }
-          return true
-        },
-      })
-
-      // LocalDatabase store indicies
-      A = await question({
-        answers: A,
-        prompter,
-        type: 'input',
-        variableName: 'storeIndicies',
-        message: 'LocalDatabase store indicies:',
-        validateFunc: (val) => {
-          if (!val.length) {
-            return 'Must enter store indices (Example: &id, createdDate)'
-          }
-          return true
-        },
-      })
-    }
-  } else {
-    // Only models can be LocalDatabase stores
-    A = { ...A, isLocalDatabaseStore: false }
-  }
-
-  let parameters = []
-  let questionCounter = 0
-
-  const paramQuestion = {
-    prompter,
-    type: 'confirm',
-    variableName: 'addParam',
-    message: 'Add class parameter?',
-  }
-
-  // Add parameters?
-  while ((await question(paramQuestion)).addParam) {
-    parameters[questionCounter] = {
-      // Parameter name
-      name: (
-        await question({
-          prompter,
-          type: 'input',
-          variableName: 'name',
-          message: `Parameter ${questionCounter + 1} name:`,
-          validateFunc: (val) => {
-            if (!val.length) {
-              return 'Must enter parameter name (Example: createdDate)'
-            }
-            return true
-          },
-        })
-      ).name,
-      // Parameter type
-      type: (
-        await question({
-          prompter,
-          type: 'select',
-          variableName: 'type',
-          message: `Parameter ${questionCounter + 1} type:`,
-          choices: [
-            'string',
-            'number',
-            'boolean',
-            'object',
-            'any',
-            'string[]',
-            'number[]',
-            'boolean[]',
-            'object[]',
-            'any[]',
-          ],
-        })
-      ).type,
-    }
-
-    questionCounter += 1
-  }
-
-  // Merge parameters into answers
-  A = { ...A, parameters }
-  let methods = []
-  questionCounter = 0
-
-  const methodQuestion = {
-    prompter,
-    type: 'confirm',
-    variableName: 'addMethod',
-    message: 'Add class method?',
-  }
-
-  // Add methods?
-  while ((await question(methodQuestion)).addMethod) {
-    // Method name
-    methods[questionCounter] = (
-      await question({
-        prompter,
-        type: 'input',
-        variableName: 'name',
-        message: `Method ${questionCounter + 1} name:`,
-        validateFunc: (val) => {
-          if (!val.length) {
-            return 'Must enter method name (Example: getDisplayDate)'
-          }
-          return true
-        },
-      })
-    ).name
-
-    questionCounter += 1
-  }
-
-  // Merge methods into answers
-  A = { ...A, methods }
   let imports = []
-  questionCounter = 0
+  let questionCounter = 0
 
   const importQuestion = {
     prompter,
@@ -217,6 +61,115 @@ async function generator(prompter, A = {}) {
   // Merge imports into answers
   A = { ...A, imports }
 
+  let functions = []
+  questionCounter = 0
+
+  const functionQuestion = {
+    prompter,
+    type: 'confirm',
+    variableName: 'addFunction',
+    message: 'Add a new function?',
+  }
+
+  // Add functions?
+  while ((await question(functionQuestion)).addFunction) {
+    functions[questionCounter] = {
+      // Function name
+      name: (
+        await question({
+          prompter,
+          type: 'input',
+          variableName: 'name',
+          message: `Function ${questionCounter + 1} name:`,
+          validateFunc: (val) => {
+            if (!val.length) {
+              return 'Must enter function name (Example: getDisplayDate)'
+            }
+            return true
+          },
+        })
+      ).name,
+      // Function exportable?
+      isExportFunc: (
+        await question({
+          prompter,
+          type: 'confirm',
+          variableName: 'isExportFunc',
+          message: 'Is function exportable?',
+        })
+      ).isExportFunc,
+      // Function async?
+      isAsyncFunc: (
+        await question({
+          prompter,
+          type: 'confirm',
+          variableName: 'isAsyncFunc',
+          message: 'Is function async?',
+        })
+      ).isAsyncFunc,
+      // Function parameters
+      parameters: [],
+    }
+
+    let parameterCounter = 0
+
+    const paramQuestion = {
+      prompter,
+      type: 'confirm',
+      variableName: 'addParam',
+      message: 'Add function parameter?',
+    }
+
+    // Add parameters?
+    while ((await question(paramQuestion)).addParam) {
+      functions[questionCounter].parameters[parameterCounter] = {
+        // Parameter name
+        name: (
+          await question({
+            prompter,
+            type: 'input',
+            variableName: 'name',
+            message: `Parameter ${parameterCounter + 1} name:`,
+            validateFunc: (val) => {
+              if (!val.length) {
+                return 'Must enter parameter name (Example: createdDate)'
+              }
+              return true
+            },
+          })
+        ).name,
+        // Parameter type
+        type: (
+          await question({
+            prompter,
+            type: 'select',
+            variableName: 'type',
+            message: `Parameter ${parameterCounter + 1} type:`,
+            choices: [
+              'string',
+              'number',
+              'boolean',
+              'object',
+              'any',
+              'string[]',
+              'number[]',
+              'boolean[]',
+              'object[]',
+              'any[]',
+            ],
+          })
+        ).type,
+      }
+
+      parameterCounter += 1
+    }
+
+    questionCounter += 1
+  }
+
+  // Merge functions into answers
+  A = { ...A, functions }
+
   console.log('Answers ::', A)
 
   const fileCodeLines = await buildFileCodeLines(A)
@@ -226,8 +179,7 @@ async function generator(prompter, A = {}) {
   console.log('Test Code Lines ::', testCodeLines)
 
   return {
-    className: A.className,
-    classLocation: A.classLocation,
+    fileName: A.fileName,
     fileLines: fileCodeLines,
     testLines: testCodeLines,
   }
