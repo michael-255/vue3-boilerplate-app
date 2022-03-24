@@ -242,7 +242,7 @@ async function buildFileCodeLines(A) {
   const codeLines = []
 
   // File Imports
-  if (A.imports) {
+  if (A.imports.length) {
     A.imports.forEach((i) => {
       codeLines.push(i)
     })
@@ -279,7 +279,7 @@ async function buildFileCodeLines(A) {
   // Description
   codeLines.push('/**')
   codeLines.push(` * ${A.classDescription}`)
-  if (A.parameters) {
+  if (A.parameters.length) {
     A.parameters.forEach((p) => {
       codeLines.push(` * @param ${p.name}`)
     })
@@ -294,7 +294,7 @@ async function buildFileCodeLines(A) {
   }
 
   // Fields
-  if (A.parameters) {
+  if (A.parameters.length) {
     A.parameters.forEach((p) => {
       codeLines.push(`  ${p.name}: ${p.type}`)
     })
@@ -355,9 +355,9 @@ async function buildTestCodeLines(A) {
   codeLines.push('  })')
   codeLines.push('')
 
-  if (A.methods) {
+  if (A.methods.length) {
     A.methods.forEach((m) => {
-      codeLines.push(`  test('should test ${m}', () => {`)
+      codeLines.push(`  test('should test ${m} method', () => {`)
       codeLines.push('    expect(true).toBe(false)')
       codeLines.push('  })')
       codeLines.push('')

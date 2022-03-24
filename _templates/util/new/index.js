@@ -89,6 +89,16 @@ async function generator(prompter, A = {}) {
           },
         })
       ).name,
+      // Function description
+      description: (
+        await question({
+          prompter,
+          type: 'input',
+          variableName: 'description',
+          message: `Function ${questionCounter + 1} description:`,
+          initial: 'Utility Function',
+        })
+      ).description,
       // Function exportable?
       isExportFunc: (
         await question({
@@ -194,97 +204,58 @@ async function buildFileCodeLines(A) {
   const codeLines = []
 
   // File Imports
-  if (A.imports) {
+  if (A.imports.length) {
     A.imports.forEach((i) => {
       codeLines.push(i)
     })
     codeLines.push('')
   }
 
-  // LocalDatabase Exports
-  if (A.isLocalDatabaseStore) {
-    codeLines.push('// Exports for LocalDatabase')
-    codeLines.push(
-      `export const ${A.className}Store = Object.freeze({ ${A.storeKey}: '${A.storeIndicies}' })`
-    )
-    codeLines.push('')
-  }
-  if (A.isLocalDatabaseStore && A.parameters.length) {
-    codeLines.push(`export interface I${A.className} {`)
-    A.parameters.forEach((p) => {
-      codeLines.push(`  ${p.name}: ${p.type}`)
-    })
-    codeLines.push('}')
-    codeLines.push('')
-  }
+  // Utility Functions
+  if (A.functions.length) {
+    A.functions.forEach((f) => {
+      // Type Params
+      if (f.parameters.length) {
+        codeLines.push(`type ${f.name}Params = {`)
+        f.parameters.forEach((p) => {
+          codeLines.push(`  ${p.name}?: ${p.type}`)
+        })
+        codeLines.push('}')
+        codeLines.push('')
+      }
 
-  // Type Params
-  if (A.parameters.length) {
-    codeLines.push(`type ${A.className}Params = {`)
-    A.parameters.forEach((p) => {
-      codeLines.push(`  ${p.name}?: ${p.type}`)
-    })
-    codeLines.push('}')
-    codeLines.push('')
-  }
+      // Description
+      codeLines.push('/**')
+      codeLines.push(` * ${f.description}`)
+      if (f.parameters.length) {
+        f.parameters.forEach((p) => {
+          codeLines.push(` * @param obj.${p.name}`)
+        })
+      }
+      codeLines.push(' */')
 
-  // Description
-  codeLines.push('/**')
-  codeLines.push(` * ${A.classDescription}`)
-  if (A.parameters) {
-    A.parameters.forEach((p) => {
-      codeLines.push(` * @param ${p.name}`)
-    })
-  }
-  codeLines.push(' */')
-
-  // Class Export
-  if (A.isLocalDatabaseStore && A.parameters.length) {
-    codeLines.push(`export class ${A.className} implements I${A.className} {`)
-  } else {
-    codeLines.push(`export class ${A.className} {`)
-  }
-
-  // Fields
-  if (A.parameters) {
-    A.parameters.forEach((p) => {
-      codeLines.push(`  ${p.name}: ${p.type}`)
-    })
-    codeLines.push('')
-  }
-
-  // Constructor
-  if (A.parameters.length) {
-    codeLines.push('  constructor({')
-    A.parameters.forEach((p) => {
-      codeLines.push(`    ${p.name} = ${getDefaultForType(p.type)},`)
-    })
-    codeLines.push(`  }: ${A.className}Params = {}) {`)
-    A.parameters.forEach((p) => {
-      codeLines.push(`    this.${p.name} = ${p.name}`)
-    })
-    codeLines.push('  }')
-    codeLines.push('')
-  } else {
-    codeLines.push('  constructor() {')
-    codeLines.push(`    console.log('empty constructor')`)
-    codeLines.push('  }')
-    codeLines.push('')
-  }
-
-  // Methods
-  if (A.methods.length) {
-    A.methods.forEach((m) => {
-      codeLines.push(`  ${m}(): Error {`)
-      codeLines.push(`    return new Error('Not Implemented')`)
-      codeLines.push('  }')
+      // Function Name Line
+      const hasExport = f.isExportFunc ? 'export ' : ''
+      const hasAsync = f.isAsyncFunc ? 'async ' : ''
+      const hasVoid = f.isAsyncFunc ? 'Promise<void>' : 'void'
+      if (f.parameters.length) {
+        codeLines.push(`${hasExport}${hasAsync}function ${f.name}({`)
+        let paramNames = []
+        f.parameters.forEach((p) => {
+          paramNames.push(p.name)
+          codeLines.push(`  ${p.name} = ${getDefaultForType(p.type)},`)
+        })
+        codeLines.push(`}: ${f.name}Params = {}): ${hasVoid} {`)
+        codeLines.push(`  console.log(${paramNames.toString()})`)
+        codeLines.push(`}`)
+      } else {
+        codeLines.push(`${hasExport}${hasAsync}function ${f.name}(): ${hasVoid} {`)
+        codeLines.push(`  console.log('empty function')`)
+        codeLines.push(`}`)
+      }
       codeLines.push('')
     })
-    codeLines.pop() // Remove last newline
   }
-
-  // Class Export - Closing Bracket
-  codeLines.push('}')
 
   return codeLines
 }
@@ -298,21 +269,25 @@ async function buildTestCodeLines(A) {
   const codeLines = []
 
   codeLines.push(`import { describe, test, expect } from 'vitest'`)
-  codeLines.push(`import { ${A.className} } from '../${A.className}'`)
+  codeLines.push(`import * as utils from '../${A.fileName}'`)
   codeLines.push('')
-  codeLines.push(`describe('${A.className}', () => {`)
+  codeLines.push(`describe('${A.fileName}', () => {`)
 
-  codeLines.push(`  test('should test ${A.className}', () => {`)
-  codeLines.push(`    expect(new ${A.className}()).toBe(false)`)
+  codeLines.push(`  test('should test ${A.fileName} file', () => {`)
+  codeLines.push(`    expect(true).toBe(false)`)
   codeLines.push('  })')
   codeLines.push('')
 
-  if (A.methods) {
-    A.methods.forEach((m) => {
-      codeLines.push(`  test('should test ${m}', () => {`)
-      codeLines.push('    expect(true).toBe(false)')
-      codeLines.push('  })')
-      codeLines.push('')
+  if (A.functions.length) {
+    A.functions.forEach((f) => {
+      if (f.isExportFunc) {
+        codeLines.push(`  describe('${f.name}', () => {`)
+        codeLines.push(`    test('should test ${f.name} function', () => {`)
+        codeLines.push(`      expect(true).toBe(false)`)
+        codeLines.push('    })')
+        codeLines.push('  })')
+        codeLines.push('')
+      }
     })
   }
 

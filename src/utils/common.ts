@@ -7,10 +7,10 @@ type downloadFileParams = {
 
 /**
  * Simple file download function for web apps.
- * @param fileName Name of file
- * @param extension File extension
- * @param mimeType Options like: 'application/json', or 'text/csv', etc.
- * @param textContent All file content as a string
+ * @param obj.fileName Name of file
+ * @param obj.extension File extension
+ * @param obj.mimeType Options like: 'application/json', or 'text/csv', etc.
+ * @param obj.textContent All file content as a string
  * @returns Nothing, but should trigger a file download
  */
 export function downloadFile({
