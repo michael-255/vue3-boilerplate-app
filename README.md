@@ -314,11 +314,16 @@ Initialize in a project only **once**. You should see a `~/_templates` directory
 hygen init self
 ```
 
+My Boilerplate Generators
+
+- `class`
+- `util`
+
 Create a new Hygen generator with the following steps:
 
 1. Create a generator **NAME** directory in `~/_templates`
 
-   - Like `classes`, `components`, or `utils`
+   - Like `class`, `component`, or `util`
 
 2. Create a generator **ACTION** directory in the **NAME** directory
 
@@ -328,7 +333,7 @@ Create a new Hygen generator with the following steps:
 
    - `*.ejf.t`
    - `*.test.ejs.t`
-   - `prompt.js` (if using console prompts)
+   - `index.js` (if using console prompts)
 
 You can run your generators with the following command.
 
