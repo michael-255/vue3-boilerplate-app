@@ -1,4 +1,23 @@
 <script setup lang="ts">
+import { RouterView, RouterLink } from 'vue-router'
+</script>
+
+<template>
+  <h3>App</h3>
+
+  <nav>
+    <RouterLink to="/">Home</RouterLink>
+    <RouterLink to="/dashboard">Dashboard</RouterLink>
+    <RouterLink to="/about">About</RouterLink>
+    <RouterLink to="/test123">NotFound</RouterLink>
+  </nav>
+
+  <h6>----- Router View Below -----</h6>
+
+  <RouterView />
+</template>
+
+<!-- <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from '@/components/HelloWorld.vue'
 </script>
@@ -116,4 +135,4 @@ nav a:first-of-type {
     margin-top: 1rem;
   }
 }
-</style>
+</style> -->
