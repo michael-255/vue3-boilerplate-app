@@ -1,20 +1,23 @@
 <script setup lang="ts">
-import { RouterView, RouterLink } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
+import { defineAsyncComponent, computed } from 'vue'
+import { Layouts } from '@/constants'
+
+// Get Layout for View based on router meta property
+const route = useRoute()
+const routeLayout = computed(() => route?.meta?.layout)
+const layoutComponent = computed(() => {
+  return routeLayout.value
+    ? defineAsyncComponent(() => import(`./layouts/${routeLayout.value}.vue`))
+    : defineAsyncComponent(() => import(`./layouts/${Layouts.DEFAULT}.vue`))
+})
 </script>
 
 <template>
   <h3>App</h3>
-
-  <nav>
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/dashboard">Dashboard</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
-    <RouterLink to="/test123">NotFound</RouterLink>
-  </nav>
-
-  <h6>----- Router View Below -----</h6>
-
-  <RouterView />
+  <component :is="layoutComponent">
+    <RouterView />
+  </component>
 </template>
 
 <!-- <script setup lang="ts">

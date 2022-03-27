@@ -4,6 +4,7 @@ const view = 'View'
 const layout = 'Layout'
 
 export const Layouts = Object.freeze({
+  DEFAULT: 'Default' + layout,
   SIMPLE: 'Simple' + layout,
   MENU: 'Menu' + layout,
 })
