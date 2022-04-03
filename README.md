@@ -1,6 +1,7 @@
 # Vue 3 Boilerplate App
 
-This template should help get you started developing with Vue 3 in Vite.
+This template should help get you started developing with Vue 3 in Vite. Read through this README to
+have a better understanding of how this project is setup.
 
 ```bash
 ###############################################################################
@@ -70,7 +71,7 @@ Check for outdated packages.
 npm outdated
 ```
 
-Update packages based on `package.json` version settings.
+Update packages based on `package.json` version settings. Test if you update to the latest version.
 
 ```sh
 npm upgrade

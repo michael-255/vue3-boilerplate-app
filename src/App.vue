@@ -14,6 +14,7 @@ const layoutComponent = computed(() => {
 </script>
 
 <template>
+  <!--TEMP-->
   <h3>App</h3>
   <component :is="layoutComponent">
     <RouterView />
