@@ -1,14 +1,23 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { QBtn, QLayout, QHeader, QToolbar, QToolbarTitle, QPageContainer } from 'quasar'
+import { useRouter } from 'vue-router'
+import { Views } from '@/constants'
+
+const router = useRouter()
 </script>
 
 <template>
-  <h2>Default Layout</h2>
-  <nav>
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/dashboard">Dashboard</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
-    <RouterLink to="/test123">NotFound</RouterLink>
-  </nav>
-  <slot />
+  <QLayout elevated view="hHh lpR lFf">
+    <QHeader bordered class="bg-primary text-white">
+      <QToolbar>
+        <QBtn dense flat round icon="home" @click="router.push({ name: Views.DASHBOARD })" />
+
+        <QToolbarTitle>Back to Dashboard</QToolbarTitle>
+      </QToolbar>
+    </QHeader>
+
+    <QPageContainer>
+      <router-view />
+    </QPageContainer>
+  </QLayout>
 </template>

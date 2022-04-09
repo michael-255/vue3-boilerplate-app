@@ -1,12 +1,22 @@
 <script setup lang="ts">
-import { QBtn, QLayout, QHeader, QToolbar, QToolbarTitle, QDrawer, QPageContainer } from 'quasar'
-import { RouterLink } from 'vue-router'
+import {
+  QBtn,
+  QLayout,
+  QHeader,
+  QToolbar,
+  QToolbarTitle,
+  QDrawer,
+  QPageContainer,
+  QList,
+} from 'quasar'
+import DrawerItem from '@/components/shared/DrawerItem.vue'
+import { Paths } from '@/constants'
 import { ref } from 'vue'
 
-const leftDrawerOpen = ref(false)
+const drawer = ref(false) // Closed by default
 
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+function toggleDrawer() {
+  drawer.value = !drawer.value
 }
 </script>
 
@@ -14,25 +24,18 @@ function toggleLeftDrawer() {
   <QLayout elevated view="hHh lpR lFf">
     <QHeader bordered class="bg-primary text-white">
       <QToolbar>
-        <QBtn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <QBtn dense flat round icon="menu" @click="toggleDrawer" />
 
-        <QToolbarTitle> MenuLayout </QToolbarTitle>
+        <QToolbarTitle>Menu Layout</QToolbarTitle>
       </QToolbar>
     </QHeader>
 
-    <QDrawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
-      <div>
-        <RouterLink to="/">Home</RouterLink>
-      </div>
-      <div>
-        <RouterLink to="/dashboard">Dashboard</RouterLink>
-      </div>
-      <div>
-        <RouterLink to="/about">About</RouterLink>
-      </div>
-      <div>
-        <RouterLink to="/test123">NotFound</RouterLink>
-      </div>
+    <QDrawer v-model="drawer" :width="200" show-if-above side="left" bordered>
+      <QList>
+        <DrawerItem :to="Paths.DASHBOARD" icon="dashboard" label="Dashboard" />
+        <DrawerItem :to="Paths.ABOUT" icon="info" label="About" />
+        <DrawerItem to="/example404" icon="warning" label="Not Found" />
+      </QList>
     </QDrawer>
 
     <QPageContainer>

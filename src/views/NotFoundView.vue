@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-
-const route = useRoute()
-
-console.log(route.meta)
+import DocumentationIcon from '@/components/icons/IconDocumentation.vue'
+import ToolingIcon from '@/components/icons/IconTooling.vue'
+import EcosystemIcon from '@/components/icons/IconEcosystem.vue'
+import CommunityIcon from '@/components/icons/IconCommunity.vue'
+import SupportIcon from '@/components/icons/IconSupport.vue'
 </script>
 
 <template>
-  <h1>404 Not Found</h1>
+  <h3>404 Not Found</h3>
+  <DocumentationIcon />
+  <ToolingIcon />
+  <EcosystemIcon />
+  <CommunityIcon />
+  <SupportIcon />
 </template>
