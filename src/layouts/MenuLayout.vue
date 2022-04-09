@@ -10,27 +10,23 @@ import {
   QList,
 } from 'quasar'
 import DrawerItem from '@/components/shared/DrawerItem.vue'
+import { useUIStore } from '@/stores/ui'
 import { Paths } from '@/constants'
-import { ref } from 'vue'
 
-const drawer = ref(false) // Closed by default
-
-function toggleDrawer() {
-  drawer.value = !drawer.value
-}
+const ui = useUIStore()
 </script>
 
 <template>
-  <QLayout elevated view="hHh lpR lFf">
-    <QHeader bordered class="bg-primary text-white">
+  <QLayout view="hHh lpR lFf">
+    <QHeader bordered elevated class="bg-primary text-white">
       <QToolbar>
-        <QBtn dense flat round icon="menu" @click="toggleDrawer" />
+        <QBtn dense flat round icon="menu" @click="ui.toggleDrawer()" />
 
         <QToolbarTitle>Menu Layout</QToolbarTitle>
       </QToolbar>
     </QHeader>
 
-    <QDrawer v-model="drawer" :width="200" show-if-above side="left" bordered>
+    <QDrawer v-model="ui.drawer" :width="200" show-if-above side="left" bordered>
       <QList>
         <DrawerItem :to="Paths.DASHBOARD" icon="dashboard" label="Dashboard" />
         <DrawerItem :to="Paths.ABOUT" icon="info" label="About" />
@@ -38,7 +34,7 @@ function toggleDrawer() {
       </QList>
     </QDrawer>
 
-    <QPageContainer>
+    <QPageContainer class="q-mx-sm">
       <router-view />
     </QPageContainer>
   </QLayout>

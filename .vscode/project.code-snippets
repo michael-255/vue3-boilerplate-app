@@ -1,19 +1,59 @@
+// VS Code Snippets
+// Use comment lines to prevent editor array collapsing
 {
-  "test": {
-    "scope": "typescript",
-    "prefix": "test (Jest 'it' func)",
-    "description": "Jest test function",
+  "component-vue3": {
+    "scope": "vue",
+    "prefix": "component (vue3)",
+    "description": "TypeScript component for Vue 3",
     "body": [
-      "it('${0:should test example...}', () => {",
-      "\texpect(true).toBe(false)",
-      "})"
+      "<script setup lang=\"ts\">", // 1
+      "import { ref } from 'vue'", // 2
+      "const data = ref('New Component')", // 3
+      "</script>\n", // 4
+      "<template>", // 5
+      "\t<h3>{{ data }}</h3>", // 6
+      "</template>\n", // 7
+      "<style></style>" // 8
     ]
   },
 
-  "describe": {
+  "imports-vitest": {
     "scope": "typescript",
-    "prefix": "describe (Jest describe func)",
-    "description": "Jest 'describe' function",
-    "body": ["describe('${0:example}', () => {", "\t", "})"]
+    "prefix": "import (vitest imports)",
+    "description": "Common imports for vitest",
+    "body": "import { describe, test, expect } from 'vitest'"
+  },
+
+  "test-vitest": {
+    "scope": "typescript",
+    "prefix": "test (vitest func)",
+    "description": "Test function for vitest",
+    "body": [
+      "test('${0:testing...}', () => {", // 1
+      "\texpect(true).toBe(false)", // 2
+      "})" // 3
+    ]
+  },
+
+  "describe-vitest": {
+    "scope": "typescript",
+    "prefix": "describe (vitest func)",
+    "description": "Describe function for vitest",
+    "body": [
+      "describe('${1:Example}', () => {", // 1
+      "\t${0}", // 2
+      "})" // 3
+    ]
+  },
+
+  "beforeEach-vitest": {
+    "scope": "typescript",
+    "prefix": "beforeEach (vitest func)",
+    "description": "BeforeEach function for vitest",
+    "body": [
+      "beforeEach(() => {", // 1
+      "\t${0}", // 2
+      "})" // 3
+    ]
   }
 }
