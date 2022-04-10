@@ -24,7 +24,7 @@ export function buildIdFunction({
   // Returns new create id function that can be reused
   return () => {
     const createIdSeg = (len: number): string => {
-      // Note: Math.random only consistently produces 8 unique characters
+      // Note: Math.random only consistently produces 8 unique base 36 characters
       return Math.random()
         .toString(36)
         .substring(2, len + 2) // Adjusted to account for 2 trimmed characters
