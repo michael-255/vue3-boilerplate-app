@@ -11,7 +11,6 @@ import type { IExample } from '../models/Example'
  * @param name Database name in the browser dev tools
  */
 export class LocalDatabase extends Dexie {
-  logger: any
   // Information for the typing system to help Dexie out
   users!: Table<IUser>
   examples!: Table<IExample>
