@@ -12,7 +12,7 @@ describe('LocalDatabase', () => {
   const orderByMock = vi.fn(() => ({ first: firstMock, last: lastMock }))
 
   beforeEach(() => {
-    db = new LocalDatabase()
+    db = new LocalDatabase('TestDatabase')
     db.users = {
       add: vi.fn(),
       where: whereMock,

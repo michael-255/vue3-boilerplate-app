@@ -15,7 +15,7 @@ export class LocalDatabase extends Dexie {
   users!: Table<IUser>
   examples!: Table<IExample>
 
-  constructor(name = 'LocalDatabase') {
+  constructor(name: string) {
     super(name)
 
     this.version(1).stores({
