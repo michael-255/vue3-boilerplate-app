@@ -3,6 +3,10 @@
 This template should help get you started developing with Vue 3 in Vite. Read through this README to
 have a better understanding of how this project is setup.
 
+## Todos
+
+- Update `hygen class new`
+
 ```bash
 ###############################################################################
 #                                                                             #
