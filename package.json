@@ -12,7 +12,7 @@
     "test": "vitest --environment jsdom --coverage",
     "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "deploy": "npm run build && gh-pages -d dist -m Deployment"
+    "deploy": "npm run build && cd dist && cp index.html 404.html && cd .. && gh-pages -d dist -m Deployment"
   },
   "dependencies": {
     "@quasar/extras": "^1.12.5",

@@ -292,12 +292,14 @@ Install gh-pages for GitHub Pages deployments.
 npm i -D gh-pages
 ```
 
-Use the following script to build and deploy your project.
+Use the following script to build and deploy your project. It makes a copy of the `index.html` in
+`dist` as `404.html` to address complications related to routing. This let's you avoid using hash
+based routing.
 
 ```jsonc
 // FILE: ~/package.json
 "scripts": {
-  "deploy": "npm run build && gh-pages -d dist -m Deployment"
+  "deploy": "npm run build && cd dist && cp index.html 404.html && cd .. && gh-pages -d dist -m Deployment"
 }
 ```
 
