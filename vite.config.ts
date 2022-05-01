@@ -19,4 +19,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  base: '/vue3-boilerplate-app/', // Your GitHub repo name
 })

@@ -27,6 +27,8 @@ have a better understanding of how this project is setup.
 #    - Website                                                                #
 #    - Topics                                                                 #
 #    - The "Include in the home page" section                                 #
+#  - Change base path in vite.config.ts to your repository name (IMPORTANT!)  #
+#    - Your deployments to GitHub pages will fail without this change         #
 #                                                                             #
 ###############################################################################
 ```
