@@ -7,8 +7,8 @@ module.exports = {
 
 /**
  * All prompts (questions) for this generator.
- * @param prompter
- * @param A Answers
+ * @arg prompter
+ * @arg A Answers
  */
 async function generator(prompter, A = {}) {
   console.log('##### Launching Class File Generator #####')
@@ -235,7 +235,7 @@ async function generator(prompter, A = {}) {
 
 /**
  * Builds the main file code lines for the EJS template.
- * @param A Answers
+ * @arg A Answers
  * @returns codeLines array
  */
 async function buildFileCodeLines(A) {
@@ -281,7 +281,7 @@ async function buildFileCodeLines(A) {
   codeLines.push(` * ${A.classDescription}`)
   if (A.parameters.length) {
     A.parameters.forEach((p) => {
-      codeLines.push(` * @param ${p.name}`)
+      codeLines.push(` * @arg ${p.name}`)
     })
   }
   codeLines.push(' */')
@@ -339,7 +339,7 @@ async function buildFileCodeLines(A) {
 
 /**
  * Builds the test file code lines for the EJS template.
- * @param A Answers
+ * @arg A Answers
  * @returns codeLines array
  */
 async function buildTestCodeLines(A) {
@@ -372,7 +372,7 @@ async function buildTestCodeLines(A) {
 
 /**
  * Default value getter for TypeScript type.
- * @param type
+ * @arg type
  */
 function getDefaultForType(type) {
   switch (type) {

@@ -13,8 +13,8 @@ type loggerParams = {
 
 /**
  * Logger that adds some style to your console.
- * @param name Logger name appearing in the console
- * @param debug Debug boolean hides logger messages when false
+ * @arg name Logger name appearing in the console
+ * @arg debug Debug boolean hides logger messages when false
  */
 export class Logger {
   private name: string

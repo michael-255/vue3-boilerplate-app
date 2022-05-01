@@ -5,8 +5,8 @@ type buildIdParams = {
 
 /**
  * Returns function that generates ids based on the parameters.
- * @param obj.segmentLengths Array of segment lengths (recommend 1-8 for each)
- * @param obj.delimiter Single string character delimiter for id segments
+ * @arg obj.segmentLengths Array of segment lengths (recommend 1-8 for each)
+ * @arg obj.delimiter Single string character delimiter for id segments
  * @returns Create id function
  */
 export function buildIdFunction({

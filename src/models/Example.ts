@@ -16,9 +16,9 @@ type ExampleParams = {
 
 /**
  * Example class for Vue 3 Boilerplate app.
- * @param id
- * @param createdDate
- * @param data
+ * @arg id
+ * @arg createdDate
+ * @arg data
  */
 export class Example implements IExample {
   id: string

@@ -8,7 +8,7 @@ import type { IExample } from '../models/Example'
 
 /**
  * Wrapper for Dexie IndexedDB
- * @param name Database name
+ * @arg name Database name
  */
 export class LocalDatabase extends Dexie {
   // Information for the typing system to help Dexie out

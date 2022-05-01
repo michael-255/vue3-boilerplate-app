@@ -7,10 +7,10 @@ type downloadFileParams = {
 
 /**
  * Simple file download function for web apps.
- * @param obj.fileName Name of file
- * @param obj.extension File extension
- * @param obj.mimeType Options like: 'application/json', or 'text/csv', etc.
- * @param obj.textContent All file content as a string
+ * @arg obj.fileName Name of file
+ * @arg obj.extension File extension
+ * @arg obj.mimeType Options like: 'application/json', or 'text/csv', etc.
+ * @arg obj.textContent All file content as a string
  * @returns Nothing, but should trigger a file download
  */
 export function downloadFile({
@@ -32,7 +32,7 @@ export function downloadFile({
 
 /**
  * Checks if the object has at least one property in it.
- * @param obj Any object
+ * @arg obj Any object
  * @returns Boolean result
  */
 export function isDataInObject(obj: object): boolean {
@@ -47,7 +47,7 @@ export function isDataInObject(obj: object): boolean {
 
 /**
  * Checks if the array has at least one element in it.
- * @param arr Any array
+ * @arg arr Any array
  * @returns Boolean result
  */
 export function isDataInArray(arr: any[]): boolean {

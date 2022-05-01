@@ -18,10 +18,10 @@ type UserParams = {
 
 /**
  * User class for Vue 3 Boilerplate app.
- * @param id
- * @param createdDate
- * @param name
- * @param attributes
+ * @arg id
+ * @arg createdDate
+ * @arg name
+ * @arg attributes
  */
 export class User implements IUser {
   id: string
