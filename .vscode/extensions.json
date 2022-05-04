@@ -3,8 +3,8 @@
   // for the documentation about the extensions.json format
   "recommendations": [
     // Syntax highlighting for Vue/TypeScript
-    "johnsoncodehk.volar",
-    "johnsoncodehk.vscode-typescript-vue-plugin",
+    "vue.volar",
+    "vue.vscode-typescript-vue-plugin",
     // JavaScript linting
     "dbaeumer.vscode-eslint",
     // CSS, LESS, SCSS linting
