@@ -58,7 +58,7 @@ export const MonthLong = Object.freeze([
 
 /**
  * Returns an ordinal for an integar parameter.
- * @arg integar
+ * @param integar
  * @returns Ordinal 'st', 'nd', 'rd', or 'th'
  */
 export function getOrdinalString(integar: number): string {
@@ -81,7 +81,7 @@ export function getOrdinalString(integar: number): string {
 
 /**
  * Uses integar milliseconds parameter to build a duration string.
- * @arg milliseconds
+ * @param milliseconds
  * @returns Duration String format: #d #h #m #s
  */
 export function getDurationString(milliseconds: number): string {
@@ -108,7 +108,7 @@ export function getDurationString(milliseconds: number): string {
 
 /**
  * Builds a concise display date string from a date.
- * @arg date
+ * @param date
  * @returns Date String format: MM/DD/YYYY
  */
 export function getShortDateString(date: Date): string {
@@ -121,7 +121,7 @@ export function getShortDateString(date: Date): string {
 
 /**
  * Builds a medium length display date string from a date.
- * @arg date
+ * @param date
  * @returns Date String format: [short weekday], [short month] [day], [year]
  */
 export function getMediumDateString(date: Date): string {
@@ -135,7 +135,7 @@ export function getMediumDateString(date: Date): string {
 
 /**
  * Builds a long detailed display date string from a date.
- * @arg {Date} date
+ * @param {Date} date
  * @returns Date String format: [long weekday], [long month] [day], [year]
  */
 export function getLongDateString(date: Date): string {

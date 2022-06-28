@@ -6,9 +6,9 @@ export type localStorageParams = {
 
 /**
  * Simple wrapper for localStorage with some basic additions.
- * @arg prefix Item key prefix string
- * @arg suffix Intem key suffix string
- * @arg initialValue Value that is used when initializing or clearing an item
+ * @param prefix Item key prefix string
+ * @param suffix Intem key suffix string
+ * @param initialValue Value that is used when initializing or clearing an item
  */
 export class LocalStorage {
   prefix: string
