@@ -3,6 +3,8 @@
   "include": ["vite.config.*"],
   "compilerOptions": {
     "composite": true,
-    "types": ["node", "vitest"]
+    "types": ["node", "vitest"],
+    "target": "es2020", // added es2020
+    "lib": ["es2020"] // added es2020
   }
 }

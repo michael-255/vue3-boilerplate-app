@@ -3,7 +3,8 @@
   "exclude": [],
   "compilerOptions": {
     "composite": true,
-    "lib": [],
+    "target": "es2020", // added es2020
+    "lib": ["es2020"], // added es2020
     "types": ["node", "jsdom"]
   }
 }

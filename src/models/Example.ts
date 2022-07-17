@@ -1,49 +1,17 @@
-import { createId } from '../utils/build-id'
+import { Entity, type IEntity } from '@/models/Entity'
 
-// Exports for LocalDatabase
-export const ExampleStore = Object.freeze({ examples: '&id, createdDate' })
-export interface IExample {
-  id: string
-  createdDate: string
-  data: object
+export interface IExample extends IEntity {
+  name: string
+  description: string
 }
 
-type ExampleParams = {
-  id?: string
-  createdDate?: string
-  data?: object
-}
+export class Example extends Entity {
+  name: string
+  description: string
 
-/**
- * Example class for Vue 3 Boilerplate app.
- * @param id
- * @param createdDate
- * @param data
- */
-export class Example implements IExample {
-  id: string
-  createdDate: string
-  data: object
-
-  constructor({
-    id = createId(),
-    createdDate = new Date().toISOString(),
-    data = {},
-  }: ExampleParams = {}) {
-    this.id = id
-    this.createdDate = createdDate
-    this.data = data
-  }
-
-  getId(): string {
-    return this.id
-  }
-
-  getDate(): string {
-    return this.createdDate
-  }
-
-  getData(): object {
-    return this.data
+  constructor(params: IExample) {
+    super({ id: params.id, createdDate: params.createdDate })
+    this.name = params.name
+    this.description = params.description
   }
 }

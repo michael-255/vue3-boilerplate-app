@@ -8,33 +8,44 @@ import {
   QDrawer,
   QPageContainer,
   QList,
+  QSeparator,
 } from 'quasar'
-import DrawerItem from '@/components/shared/DrawerItem.vue'
+import DrawerItem from '@/components/drawer/DrawerItem.vue'
 import { useUIStore } from '@/stores/ui'
-import { Paths } from '@/constants'
+import { Views, Icon } from '@/constants/ui-enums'
 
 const ui = useUIStore()
 </script>
 
 <template>
   <QLayout view="hHh lpR lFf">
-    <QHeader bordered elevated class="bg-primary text-white">
+    <QHeader elevated class="bg-primary text-white">
       <QToolbar>
         <QBtn dense flat round icon="menu" @click="ui.toggleDrawer()" />
 
-        <QToolbarTitle>Menu Layout</QToolbarTitle>
+        <QToolbarTitle>Fitness Tracker</QToolbarTitle>
       </QToolbar>
     </QHeader>
 
     <QDrawer v-model="ui.drawer" :width="200" show-if-above side="left" bordered>
       <QList>
-        <DrawerItem :to="Paths.DASHBOARD" icon="dashboard" label="Dashboard" />
-        <DrawerItem :to="Paths.ABOUT" icon="info" label="About" />
-        <DrawerItem to="/example404" icon="warning" label="Not Found" />
+        <DrawerItem :to="{ name: Views.DASHBOARD }" :icon="Icon.DASHBOARD" label="Dashboard" />
+        <DrawerItem :to="{ name: Views.ACTIVE }" :icon="Icon.ACTIVE" label="Active" />
+
+        <QSeparator />
+
+        <DrawerItem :to="{ name: Views.EXAMPLE }" :icon="Icon.EXAMPLE" label="Examples" />
+
+        <QSeparator />
+
+        <DrawerItem :to="{ name: Views.LOGS }" :icon="Icon.APPLOGS" label="Logs" />
+        <DrawerItem :to="{ name: Views.OPTIONS }" :icon="Icon.SETTINGS" label="Options" />
+        <DrawerItem :to="{ name: Views.ABOUT }" :icon="Icon.INFO" label="About" />
+        <DrawerItem to="/404" :icon="Icon.WARN" label="Not Found Page" />
       </QList>
     </QDrawer>
 
-    <QPageContainer class="q-mx-sm">
+    <QPageContainer>
       <router-view />
     </QPageContainer>
   </QLayout>

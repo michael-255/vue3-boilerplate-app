@@ -5,7 +5,9 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- Update `hygen class new`
+- [ ] Clean up boilerplate app
+- [ ] `TableInterface` implemented for boilerplate test data
+- [ ] Update `hygen class new`
 
 ```bash
 ###############################################################################

@@ -1,21 +1,39 @@
 <script setup lang="ts">
-import { DoughnutChart } from 'vue-chart-3'
-import { Chart, registerables } from 'chart.js'
+import { QSeparator, QBtn } from 'quasar'
 
-Chart.register(...registerables)
+enum Severity {
+  DEBUG = 'Debug',
+  INFO = 'Info',
+  WARN = 'Warning',
+  ERROR = 'Error',
+  CRITICAL = 'Critical',
+}
 
-const testData = {
-  labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
-  datasets: [
-    {
-      data: [30, 40, 60, 70, 5],
-      backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED'],
-    },
-  ],
+// const Severity: Readonly<string[]> = ['Debug', 'Info', 'Warning', 'Error', 'Critical']
+
+function set() {
+  console.log('set')
+}
+
+function get() {
+  console.log('get')
+  console.log(Object.keys(Severity)[0])
+}
+2
+
+function print() {
+  console.log('print')
 }
 </script>
 
 <template>
-  <h3>Dashboard View</h3>
-  <DoughnutChart :chartData="testData" />
+  <h3>Dashboard</h3>
+
+  <div class="q-my-sm">
+    <QSeparator />
+    <QBtn color="primary" label="Set" class="q-ma-sm" @click="set()" />
+    <QBtn color="primary" label="Get" class="q-ma-sm" @click="get()" />
+    <QBtn color="primary" label="Print" class="q-ma-sm" @click="print()" />
+    <QSeparator />
+  </div>
 </template>

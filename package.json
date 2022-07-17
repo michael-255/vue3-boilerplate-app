@@ -1,7 +1,7 @@
 {
   "name": "vue3-boilerplate-app",
-  "description": "Vue 3 Boilerplate app setup with packages I want to use and more!",
-  "version": "0.0.0",
+  "description": "Vue 3 Boilerplate app setup with packages I use.",
+  "version": "0.1.0",
   "author": "Michael Joy",
   "license": "MIT",
   "private": true,
