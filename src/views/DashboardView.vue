@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { QSeparator, QBtn } from 'quasar'
 import { Severity } from '@/constants/data-enums'
-import { useLogs } from '../composables/useLogs'
+import { useLogs } from '@/use/useLogs'
 
 const { log, consoleTest } = useLogs()
 

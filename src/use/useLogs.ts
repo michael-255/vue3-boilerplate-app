@@ -1,5 +1,5 @@
 import { logger } from '@/services/Logger'
-import { useNotifications } from '@/composables/useNotifications'
+import { useNotifications } from '@/use/useNotifications'
 import type { LogParams } from '@/models/Log'
 import { DexieTable, Severity } from '@/constants/data-enums'
 import { Icon } from '@/constants/ui-enums'
