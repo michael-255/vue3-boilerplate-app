@@ -1,0 +1,56 @@
+import { useQuasar } from 'quasar'
+import { Icon } from '@/constants/ui-enums'
+
+/**
+ * Simple customizable notifications.
+ */
+export function useNotifications() {
+  const $quasar = useQuasar()
+
+  /**
+   * Customizable Quasar notification.
+   * @param message
+   * @param icon
+   * @param color
+   * @param multiLine
+   * @param position
+   * @param timeout
+   */
+  function notify(
+    message: string,
+    icon: Icon = Icon.INFO,
+    color: 'deep-purple' | 'primary' | 'orange' | 'negative' = 'primary',
+    multiLine = false,
+    position:
+      | 'top-left'
+      | 'top-right'
+      | 'bottom-left'
+      | 'bottom-right'
+      | 'top'
+      | 'bottom'
+      | 'left'
+      | 'right'
+      | 'center' = 'top',
+    timeout = 4000
+  ): void {
+    const textColor = 'white'
+
+    $quasar.notify({
+      message,
+      icon,
+      color,
+      textColor,
+      position,
+      multiLine,
+      timeout,
+      actions: [
+        {
+          label: 'Dismiss',
+          color: textColor,
+        },
+      ],
+    })
+  }
+
+  return { notify }
+}

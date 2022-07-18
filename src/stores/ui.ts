@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 
+/**
+ * @todo Typescript for the state?
+ */
 export const useUIStore = defineStore({
   id: 'ui',
 
@@ -8,17 +11,15 @@ export const useUIStore = defineStore({
   }),
 
   actions: {
-    toggleDrawer() {
-      console.log('drawer toggle')
+    toggleDrawer(): void {
       this.drawer = !this.drawer
     },
 
-    closeDrawer() {
-      console.log('drawer close')
+    closeDrawer(): void {
       this.drawer = false
     },
 
-    openDrawer() {
+    openDrawer(): void {
       this.drawer = true
     },
   },

@@ -8,6 +8,12 @@ export enum Icon {
   WORKOUTS = 'assignment',
   APPLOGS = 'plagiarism',
   // Misc
+  // Severity
+  DEBUG = 'bug_report',
+  INFO = 'info',
+  WARN = 'warning',
+  ERROR = 'error',
+  CRITICAL = 'crisis_alert',
   CALENDAR_DATE = 'event',
   CALENDAR_CHECK = 'event_available',
   TIME = 'access_time',
@@ -24,9 +30,6 @@ export enum Icon {
   DELETE = 'delete',
   CODE = 'code',
   WEB = 'language',
-  INFO = 'info',
-  WARN = 'warning',
-  ERROR = 'error',
   NOTES = 'assignment',
   REST = 'hourglass_empty',
   TEMPO = 'speed',

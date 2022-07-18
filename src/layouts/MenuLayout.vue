@@ -9,12 +9,20 @@ import {
   QPageContainer,
   QList,
   QSeparator,
+  QBtnDropdown,
+  QItem,
+  QItemSection,
+  QItemLabel,
 } from 'quasar'
 import DrawerItem from '@/components/drawer/DrawerItem.vue'
 import { useUIStore } from '@/stores/ui'
 import { Views, Icon } from '@/constants/ui-enums'
 
 const ui = useUIStore()
+
+function onItemClick() {
+  console.log('hi')
+}
 </script>
 
 <template>
@@ -24,6 +32,22 @@ const ui = useUIStore()
         <QBtn dense flat round icon="menu" @click="ui.toggleDrawer()" />
 
         <QToolbarTitle>Fitness Tracker</QToolbarTitle>
+
+        <QBtnDropdown flat dense rounded :dropdown-icon="Icon.SETTINGS">
+          <QList>
+            <QItem clickable v-close-popup @click="onItemClick">
+              <QItemSection>
+                <QItemLabel>Import</QItemLabel>
+              </QItemSection>
+            </QItem>
+
+            <QItem clickable v-close-popup @click="onItemClick">
+              <QItemSection>
+                <QItemLabel>Export</QItemLabel>
+              </QItemSection>
+            </QItem>
+          </QList>
+        </QBtnDropdown>
       </QToolbar>
     </QHeader>
 

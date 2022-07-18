@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import { defineAsyncComponent, computed } from 'vue'
-import { Layouts } from '@/constants'
+import { Layouts } from '@/constants/ui-enums'
 
 // Get Layout for View based on router meta property
 const route = useRoute()

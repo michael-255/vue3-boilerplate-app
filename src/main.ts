@@ -3,7 +3,7 @@ import router from './router'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 // Design Framework
-import { Quasar } from 'quasar'
+import { Dialog, Notify, Quasar } from 'quasar'
 import '@quasar/extras/roboto-font-latin-ext/roboto-font-latin-ext.css'
 import '@quasar/extras/material-icons/material-icons.css'
 import '@quasar/extras/material-icons-outlined/material-icons-outlined.css'
@@ -14,7 +14,12 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(Quasar, {
-  plugins: {}, // import Quasar plugins and add here
+  // import Quasar plugins and add here
+  plugins: {
+    Dialog, // doesn't appear to support default settings
+    Notify,
+  },
+  // default options for Quasar plugins and more
   /*
   config: {
     brand: {

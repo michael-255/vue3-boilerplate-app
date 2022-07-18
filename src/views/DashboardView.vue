@@ -1,28 +1,22 @@
 <script setup lang="ts">
 import { QSeparator, QBtn } from 'quasar'
+import { Severity } from '@/constants/data-enums'
+import { useLogs } from '../composables/useLogs'
 
-enum Severity {
-  DEBUG = 'Debug',
-  INFO = 'Info',
-  WARN = 'Warning',
-  ERROR = 'Error',
-  CRITICAL = 'Critical',
-}
-
-// const Severity: Readonly<string[]> = ['Debug', 'Info', 'Warning', 'Error', 'Critical']
+const { log, consoleTest } = useLogs()
 
 function set() {
-  console.log('set')
+  console.log('---set---')
 }
 
 function get() {
-  console.log('get')
-  console.log(Object.keys(Severity)[0])
+  console.log('---get---')
+  consoleTest('Hi there!')
 }
-2
 
 function print() {
-  console.log('print')
+  console.log('---print---')
+  log({ error: new Error('XXX'), severity: Severity.DEBUG, callerDetails: 'Hello World!' })
 }
 </script>
 

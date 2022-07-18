@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { QBtn, QLayout, QHeader, QToolbar, QToolbarTitle, QPageContainer } from 'quasar'
 import { useRouter } from 'vue-router'
-import { Views } from '@/constants'
+import { Views } from '@/constants/ui-enums'
 
 const router = useRouter()
 </script>
