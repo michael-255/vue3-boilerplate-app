@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { QSeparator, QBtn } from 'quasar'
-import { Severity } from '@/constants/data-enums'
 import { useLogs } from '@/use/useLogs'
 
 const { log, consoleTest } = useLogs()
@@ -11,12 +10,16 @@ function set() {
 
 function get() {
   console.log('---get---')
-  consoleTest('Hi there!')
+  consoleTest(log)
 }
 
-function print() {
+async function print() {
   console.log('---print---')
-  log({ error: new Error('XXX'), severity: Severity.DEBUG, callerDetails: 'Hello World!' })
+  await log.debug('debug', new Error(''))
+  await log.info('info', new Error(''))
+  await log.warn('warn', new Error(''))
+  await log.error('error', new Error(''))
+  await log.critical('critical', new Error(''))
 }
 </script>
 

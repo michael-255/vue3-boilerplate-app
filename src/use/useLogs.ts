@@ -1,10 +1,10 @@
 import { logger } from '@/services/Logger'
 import { useNotifications } from '@/use/useNotifications'
-import type { LogParams } from '@/models/Log'
 import { DexieTable, Severity } from '@/constants/data-enums'
 import { Icon } from '@/constants/ui-enums'
 import { database } from '@/services/LocalDatabase'
 import { Log } from '@/models/Log'
+import { ref, type Ref } from 'vue'
 
 /**
  * Composable with utilities for logging, notifications, and basic dialogs.
@@ -12,74 +12,94 @@ import { Log } from '@/models/Log'
 export function useLogs() {
   const { notify } = useNotifications()
 
-  const DEBUG: Readonly<boolean> = true
+  const DEBUG: Ref<boolean> = ref(true)
+  const NOTIFY: Ref<boolean> = ref(true)
 
-  function logDisplay(severity: Severity) {
-    return {
-      console: addConsoleLog(severity),
-      notify: addNotification(severity),
-      log: async (params: LogParams) => await database.add(DexieTable.LOGS, new Log(params)),
+  /**
+   * Log object with common logger functions. Output can be controled by DEBUG and NOTIFY refs.
+   * - debug
+   * - info
+   * - warn
+   * - error
+   * - critical
+   */
+  const log = {
+    debug: async (callerDetails: string, error: Error | any) => {
+      debugLog(callerDetails, error)
+    },
+    info: async (callerDetails: string, error: Error | any) => {
+      infoLog(callerDetails, error)
+    },
+    warn: async (callerDetails: string, error: Error | any) => {
+      warnLog(callerDetails, error)
+    },
+    error: async (callerDetails: string, error: Error | any) => {
+      errorLog(callerDetails, error)
+    },
+    critical: async (callerDetails: string, error: Error | any) => {
+      criticalLog(callerDetails, error)
+    },
+  }
+
+  async function debugLog(callerDetails: string, error: Error | any) {
+    if (DEBUG.value && NOTIFY.value) {
+      const severity = Severity.DEBUG
+      logger.log(`[${severity}]`, callerDetails, error)
+      // No DB call on DEBUG
+      notify(`${severity} ${callerDetails}`, Icon.DEBUG, 'deep-purple')
     }
   }
 
-  function addConsoleLog(severity: Severity) {
-    return {
-      [Severity.DEBUG]: (params: LogParams) => {
-        if (DEBUG) {
-          logger.log(`[${severity}]`, params?.callerDetails, params?.error)
-        }
-      },
-      [Severity.INFO]: (params: LogParams) => {
-        if (DEBUG) {
-          logger.log(`[${severity}]`, params?.callerDetails, params?.error)
-        }
-      },
-      [Severity.WARN]: (params: LogParams) => {
-        if (DEBUG) {
-          logger.warn(`[${severity}]`, params?.callerDetails, params?.error)
-        }
-      },
-      [Severity.ERROR]: (params: LogParams) => {
-        if (DEBUG) {
-          logger.error(`[${severity}]`, params?.callerDetails, params?.error)
-        }
-      },
-      [Severity.CRITICAL]: (params: LogParams) => {
-        if (DEBUG) {
-          logger.error(`[${severity}]`, params?.callerDetails, params?.error)
-        }
-      },
-    }[severity]
+  async function infoLog(callerDetails: string, error: Error | any) {
+    const severity = Severity.INFO
+    if (DEBUG.value) {
+      logger.log(`[${severity}]`, callerDetails, error)
+    }
+
+    await database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+
+    if (NOTIFY.value) {
+      notify(`${severity} ${callerDetails}`, Icon.INFO, 'primary')
+    }
   }
 
-  function addNotification(severity: Severity) {
-    return {
-      [Severity.DEBUG]: (params: LogParams) => {
-        notify(`${severity} ${params?.callerDetails}`, Icon.DEBUG, 'deep-purple')
-      },
-      [Severity.INFO]: (params: LogParams) => {
-        notify(`${severity} ${params?.callerDetails}`, Icon.INFO, 'primary')
-      },
-      [Severity.WARN]: (params: LogParams) => {
-        notify(`${severity} ${params?.callerDetails}`, Icon.WARN, 'orange')
-      },
-      [Severity.ERROR]: (params: LogParams) => {
-        notify(`${severity} ${params?.callerDetails}`, Icon.ERROR, 'negative')
-      },
-      [Severity.CRITICAL]: (params: LogParams) => {
-        notify(`${severity} ${params?.callerDetails}`, Icon.CRITICAL, 'negative')
-      },
-    }[severity]
+  async function warnLog(callerDetails: string, error: Error | any) {
+    const severity = Severity.WARN
+    if (DEBUG.value) {
+      logger.warn(`[${severity}]`, callerDetails, error)
+    }
+
+    await database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+
+    if (NOTIFY.value) {
+      notify(`${severity} ${callerDetails}`, Icon.WARN, 'orange')
+    }
   }
 
-  /**
-   * Logs to the DB and console while also showing a notification.
-   */
-  async function log(params: LogParams): Promise<void> {
-    const display = logDisplay(params?.severity)
-    display.console(params)
-    display.log(params)
-    display.notify(params)
+  async function errorLog(callerDetails: string, error: Error | any) {
+    const severity = Severity.ERROR
+    if (DEBUG.value) {
+      logger.error(`[${severity}]`, callerDetails, error)
+    }
+
+    await database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+
+    if (NOTIFY.value) {
+      notify(`${severity} ${callerDetails}`, Icon.ERROR, 'negative')
+    }
+  }
+
+  async function criticalLog(callerDetails: string, error: Error | any) {
+    const severity = Severity.CRITICAL
+    if (DEBUG.value) {
+      logger.error(`[${severity}]`, callerDetails, error)
+    }
+
+    await database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+
+    if (NOTIFY.value) {
+      notify(`${severity} ${callerDetails}`, Icon.CRITICAL, 'negative')
+    }
   }
 
   /**
@@ -87,7 +107,7 @@ export function useLogs() {
    * @param value
    */
   function consoleTest(value: any): void {
-    logger.log('[TEST] ', value)
+    logger.log('[TEST]', value)
   }
 
   return {
