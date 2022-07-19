@@ -6,7 +6,7 @@ import { Icon, Views } from '@/constants/ui-enums'
 <template>
   <QPage padding>
     <div class="row justify-center">
-      <QCard style="max-width: 300px">
+      <QCard>
         <QCardSection class="bg-deep-purple text-white">
           <div class="text-h3">404</div>
           <div class="text-subtitle1">Page Not Found</div>
