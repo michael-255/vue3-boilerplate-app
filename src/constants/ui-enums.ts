@@ -1,3 +1,11 @@
+export enum NotifyColor {
+  DEBUG = 'deep-purple',
+  INFO = 'primary',
+  WARN = 'orange',
+  ERROR = 'red',
+  CRITICAL = 'negative',
+}
+
 export enum Icon {
   EXAMPLE = 'cruelty_free',
   ACTIVE = 'play_arrow',
@@ -22,6 +30,7 @@ export enum Icon {
   REPORT = 'timeline',
   MANAGEMENT = 'tune',
   WORKOUT = 'assignment',
+  DOTS = 'more_vert',
   SETTINGS = 'settings',
   DETAILS = 'summarize',
   SAVE = 'save',

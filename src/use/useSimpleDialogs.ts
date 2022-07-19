@@ -1,5 +1,5 @@
 import { useQuasar } from 'quasar'
-import { Icon } from '@/constants/ui-enums'
+import { NotifyColor, Icon } from '@/constants/ui-enums'
 import SimpleDialog from '@/components/dialogs/SimpleDialog.vue'
 
 /**
@@ -21,7 +21,7 @@ export function useSimpleDialogs() {
     message: string,
     onOkFunc: () => void,
     icon: Icon = Icon.INFO,
-    color: 'deep-purple' | 'primary' | 'orange' | 'negative' = 'primary'
+    color: NotifyColor = NotifyColor.INFO
   ): void {
     $quasar
       .dialog({
@@ -51,7 +51,7 @@ export function useSimpleDialogs() {
     title: string,
     message: string,
     icon: Icon = Icon.INFO,
-    color: 'deep-purple' | 'primary' | 'orange' | 'negative' = 'primary'
+    color: NotifyColor = NotifyColor.INFO
   ): void {
     $quasar.dialog({
       component: SimpleDialog,

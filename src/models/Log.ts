@@ -11,9 +11,9 @@ export interface ILog {
 }
 
 export interface LogParams {
-  error: Error | any
   severity: Severity
   callerDetails: string
+  error?: Error | any
 }
 
 /**

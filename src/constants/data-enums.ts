@@ -1,3 +1,14 @@
+export enum DexieTable {
+  EXAMPLES = 'examples',
+  EXAMPLE_RECORDS = 'exampleRecords',
+  LOGS = 'logs',
+}
+
+export enum SettingKey {
+  DEBUG = 'DEBUG',
+  NOTIFY = 'NOTIFY',
+}
+
 /**
  * Class field
  */
@@ -18,10 +29,4 @@ export enum Severity {
   WARN = 'Warning',
   ERROR = 'Error',
   CRITICAL = 'Critical',
-}
-
-export enum DexieTable {
-  EXAMPLES = 'examples',
-  EXAMPLE_RECORDS = 'exampleRecords',
-  LOGS = 'logs',
 }

@@ -37,13 +37,7 @@ function onItemClick() {
           <QList>
             <QItem clickable v-close-popup @click="onItemClick">
               <QItemSection>
-                <QItemLabel>Import</QItemLabel>
-              </QItemSection>
-            </QItem>
-
-            <QItem clickable v-close-popup @click="onItemClick">
-              <QItemSection>
-                <QItemLabel>Export</QItemLabel>
+                <QItemLabel>Import / Export</QItemLabel>
               </QItemSection>
             </QItem>
           </QList>

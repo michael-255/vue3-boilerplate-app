@@ -10,6 +10,7 @@ import { Log, type ILog } from '@/models/Log'
  */
 export class LocalDatabase extends Dexie {
   // Information for the typing system to help Dexie out
+  // REQUIRED
   [DexieTable.EXAMPLES]!: Table<IExample>;
   [DexieTable.EXAMPLE_RECORDS]!: Table<IExampleRecord>;
   [DexieTable.LOGS]!: Table<ILog>
@@ -18,11 +19,13 @@ export class LocalDatabase extends Dexie {
     super(name)
 
     this.version(1).stores({
+      // REQUIRED
       [DexieTable.EXAMPLES]: '&id, name',
       [DexieTable.EXAMPLE_RECORDS]: '&id, parentId',
       [DexieTable.LOGS]: '&id',
     })
 
+    // REQUIRED
     this[DexieTable.EXAMPLES].mapToClass(Example)
     this[DexieTable.EXAMPLE_RECORDS].mapToClass(ExampleRecord)
     this[DexieTable.LOGS].mapToClass(Log)

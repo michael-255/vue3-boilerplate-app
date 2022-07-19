@@ -1,14 +1,14 @@
 import { describe, test, expect, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useUIStore } from '../ui'
+import { useAppStore } from '../settings'
 
-describe('useUIStore', () => {
+describe('useAppStore', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
   })
 
   test('toggleDrawer toggles the drawer boolean', () => {
-    const ui = useUIStore()
+    const ui = useAppStore()
     ui.drawer = false
     ui.toggleDrawer()
     expect(ui.drawer).toBe(true)
@@ -17,14 +17,14 @@ describe('useUIStore', () => {
   })
 
   test('openDrawer sets the drawer boolean to true', () => {
-    const ui = useUIStore()
+    const ui = useAppStore()
     ui.drawer = false
     ui.openDrawer()
     expect(ui.drawer).toBe(true)
   })
 
   test('closeDrawer sets the drawer boolean to false', () => {
-    const ui = useUIStore()
+    const ui = useAppStore()
     ui.drawer = true
     ui.closeDrawer()
     expect(ui.drawer).toBe(false)

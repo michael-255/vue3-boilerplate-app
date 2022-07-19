@@ -1,19 +1,18 @@
 import { logger } from '@/services/Logger'
-import { useNotifications } from '@/use/useNotifications'
 import { DexieTable, Severity } from '@/constants/data-enums'
-import { Icon } from '@/constants/ui-enums'
+import { NotifyColor, Icon } from '@/constants/ui-enums'
 import { database } from '@/services/LocalDatabase'
 import { Log } from '@/models/Log'
-import { ref, type Ref } from 'vue'
+import { useNotifications } from '@/use/useNotifications'
+import { useSettingsStore } from '@/stores/settings'
 
 /**
  * Composable with utilities for logging, notifications, and basic dialogs.
+ * Never awaiting for any logging calls. Don't want to slow down the UI.
  */
 export function useLogs() {
+  const settings = useSettingsStore()
   const { notify } = useNotifications()
-
-  const DEBUG: Ref<boolean> = ref(true)
-  const NOTIFY: Ref<boolean> = ref(true)
 
   /**
    * Log object with common logger functions. Output can be controled by DEBUG and NOTIFY refs.
@@ -24,82 +23,70 @@ export function useLogs() {
    * - critical
    */
   const log = {
-    debug: async (callerDetails: string, error: Error | any) => {
+    debug: (callerDetails: string, error?: Error | any) => {
       debugLog(callerDetails, error)
     },
-    info: async (callerDetails: string, error: Error | any) => {
+    info: (callerDetails: string, error?: Error | any) => {
       infoLog(callerDetails, error)
     },
-    warn: async (callerDetails: string, error: Error | any) => {
+    warn: (callerDetails: string, error?: Error | any) => {
       warnLog(callerDetails, error)
     },
-    error: async (callerDetails: string, error: Error | any) => {
+    error: (callerDetails: string, error?: Error | any) => {
       errorLog(callerDetails, error)
     },
-    critical: async (callerDetails: string, error: Error | any) => {
+    critical: (callerDetails: string, error?: Error | any) => {
       criticalLog(callerDetails, error)
     },
   }
 
-  async function debugLog(callerDetails: string, error: Error | any) {
-    if (DEBUG.value && NOTIFY.value) {
+  function debugLog(callerDetails: string, error?: Error | any) {
+    if (settings.DEBUG) {
       const severity = Severity.DEBUG
       logger.log(`[${severity}]`, callerDetails, error)
       // No DB call on DEBUG
-      notify(`${severity} ${callerDetails}`, Icon.DEBUG, 'deep-purple')
+      if (settings.NOTIFY) {
+        notify(`${severity} - ${callerDetails}`, Icon.DEBUG, NotifyColor.DEBUG)
+      }
     }
   }
 
-  async function infoLog(callerDetails: string, error: Error | any) {
+  function infoLog(callerDetails: string, error?: Error | any) {
     const severity = Severity.INFO
-    if (DEBUG.value) {
+    if (settings.DEBUG) {
       logger.log(`[${severity}]`, callerDetails, error)
     }
-
-    await database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
-
-    if (NOTIFY.value) {
-      notify(`${severity} ${callerDetails}`, Icon.INFO, 'primary')
+    database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+    if (settings.NOTIFY) {
+      notify(`${severity} - ${callerDetails}`, Icon.INFO, NotifyColor.INFO)
     }
   }
 
-  async function warnLog(callerDetails: string, error: Error | any) {
+  function warnLog(callerDetails: string, error?: Error | any) {
     const severity = Severity.WARN
-    if (DEBUG.value) {
+    if (settings.DEBUG) {
       logger.warn(`[${severity}]`, callerDetails, error)
     }
-
-    await database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
-
-    if (NOTIFY.value) {
-      notify(`${severity} ${callerDetails}`, Icon.WARN, 'orange')
-    }
+    database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+    notify(`${severity} - ${callerDetails}`, Icon.WARN, NotifyColor.WARN)
   }
 
-  async function errorLog(callerDetails: string, error: Error | any) {
+  function errorLog(callerDetails: string, error?: Error | any) {
     const severity = Severity.ERROR
-    if (DEBUG.value) {
+    if (settings.DEBUG) {
       logger.error(`[${severity}]`, callerDetails, error)
     }
-
-    await database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
-
-    if (NOTIFY.value) {
-      notify(`${severity} ${callerDetails}`, Icon.ERROR, 'negative')
-    }
+    database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+    notify(`${severity} - ${callerDetails}`, Icon.ERROR, NotifyColor.ERROR)
   }
 
-  async function criticalLog(callerDetails: string, error: Error | any) {
+  function criticalLog(callerDetails: string, error?: Error | any) {
     const severity = Severity.CRITICAL
-    if (DEBUG.value) {
+    if (settings.DEBUG) {
       logger.error(`[${severity}]`, callerDetails, error)
     }
-
-    await database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
-
-    if (NOTIFY.value) {
-      notify(`${severity} ${callerDetails}`, Icon.CRITICAL, 'negative')
-    }
+    database.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+    notify(`${severity} - ${callerDetails}`, Icon.CRITICAL, NotifyColor.CRITICAL)
   }
 
   /**
@@ -107,7 +94,7 @@ export function useLogs() {
    * @param value
    */
   function consoleTest(value: any): void {
-    logger.log('[TEST]', value)
+    logger.log('[Test]', value)
   }
 
   return {
