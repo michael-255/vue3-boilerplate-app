@@ -5,7 +5,9 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] Make `useLogs`
+- [ ] Settings and more (ABOVE)
+
+- [x] Make `useLogs`
 - [ ] File-by-file transfer and cleanup
 - [ ] Clean up boilerplate app
 - [ ] `TableInterface` implemented for boilerplate test data

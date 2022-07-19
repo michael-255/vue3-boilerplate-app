@@ -56,10 +56,10 @@ function onItemClick() {
 
         <QSeparator />
 
-        <DrawerItem :to="{ name: Views.LOGS }" :icon="Icon.APPLOGS" label="Logs" />
+        <DrawerItem :to="{ name: Views.LOGS }" :icon="Icon.APPLOGS" label="Application Logs" />
         <DrawerItem :to="{ name: Views.OPTIONS }" :icon="Icon.SETTINGS" label="Options" />
         <DrawerItem :to="{ name: Views.ABOUT }" :icon="Icon.INFO" label="About" />
-        <DrawerItem to="/404" :icon="Icon.WARN" label="Not Found Page" />
+        <DrawerItem to="/404" :icon="Icon.WARN" label="Example 404" />
       </QList>
     </QDrawer>
 
