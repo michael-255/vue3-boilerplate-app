@@ -33,6 +33,7 @@ export enum Icon {
   DOTS = 'more_vert',
   SETTINGS = 'settings',
   DETAILS = 'summarize',
+  UNDO = 'undo',
   SAVE = 'save',
   CLOSE = 'close',
   EDIT = 'edit',
