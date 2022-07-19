@@ -3,6 +3,7 @@ import { DexieTable } from '@/constants/data-enums'
 import { Example, type IExample } from '@/models/Example'
 import { ExampleRecord, type IExampleRecord } from '@/models/ExampleRecord'
 import { Log, type ILog } from '@/models/Log'
+import { Setting, type ISetting } from '@/models/Setting'
 
 /**
  * Wrapper for Dexie IndexedDB
@@ -13,6 +14,7 @@ export class LocalDatabase extends Dexie {
   // REQUIRED
   [DexieTable.EXAMPLES]!: Table<IExample>;
   [DexieTable.EXAMPLE_RECORDS]!: Table<IExampleRecord>;
+  [DexieTable.SETTINGS]!: Table<ISetting>;
   [DexieTable.LOGS]!: Table<ILog>
 
   constructor(name: string) {
@@ -22,12 +24,14 @@ export class LocalDatabase extends Dexie {
       // REQUIRED
       [DexieTable.EXAMPLES]: '&id, name',
       [DexieTable.EXAMPLE_RECORDS]: '&id, parentId',
+      [DexieTable.SETTINGS]: '&id',
       [DexieTable.LOGS]: '&id',
     })
 
     // REQUIRED
     this[DexieTable.EXAMPLES].mapToClass(Example)
     this[DexieTable.EXAMPLE_RECORDS].mapToClass(ExampleRecord)
+    this[DexieTable.SETTINGS].mapToClass(Setting)
     this[DexieTable.LOGS].mapToClass(Log)
   }
 

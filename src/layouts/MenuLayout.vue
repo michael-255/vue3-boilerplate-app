@@ -15,11 +15,14 @@ import {
   QItemLabel,
 } from 'quasar'
 import DrawerItem from '@/components/drawer/DrawerItem.vue'
-import { useUIStore } from '@/stores/ui'
 import { Views, Icon } from '@/constants/ui-enums'
+import { useUIStore } from '@/stores/ui'
 
 const ui = useUIStore()
 
+/**
+ * @todo
+ */
 function onItemClick() {
   console.log('hi')
 }

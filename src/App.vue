@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
-import { defineAsyncComponent, computed } from 'vue'
+import { defineAsyncComponent, computed, onMounted } from 'vue'
 import { Layouts } from '@/constants/ui-enums'
+import { useSettingsStore } from '@/stores/settings'
+
+const settings = useSettingsStore()
+
+onMounted(async () => {
+  await settings.initSettings()
+})
 
 // Get Layout for View based on router meta property
 const route = useRoute()

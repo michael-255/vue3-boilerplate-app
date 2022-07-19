@@ -1,6 +1,7 @@
 export enum DexieTable {
   EXAMPLES = 'examples',
   EXAMPLE_RECORDS = 'exampleRecords',
+  SETTINGS = 'settings',
   LOGS = 'logs',
 }
 
