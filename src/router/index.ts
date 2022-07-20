@@ -29,10 +29,10 @@ const router = createRouter({
       component: () => import(`../views/${Views.LOGS}.vue`),
     },
     {
-      path: '/options',
-      name: Views.OPTIONS,
+      path: '/settings',
+      name: Views.SETTINGS,
       meta: { layout: Layouts.MENU },
-      component: () => import(`../views/${Views.OPTIONS}.vue`),
+      component: () => import(`../views/${Views.SETTINGS}.vue`),
     },
     {
       path: '/about',

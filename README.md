@@ -344,8 +344,8 @@ you'll need to copy over based on your selection.
 
 ### Dexie (IndexedDB)
 
-Using this package to store the apps data in an easy to use local database. I've wrapped `Dexie`
-with a class called `LocalDatabase` in this project.
+Using this package to store the apps data in an easy to use local db. I've wrapped `Dexie` with a
+class called `LocalDatabase` in this project.
 
 Installing the package.
 

@@ -22,7 +22,7 @@ export function useTableInterface(dbTable: DBTable) {
       label: tableLabels('Exercise', 'Exercises'),
       actions: null,
       fields: tableFields(dbTable),
-      rows: [1, 2, 3, 4, 5], //await database.getAll(table)
+      rows: [1, 2, 3, 4, 5], //await db.getAll(table)
       columns: () => tableColumns(dbTable),
       columnOptions: () => tableColumns(dbTable).filter((i: any) => i.name !== Field.ID),
       visibleColumns: () => [],
@@ -33,7 +33,7 @@ export function useTableInterface(dbTable: DBTable) {
       label: tableLabels('Exercise Record', 'Exercise Records'),
       actions: null,
       fields: tableFields(dbTable),
-      rows: [1, 2, 3, 4, 5], //await database.getAll(table)
+      rows: [1, 2, 3, 4, 5], //await db.getAll(table)
       columns: () => tableColumns(dbTable),
       columnOptions: () => tableColumns(dbTable).filter((i: any) => i.name !== Field.ID),
       visibleColumns: () => [],

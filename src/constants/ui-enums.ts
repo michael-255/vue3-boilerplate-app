@@ -54,7 +54,7 @@ export enum Views {
   ACTIVE = 'ActiveView',
   EXAMPLE = 'ExampleView',
   LOGS = 'LogsView',
-  OPTIONS = 'OptionsView',
+  SETTINGS = 'SettingsView',
   ABOUT = 'AboutView',
   NOT_FOUND = 'NotFoundView',
 }
@@ -69,6 +69,6 @@ export enum Layouts {
  * @todo Make a site you can use as a shortcut to all of your apps
  */
 export enum Links {
-  GITHUB = 'https://github.com/michael-255/fitness-tracker-v14',
+  GITHUB = 'https://github.com/michael-255',
   MYAPPS = 'https://www.example.com',
 }

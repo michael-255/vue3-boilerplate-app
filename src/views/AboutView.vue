@@ -7,9 +7,10 @@ import { Links, Icon } from '@/constants/ui-enums'
   <QPage padding>
     <div class="row justify-center">
       <QCard>
-        <QCardSection class="bg-primary text-white">
-          <div class="text-h3">About</div>
-          <div class="text-subtitle1">Fitness Tracker created by Michael Joy</div>
+        <QCardSection class="bg-primary text-white text-h3">About</QCardSection>
+
+        <QCardSection>
+          Fitness Tracker is a Vue 3 Typescript project created by michael-255 on GitHub
         </QCardSection>
 
         <QCardActions align="left">

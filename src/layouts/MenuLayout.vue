@@ -9,23 +9,12 @@ import {
   QPageContainer,
   QList,
   QSeparator,
-  QBtnDropdown,
-  QItem,
-  QItemSection,
-  QItemLabel,
 } from 'quasar'
 import DrawerItem from '@/components/drawer/DrawerItem.vue'
 import { Views, Icon } from '@/constants/ui-enums'
 import { useUIStore } from '@/stores/ui'
 
 const ui = useUIStore()
-
-/**
- * @todo
- */
-function onItemClick() {
-  console.log('hi')
-}
 </script>
 
 <template>
@@ -36,19 +25,11 @@ function onItemClick() {
 
         <QToolbarTitle>Fitness Tracker</QToolbarTitle>
 
-        <QBtnDropdown flat dense rounded :dropdown-icon="Icon.SETTINGS">
-          <QList>
-            <QItem clickable v-close-popup @click="onItemClick">
-              <QItemSection>
-                <QItemLabel>Import / Export</QItemLabel>
-              </QItemSection>
-            </QItem>
-          </QList>
-        </QBtnDropdown>
+        <QBtn flat dense label="Settings" :to="{ name: Views.SETTINGS }" :icon="Icon.SETTINGS" />
       </QToolbar>
     </QHeader>
 
-    <QDrawer v-model="ui.drawer" :width="200" show-if-above side="left" bordered>
+    <QDrawer v-model="ui.drawer" :width="220" show-if-above side="left" bordered>
       <QList>
         <DrawerItem :to="{ name: Views.DASHBOARD }" :icon="Icon.DASHBOARD" label="Dashboard" />
         <DrawerItem :to="{ name: Views.ACTIVE }" :icon="Icon.ACTIVE" label="Active" />
@@ -59,8 +40,6 @@ function onItemClick() {
 
         <QSeparator />
 
-        <DrawerItem :to="{ name: Views.LOGS }" :icon="Icon.APPLOGS" label="Application Logs" />
-        <DrawerItem :to="{ name: Views.OPTIONS }" :icon="Icon.SETTINGS" label="Options" />
         <DrawerItem :to="{ name: Views.ABOUT }" :icon="Icon.INFO" label="About" />
         <DrawerItem to="/404" :icon="Icon.WARN" label="Example 404" />
       </QList>
