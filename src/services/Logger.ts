@@ -45,4 +45,4 @@ export class Logger {
 /**
  * Preconfigured Logger
  */
-export const logger = new Logger('FitnessTracker')
+export const logger = new Logger('Logger')

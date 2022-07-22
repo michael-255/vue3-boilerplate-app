@@ -88,12 +88,14 @@ export function useLogs() {
    * Simple console log for testing.
    * @param value
    */
-  function consoleTest(value: any): void {
-    logger.log('[Test]', value)
+  function consoleDebug(value: any): void {
+    if (settings.DEBUG) {
+      logger.log(value)
+    }
   }
 
   return {
-    consoleTest,
+    consoleDebug,
     log,
   }
 }

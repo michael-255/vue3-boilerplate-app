@@ -19,9 +19,9 @@ export function useSimpleDialogs() {
   function confirmDialog(
     title: string,
     message: string,
-    onOkFunc: () => void,
-    icon: Icon = Icon.INFO,
-    color: NotifyColor = NotifyColor.INFO
+    icon: Icon,
+    color: NotifyColor,
+    onOkFunc: () => void
   ): void {
     $quasar
       .dialog({
