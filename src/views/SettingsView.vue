@@ -46,10 +46,12 @@ const NOTIFY = computed({
 })
 
 function onRejectedImport(entries: any): void {
-  const fileName = entries[0]?.file?.name
+  const fileName = entries[0]?.file?.name || undefined
+  const size = entries[0]?.file?.size || undefined
+  const type = entries[0]?.file?.type || undefined
   log.warn(`Cannot import ${fileName}`, {
     errorName: entries[0]?.failedPropValidation,
-    message: `name: ${fileName}, size: ${entries[0]?.file?.size}, type: ${entries[0]?.file?.type}`,
+    message: `name: ${fileName}, size: ${size}, type: ${type}`,
   })
 }
 
