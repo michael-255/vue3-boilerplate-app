@@ -5,19 +5,6 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [x] Implement `Clear All App Data`
-- [x] Implement `Import`
-- [x] Implement `Export`
-- [x] `ConfirmDialog` for most settings
-- [x] Clean up settings view (Quasar & flex components)
-
-- [ ] Custom input `components`
-
-  - [x] ClearButton (table or all)
-  - [ ] ImportInput
-  - [ ] ExportInput
-  - [ ] DefaultsButton (table or all)
-
 - [ ] QTable `LogsView`
   - [ ] Sticky headers docs
   - [ ] Virtual scrolling docs

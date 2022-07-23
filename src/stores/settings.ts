@@ -16,22 +16,22 @@ export const useSettingsStore = defineStore({
 
   actions: {
     async initSettings(): Promise<void> {
-      const DEBUG: ISetting | undefined = await db.getById(DexieTable.SETTINGS, SettingKey.DEBUG)
-      const NOTIFY: ISetting | undefined = await db.getById(DexieTable.SETTINGS, SettingKey.NOTIFY)
+      const debug: ISetting | undefined = await db.getById(DexieTable.SETTINGS, SettingKey.DEBUG)
+      const notify: ISetting | undefined = await db.getById(DexieTable.SETTINGS, SettingKey.NOTIFY)
 
       const addSetting = async (id: SettingKey, value: boolean | string | number) => {
         return await db.add(DexieTable.SETTINGS, { id, value })
       }
 
-      if (!DEBUG) {
+      if (!debug) {
         await addSetting(SettingKey.DEBUG, false)
       } else {
-        this.DEBUG = DEBUG.value as boolean
+        this.DEBUG = debug.value as boolean
       }
-      if (!NOTIFY) {
+      if (!notify) {
         await addSetting(SettingKey.NOTIFY, false)
       } else {
-        this.NOTIFY = NOTIFY.value as boolean
+        this.NOTIFY = notify.value as boolean
       }
     },
 
