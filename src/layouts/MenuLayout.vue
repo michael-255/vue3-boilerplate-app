@@ -18,7 +18,7 @@ const ui = useUIStore()
 </script>
 
 <template>
-  <QLayout view="hHh lpR lFf">
+  <QLayout view="hHh LpR lff">
     <QHeader elevated class="bg-primary text-white">
       <QToolbar>
         <QBtn dense flat round icon="menu" @click="ui.toggleDrawer()" />
