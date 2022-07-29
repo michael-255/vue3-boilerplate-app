@@ -1,1 +1,0 @@
-import{aj as n,o as a}from"./index.a7731bf2.js";var s=(e,r)=>{const o=e.__vccOpts||e;for(const[t,c]of r)o[t]=c;return o};const _={};function f(e,r){return a(),n("h3",null,"Logs")}var p=s(_,[["render",f]]);export{p as default};
