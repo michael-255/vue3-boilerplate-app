@@ -6,7 +6,6 @@ import DefaultsButton from '@/components/buttons/DefaultsButton.vue'
 
 <template>
   <PageTabs
-    class="sticky-header"
     primaryName="Activities"
     :primaryIcon="Icon.ACTIVITIES"
     secondaryName="Records"

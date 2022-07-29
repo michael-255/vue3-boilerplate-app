@@ -5,6 +5,20 @@ export enum DexieTable {
   LOGS = 'logs',
 }
 
+export enum TableField {
+  ID = 'id',
+  CREATED_DATE = 'createdDate',
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  NOTES = 'notes',
+  VALUE = 'value',
+  SEVERITY = 'severity',
+  CALLER_DETAILS = 'callerDetails',
+  ERROR_NAME = 'errorName',
+  MESSAGE = 'message',
+  STACK = 'stack',
+}
+
 export enum SettingKey {
   DEBUG = 'DEBUG',
   NOTIFY = 'NOTIFY',

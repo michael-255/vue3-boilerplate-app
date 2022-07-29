@@ -5,6 +5,10 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
+- [ ] `useTableManager`
+  - [ ] Add validators for fields
+  - [ ] Add format controls for fields
+  - [ ] Actions for each table?
 - [ ] QTable `LogsView`
   - [ ] Sticky headers docs
   - [ ] Virtual scrolling docs
