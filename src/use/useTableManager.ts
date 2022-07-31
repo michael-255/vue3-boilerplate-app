@@ -1,5 +1,16 @@
-import { DexieTable, TableField } from '@/constants/data-enums'
+import { DexieTable, TableField, TableAction } from '@/constants/data-enums'
 import { db } from '@/services/LocalDatabase'
+import { DateTime } from 'luxon'
+import { truncateString } from '@/utils/common'
+import {
+  isRequired,
+  isIdValid,
+  isRequiredDateValid,
+  isShortTextValid,
+  isTextValid,
+  isOptionalNumber,
+} from '@/utils/validators'
+import { defineAsyncComponent } from 'vue'
 
 export function useTableManager(table: DexieTable) {
   /**
@@ -7,7 +18,7 @@ export function useTableManager(table: DexieTable) {
    * @param name Dexie table name
    * @param relatedTable Name of a related Dexie table (like a records table)
    * @param label Table label function (singular or plural)
-   * @param actions ??? (is this the supported actions for this table? Like CREATE, EDIT, etc?)
+   * @param actions Supported actions for this table
    * @param fields Names of all field properties for this table
    * @param rows Async function that returns all data from the DB for this table
    * @param columns Field properties for display and validation
@@ -19,7 +30,15 @@ export function useTableManager(table: DexieTable) {
       name: DexieTable.EXAMPLES,
       relatedTable: DexieTable.EXAMPLE_RECORDS,
       label: tableLabels('Example', 'Examples'),
-      actions: null,
+      actions: {}, // @todo
+      supportedActions: [
+        TableAction.CREATE,
+        TableAction.UPDATE,
+        TableAction.DELETE,
+        TableAction.CLEAR,
+        TableAction.INSPECT,
+        TableAction.REPORT,
+      ],
       fields: getTableFields(table),
       rows: async () => await db.getAll(table),
       columns: getTableColumns(table),
@@ -30,7 +49,15 @@ export function useTableManager(table: DexieTable) {
       name: DexieTable.EXAMPLE_RECORDS,
       relatedTable: DexieTable.EXAMPLES,
       label: tableLabels('Example Record', 'Example Record'),
-      actions: null,
+      actions: {}, // @todo
+      supportedActions: [
+        TableAction.CREATE,
+        TableAction.UPDATE,
+        TableAction.DELETE,
+        TableAction.CLEAR,
+        TableAction.INSPECT,
+        TableAction.REPORT,
+      ],
       fields: getTableFields(table),
       rows: async () => await db.getAll(table),
       columns: getTableColumns(table),
@@ -41,7 +68,8 @@ export function useTableManager(table: DexieTable) {
       name: DexieTable.LOGS,
       relatedTable: null,
       label: tableLabels('Log', 'Logs'),
-      actions: null,
+      actions: {},
+      supportedActions: [TableAction.DELETE, TableAction.CLEAR, TableAction.INSPECT],
       fields: getTableFields(table),
       rows: async () => await db.getAll(table),
       columns: getTableColumns(table),
@@ -53,7 +81,8 @@ export function useTableManager(table: DexieTable) {
       name: DexieTable.SETTINGS,
       relatedTable: '',
       label: () => '',
-      actions: null,
+      actions: {},
+      supportedActions: null,
       fields: [],
       rows: () => [],
       columns: [],
@@ -63,13 +92,13 @@ export function useTableManager(table: DexieTable) {
   }[table] // Selecting table
 
   //
-  // Internal table manger functions
+  // Internal table manager functions
   //
 
   function fieldProperties(field: TableField) {
     return {
       [TableField.ID]: {
-        inputType: 'text',
+        component: defineAsyncComponent(() => import('@/components/inputs/TEST.vue')),
         name: TableField.ID,
         label: 'Id',
         align: 'left',
@@ -77,65 +106,65 @@ export function useTableManager(table: DexieTable) {
         required: true,
         field: (row: any) => row.id,
         format: (val: string) => val,
-        validator: (val: any) => !!val,
+        validator: (val: string) => isIdValid(val),
       },
       [TableField.CREATED_DATE]: {
-        inputType: 'text',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.CREATED_DATE,
         label: 'Created Date',
         align: 'left',
         sortable: true,
         required: false,
         field: (row: any) => row.createdDate,
-        format: (val: string) => val,
-        validator: (val: any) => !!val,
+        format: (val: string) => DateTime.fromISO(val).toFormat('ccc LLL d yyyy ttt'),
+        validator: (val: string) => isRequiredDateValid(val),
       },
       [TableField.NAME]: {
-        inputType: 'text',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.NAME,
         label: 'Name',
         align: 'left',
         sortable: true,
         required: false,
         field: (row: any) => row.name,
-        format: (val: string) => val,
-        validator: (val: any) => !!val,
+        format: (val: string) => truncateString(val),
+        validator: (val: string) => isShortTextValid(val),
       },
       [TableField.DESCRIPTION]: {
-        inputType: 'text',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.DESCRIPTION,
         label: 'Description',
         align: 'left',
         sortable: true,
         required: false,
         field: (row: any) => row.description,
-        format: (val: string) => val,
-        validator: (val: any) => !!val,
+        format: (val: string) => truncateString(val),
+        validator: (val: string) => isTextValid(val),
       },
       [TableField.NOTES]: {
-        inputType: 'text',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.NOTES,
         label: 'Notes',
         align: 'left',
         sortable: true,
         required: false,
         field: (row: any) => row.id,
-        format: (val: string) => val,
-        validator: (val: any) => !!val,
+        format: (val: string) => truncateString(val),
+        validator: (val: string) => isTextValid(val),
       },
       [TableField.VALUE]: {
-        inputType: 'number',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.VALUE,
         label: 'Value',
         align: 'left',
         sortable: true,
         required: false,
         field: (row: any) => row.value,
-        format: (val: string) => val,
-        validator: (val: any) => !!val,
+        format: (val: number) => val,
+        validator: (val: number | undefined) => isOptionalNumber(val),
       },
       [TableField.SEVERITY]: {
-        inputType: 'text',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.SEVERITY,
         label: 'Severity',
         align: 'left',
@@ -143,51 +172,51 @@ export function useTableManager(table: DexieTable) {
         required: false,
         field: (row: any) => row.severity,
         format: (val: string) => val,
-        validator: (val: any) => !!val,
+        validator: (val: string) => isRequired(val),
       },
       [TableField.CALLER_DETAILS]: {
-        inputType: 'text',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.CALLER_DETAILS,
         label: 'Caller Details',
         align: 'left',
         sortable: true,
         required: false,
         field: (row: any) => row.callerDetails,
-        format: (val: string) => val,
-        validator: (val: any) => !!val,
+        format: (val: string) => truncateString(val),
+        validator: (val: string) => isRequired(val),
       },
       [TableField.ERROR_NAME]: {
-        inputType: 'text',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.ERROR_NAME,
         label: 'Error Name',
         align: 'left',
         sortable: true,
         required: false,
         field: (row: any) => row.errorName,
-        format: (val: string) => val,
-        validator: (val: any) => !!val,
+        format: (val: string) => truncateString(val),
+        validator: () => true,
       },
       [TableField.MESSAGE]: {
-        inputType: 'text',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.MESSAGE,
         label: 'Messages',
         align: 'left',
         sortable: true,
         required: false,
         field: (row: any) => row.message,
-        format: (val: string) => val,
-        validator: (val: any) => !!val,
+        format: (val: string) => truncateString(val),
+        validator: () => true,
       },
       [TableField.STACK]: {
-        inputType: 'text',
+        component: () => import('@/components/inputs/IdInput.vue'),
         name: TableField.STACK,
         label: 'Stack',
         align: 'left',
         sortable: true,
         required: false,
         field: (row: any) => row.stack,
-        format: (val: string) => val,
-        validator: (val: any) => !!val,
+        format: (val: string) => truncateString(val),
+        validator: () => true,
       },
     }[field]
   }

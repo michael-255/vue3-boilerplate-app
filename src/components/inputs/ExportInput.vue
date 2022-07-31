@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { exportFile, QInput, QBtn } from 'quasar'
 import { type Ref, ref } from 'vue'
-import { useLogs } from '@/use/useLogs'
+import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { DexieTable } from '@/constants/data-enums'
 import { AppData } from '@/models/AppData'
 import { db } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 
-const { log, consoleDebug } = useLogs()
+const { log, consoleDebug } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
 
 const exportText: Ref<string> = ref('')

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { QSeparator, QBtn } from 'quasar'
-import { useLogs } from '@/use/useLogs'
+import { useLogger } from '@/use/useLogger'
 import { useTableManager } from '@/use/useTableManager'
 import { DexieTable } from '@/constants/data-enums'
 
-const { log } = useLogs()
+const { log } = useLogger()
 const { tableManager, examplesTable } = useTableManager(DexieTable.LOGS)
 
 async function button1() {
@@ -30,7 +30,7 @@ async function print() {
   console.log('---print---')
   log.debug('debug')
   log.info('info')
-  log.warn('wanring')
+  log.warn('warning')
   log.error('error')
   log.critical('critical')
 }

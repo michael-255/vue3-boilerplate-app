@@ -24,11 +24,11 @@ export function isRequired(value: any): boolean {
   }
 }
 
-export function isRequiredNumber(num: any): boolean {
+export function isRequiredNumber(num: number): boolean {
   return isRequired(num) && typeof num === 'number' && isFinite(num)
 }
 
-export function isOptionalNumber(num: any): boolean {
+export function isOptionalNumber(num: number | undefined): boolean {
   return num === undefined || (typeof num === 'number' && isFinite(num))
 }
 

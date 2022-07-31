@@ -19,23 +19,18 @@ export enum TableField {
   STACK = 'stack',
 }
 
+export enum TableAction {
+  CREATE = 'Create',
+  UPDATE = 'Update',
+  DELETE = 'Delete',
+  CLEAR = 'Clear',
+  INSPECT = 'Inspect',
+  REPORT = 'Report',
+}
+
 export enum SettingKey {
   DEBUG = 'DEBUG',
   NOTIFY = 'NOTIFY',
-}
-
-/**
- * Class field
- */
-export enum Field {
-  ID = 'id',
-  CREATED_AT = 'createdAt',
-  NAME = 'name',
-  DESCRIPTION = 'description',
-  PARENT_ID = 'parentId',
-  NOTE = 'note',
-  PARENT_TYPE = 'parentType',
-  VALUE = 'value',
 }
 
 export enum Severity {

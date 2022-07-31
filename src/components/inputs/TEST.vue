@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h3>PageTabContent</h3>
+  <div class="text-red">TEST</div>
 </template>

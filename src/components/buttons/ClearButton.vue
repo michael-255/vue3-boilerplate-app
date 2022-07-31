@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { QBtn } from 'quasar'
-import { useLogs } from '@/use/useLogs'
+import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { DexieTable } from '@/constants/data-enums'
 import { db } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 
-const { log } = useLogs()
+const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
 
 const props = defineProps<{

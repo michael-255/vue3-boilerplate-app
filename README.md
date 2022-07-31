@@ -5,14 +5,14 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `useTableManager`
-  - [ ] Add validators for fields
-  - [ ] Add format controls for fields
-  - [ ] Actions for each table?
+- [ ] `TableManager` Features
+  - [ ] Create sub composables for each table
+  - [ ] Have the components on the table manager
+  - [ ] Loop through fields to add the composables to the components (like dialogs)
 - [ ] QTable `LogsView`
-  - [ ] Sticky headers docs
-  - [ ] Virtual scrolling docs
-  - [ ] Test with QTabs at the top
+  - [ ] Replicate `TabContent` and `DataTable` from fit-v14 app
+    - [ ] Finish `PageTabContent` component (`TabContent`)
+    - [ ] Finish `PageTable` component (`DataTable`)
   - [ ] Quasar `ellipsis` CSS class for cols (may need max width)
 - [ ] Implement `Defaults` with random data for Examples and Logs
 

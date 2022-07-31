@@ -10,7 +10,7 @@ import { useSettingsStore } from '@/stores/settings'
  * Composable with utilities for logging, notifications, and basic dialogs.
  * Never awaiting for any logging calls. Don't want to slow down the UI.
  */
-export function useLogs() {
+export function useLogger() {
   const settings = useSettingsStore()
   const { notify } = useNotifications()
 
