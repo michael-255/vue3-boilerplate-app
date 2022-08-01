@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { QSelect, QInput, QIcon } from 'quasar'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { type DexieTable, TableAction } from '@/constants/data-enums'
+import { type DexieTable, TableAction, TableField } from '@/constants/data-enums'
 import { type Ref, ref, onMounted, computed } from 'vue'
 import { useTableManager } from '@/use/useTableManager'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
+import { useInputProvide } from '@/use/useInputProvide'
 import { db } from '@/services/LocalDatabase.js'
 import PageDialog from '@/components/dialogs/PageDialog.vue'
+import PageInspect from '@/components/page/PageInspect.vue'
+
+const { idModel, idValidate } = useInputProvide(TableField.ID)
 
 const props = defineProps<{
   table: DexieTable
@@ -296,6 +300,13 @@ async function onSaved(): Promise<void> {
     @update:dialog="updateDialog($event)"
     @on-save="onSaved()"
   >
-    <component :is="fieldComponent" />
+    <PageInspect
+      v-if="selectedAction === TableAction.INSPECT"
+      :selectedItem="selectedItem"
+      :tableColumns="tableManager.columns"
+    />
   </PageDialog>
+
+  <!-- Async component TEST -->
+  <component :is="fieldComponent" />
 </template>

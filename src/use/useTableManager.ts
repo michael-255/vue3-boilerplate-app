@@ -98,7 +98,7 @@ export function useTableManager(table: DexieTable) {
   function fieldProperties(field: TableField) {
     return {
       [TableField.ID]: {
-        component: defineAsyncComponent(() => import('@/components/inputs/TEST.vue')),
+        component: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
         name: TableField.ID,
         label: 'Id',
         align: 'left',
