@@ -35,19 +35,19 @@ const selectedCanSave: Ref<boolean | undefined> = ref(false)
 
 // TEST
 const fieldComponent = computed(() => {
-  return tableManager.columns[0].component
+  return tableManager?.columns[0].component
 })
 
 onMounted(async () => {
-  rows.value = await tableManager.rows()
-  columns.value = tableManager.columns
-  columnOptions.value = tableManager.columnOptions
-  visibleColumns.value = tableManager.visibleColumns
+  rows.value = await tableManager?.rows()
+  columns.value = tableManager?.columns
+  columnOptions.value = tableManager?.columnOptions
+  visibleColumns.value = tableManager?.visibleColumns
 })
 
 async function updateTableRows(): Promise<void> {
   try {
-    rows.value = await tableManager.rows()
+    rows.value = await tableManager?.rows()
   } catch (error) {
     log.error('updateTableRows', error)
   }
@@ -63,58 +63,58 @@ async function updateDialog(event: any): Promise<void> {
 }
 
 async function onCreate(): Promise<void> {
-  if (tableManager.supportedActions?.includes(TableAction.CREATE)) {
+  if (tableManager?.supportedActions?.includes(TableAction.CREATE)) {
     selectedItem.value = {}
     selectedAction.value = TableAction.CREATE
-    selectedLabel.value = tableManager.label('singular')
+    selectedLabel.value = tableManager?.label('singular')
     selectedCanSave.value = true
     pageDialog.value = true
   } else {
-    log.warn(`Create not supported for ${tableManager.label('plural')} table`)
+    log.warn(`Create not supported for ${tableManager?.label('plural')} table`)
   }
 }
 
 async function onEdit(id: string): Promise<void> {
-  if (tableManager.supportedActions?.includes(TableAction.UPDATE)) {
+  if (tableManager?.supportedActions?.includes(TableAction.UPDATE)) {
     selectedItem.value = await db.getById(props.table, id)
     selectedAction.value = TableAction.UPDATE
-    selectedLabel.value = tableManager.label('singular')
+    selectedLabel.value = tableManager?.label('singular')
     selectedCanSave.value = true
     pageDialog.value = true
   } else {
-    log.warn(`Update not supported for ${tableManager.label('plural')} table`)
+    log.warn(`Update not supported for ${tableManager?.label('plural')} table`)
   }
 }
 
 async function onReport(id: string): Promise<void> {
-  if (tableManager.supportedActions?.includes(TableAction.REPORT)) {
+  if (tableManager?.supportedActions?.includes(TableAction.REPORT)) {
     selectedItem.value = await db.getById(props.table, id)
     selectedAction.value = TableAction.REPORT
-    selectedLabel.value = tableManager.label('singular')
+    selectedLabel.value = tableManager?.label('singular')
     selectedCanSave.value = false
     pageDialog.value = true
   } else {
-    log.warn(`Report not supported for ${tableManager.label('plural')} table`)
+    log.warn(`Report not supported for ${tableManager?.label('plural')} table`)
   }
 }
 
 async function onInspect(id: string): Promise<void> {
-  if (tableManager.supportedActions?.includes(TableAction.INSPECT)) {
+  if (tableManager?.supportedActions?.includes(TableAction.INSPECT)) {
     selectedItem.value = await db.getById(props.table, id)
     selectedAction.value = TableAction.INSPECT
-    selectedLabel.value = tableManager.label('singular')
+    selectedLabel.value = tableManager?.label('singular')
     selectedCanSave.value = false
     pageDialog.value = true
   } else {
-    log.warn(`Inspect not supported for ${tableManager.label('plural')} table`)
+    log.warn(`Inspect not supported for ${tableManager?.label('plural')} table`)
   }
 }
 
 async function onClear(): Promise<void> {
-  if (tableManager.supportedActions?.includes(TableAction.CLEAR)) {
+  if (tableManager?.supportedActions?.includes(TableAction.CLEAR)) {
     confirmDialog(
       'Clear',
-      `Permanently delete all data from ${tableManager.label('plural')} table?`,
+      `Permanently delete all data from ${tableManager?.label('plural')} table?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {
@@ -127,15 +127,15 @@ async function onClear(): Promise<void> {
       }
     )
   } else {
-    log.warn(`Clear not supported for ${tableManager.label('plural')} table`)
+    log.warn(`Clear not supported for ${tableManager?.label('plural')} table`)
   }
 }
 
 async function onDelete(id: string): Promise<void> {
-  if (tableManager.supportedActions?.includes(TableAction.DELETE)) {
+  if (tableManager?.supportedActions?.includes(TableAction.DELETE)) {
     confirmDialog(
       'Delete',
-      `Permanently delete "${id}" from ${tableManager.label('plural')} table?`,
+      `Permanently delete "${id}" from ${tableManager?.label('plural')} table?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {
@@ -148,17 +148,17 @@ async function onDelete(id: string): Promise<void> {
       }
     )
   } else {
-    log.warn(`Delete not supported for ${tableManager.label('plural')} table`)
+    log.warn(`Delete not supported for ${tableManager?.label('plural')} table`)
   }
 }
 
 async function onSaved(): Promise<void> {
-  if (tableManager.supportedActions?.includes(TableAction.CREATE)) {
+  if (tableManager?.supportedActions?.includes(TableAction.CREATE)) {
     console.log('create - save')
-  } else if (tableManager.supportedActions?.includes(TableAction.UPDATE)) {
+  } else if (tableManager?.supportedActions?.includes(TableAction.UPDATE)) {
     console.log('update - save')
   } else {
-    log.warn(`Save not supported for ${tableManager.label('plural')} table`)
+    log.warn(`Save not supported for ${tableManager?.label('plural')} table`)
   }
 }
 </script>
@@ -176,7 +176,7 @@ async function onSaved(): Promise<void> {
   >
     <!-- Table Heading -->
     <template v-slot:top>
-      <div class="q-table__title text-weight-bold">{{ tableManager.label('plural') }}</div>
+      <div class="q-table__title text-weight-bold">{{ tableManager?.label('plural') }}</div>
       <QSpace />
       <!-- Search Input -->
       <QInput
@@ -210,7 +210,7 @@ async function onSaved(): Promise<void> {
       <div>
         <!-- Create Btn -->
         <QBtn
-          v-if="tableManager.supportedActions?.includes(TableAction.CREATE)"
+          v-if="tableManager?.supportedActions?.includes(TableAction.CREATE)"
           color="positive"
           label="Create"
           class="q-mr-sm q-mb-sm"
@@ -218,7 +218,7 @@ async function onSaved(): Promise<void> {
         />
         <!-- Clear Btn -->
         <QBtn
-          v-if="tableManager.supportedActions?.includes(TableAction.CLEAR)"
+          v-if="tableManager?.supportedActions?.includes(TableAction.CLEAR)"
           color="negative"
           label="Clear"
           @click="onClear()"
@@ -244,7 +244,7 @@ async function onSaved(): Promise<void> {
         <QTd auto-width>
           <!-- Report Btn -->
           <QBtn
-            v-if="tableManager.supportedActions?.includes(TableAction.REPORT)"
+            v-if="tableManager?.supportedActions?.includes(TableAction.REPORT)"
             flat
             round
             dense
@@ -255,7 +255,7 @@ async function onSaved(): Promise<void> {
           />
           <!-- Details Btn -->
           <QBtn
-            v-if="tableManager.supportedActions?.includes(TableAction.INSPECT)"
+            v-if="tableManager?.supportedActions?.includes(TableAction.INSPECT)"
             flat
             round
             dense
@@ -266,7 +266,7 @@ async function onSaved(): Promise<void> {
           />
           <!-- Edit Btn -->
           <QBtn
-            v-if="tableManager.supportedActions?.includes(TableAction.UPDATE)"
+            v-if="tableManager?.supportedActions?.includes(TableAction.UPDATE)"
             flat
             round
             dense
@@ -277,7 +277,7 @@ async function onSaved(): Promise<void> {
           />
           <!-- Delete Btn -->
           <QBtn
-            v-if="tableManager.supportedActions?.includes(TableAction.DELETE)"
+            v-if="tableManager?.supportedActions?.includes(TableAction.DELETE)"
             flat
             round
             dense
@@ -303,7 +303,7 @@ async function onSaved(): Promise<void> {
     <PageInspect
       v-if="selectedAction === TableAction.INSPECT"
       :selectedItem="selectedItem"
-      :tableColumns="tableManager.columns"
+      :tableColumns="tableManager?.columns"
     />
   </PageDialog>
 

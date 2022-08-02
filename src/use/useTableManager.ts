@@ -25,71 +25,59 @@ export function useTableManager(table: DexieTable) {
    * @param columnOptions Selectable field properties (Select component)
    * @param visibleColumns Names of fields that are displayed by default
    */
-  const tableManager = {
-    [DexieTable.EXAMPLES]: {
-      name: DexieTable.EXAMPLES,
-      relatedTable: DexieTable.EXAMPLE_RECORDS,
-      label: tableLabels('Example', 'Examples'),
-      actions: {}, // @todo
-      supportedActions: [
-        TableAction.CREATE,
-        TableAction.UPDATE,
-        TableAction.DELETE,
-        TableAction.CLEAR,
-        TableAction.INSPECT,
-        TableAction.REPORT,
-      ],
-      fields: getTableFields(table),
-      rows: async () => await db.getAll(table),
-      columns: getTableColumns(table),
-      columnOptions: getTableColumns(table).filter((i: any) => i.name !== TableField.ID),
-      visibleColumns: [], // @todo
-    },
-    [DexieTable.EXAMPLE_RECORDS]: {
-      name: DexieTable.EXAMPLE_RECORDS,
-      relatedTable: DexieTable.EXAMPLES,
-      label: tableLabels('Example Record', 'Example Record'),
-      actions: {}, // @todo
-      supportedActions: [
-        TableAction.CREATE,
-        TableAction.UPDATE,
-        TableAction.DELETE,
-        TableAction.CLEAR,
-        TableAction.INSPECT,
-        TableAction.REPORT,
-      ],
-      fields: getTableFields(table),
-      rows: async () => await db.getAll(table),
-      columns: getTableColumns(table),
-      columnOptions: getTableColumns(table).filter((i: any) => i.name !== TableField.ID),
-      visibleColumns: [], // @todo
-    },
-    [DexieTable.LOGS]: {
-      name: DexieTable.LOGS,
-      relatedTable: null,
-      label: tableLabels('Log', 'Logs'),
-      actions: {},
-      supportedActions: [TableAction.DELETE, TableAction.CLEAR, TableAction.INSPECT],
-      fields: getTableFields(table),
-      rows: async () => await db.getAll(table),
-      columns: getTableColumns(table),
-      columnOptions: getTableColumns(table).filter((i: any) => i.name !== TableField.ID),
-      visibleColumns: [TableField.SEVERITY, TableField.CALLER_DETAILS, TableField.ERROR_NAME],
-    },
-    // Settings use unique values for all entries, so they can't be handled by the tableManager
-    [DexieTable.SETTINGS]: {
-      name: DexieTable.SETTINGS,
-      relatedTable: '',
-      label: () => '',
-      actions: {},
-      supportedActions: null,
-      fields: [],
-      rows: () => [],
-      columns: [],
-      columnOptions: [],
-      visibleColumns: [],
-    },
-  }[table] // Selecting table
+  const tableManager: { [x: string]: any } =
+    {
+      [DexieTable.EXAMPLES]: {
+        name: DexieTable.EXAMPLES,
+        relatedTable: DexieTable.EXAMPLE_RECORDS,
+        label: tableLabels('Example', 'Examples'),
+        actions: {}, // @todo
+        supportedActions: [
+          TableAction.CREATE,
+          TableAction.UPDATE,
+          TableAction.DELETE,
+          TableAction.CLEAR,
+          TableAction.INSPECT,
+          TableAction.REPORT,
+        ],
+        fields: getTableFields(table),
+        rows: async () => await db.getAll(table),
+        columns: getTableColumns(table),
+        columnOptions: getTableColumns(table).filter((i: any) => i.name !== TableField.ID),
+        visibleColumns: [], // @todo
+      },
+      [DexieTable.EXAMPLE_RECORDS]: {
+        name: DexieTable.EXAMPLE_RECORDS,
+        relatedTable: DexieTable.EXAMPLES,
+        label: tableLabels('Example Record', 'Example Record'),
+        actions: {}, // @todo
+        supportedActions: [
+          TableAction.CREATE,
+          TableAction.UPDATE,
+          TableAction.DELETE,
+          TableAction.CLEAR,
+          TableAction.INSPECT,
+          TableAction.REPORT,
+        ],
+        fields: getTableFields(table),
+        rows: async () => await db.getAll(table),
+        columns: getTableColumns(table),
+        columnOptions: getTableColumns(table).filter((i: any) => i.name !== TableField.ID),
+        visibleColumns: [], // @todo
+      },
+      [DexieTable.LOGS]: {
+        name: DexieTable.LOGS,
+        relatedTable: null,
+        label: tableLabels('Log', 'Logs'),
+        actions: {},
+        supportedActions: [TableAction.DELETE, TableAction.CLEAR, TableAction.INSPECT],
+        fields: getTableFields(table),
+        rows: async () => await db.getAll(table),
+        columns: getTableColumns(table),
+        columnOptions: getTableColumns(table).filter((i: any) => i.name !== TableField.ID),
+        visibleColumns: [TableField.SEVERITY, TableField.CALLER_DETAILS, TableField.ERROR_NAME],
+      },
+    }[table as string] || {} // Selecting table as string so I can ignore uneeded tables (like settings)
 
   //
   // Internal table manager functions
@@ -239,20 +227,21 @@ export function useTableManager(table: DexieTable) {
    * @returns Array of fields on that table item
    */
   function getTableFields(table: DexieTable): string[] {
-    return {
-      [DexieTable.EXAMPLES]: [TableField.ID, TableField.CREATED_DATE],
-      [DexieTable.EXAMPLE_RECORDS]: [TableField.ID, TableField.CREATED_DATE],
-      [DexieTable.LOGS]: [
-        TableField.ID,
-        TableField.CREATED_DATE,
-        TableField.SEVERITY,
-        TableField.CALLER_DETAILS,
-        TableField.ERROR_NAME,
-        TableField.MESSAGE,
-        TableField.STACK,
-      ],
-      [DexieTable.SETTINGS]: [],
-    }[table]
+    return (
+      {
+        [DexieTable.EXAMPLES]: [TableField.ID, TableField.CREATED_DATE],
+        [DexieTable.EXAMPLE_RECORDS]: [TableField.ID, TableField.CREATED_DATE],
+        [DexieTable.LOGS]: [
+          TableField.ID,
+          TableField.CREATED_DATE,
+          TableField.SEVERITY,
+          TableField.CALLER_DETAILS,
+          TableField.ERROR_NAME,
+          TableField.MESSAGE,
+          TableField.STACK,
+        ],
+      }[table as string] || []
+    )
   }
 
   /**
@@ -266,6 +255,6 @@ export function useTableManager(table: DexieTable) {
 
   return {
     tableManager,
-    [table + 'Table']: tableManager, // Named output if needed
+    [table + 'TableManager']: tableManager, // Named output if needed
   }
 }
