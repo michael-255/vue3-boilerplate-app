@@ -10,6 +10,7 @@ import { useInputProvide } from '@/use/useInputProvide'
 import { db } from '@/services/LocalDatabase.js'
 import PageDialog from '@/components/dialogs/PageDialog.vue'
 import PageInspect from '@/components/page/PageInspect.vue'
+import PageMutations from '@/components/page/PageMutations.vue'
 
 const { idModel, idValidate } = useInputProvide(TableField.ID)
 
@@ -62,7 +63,7 @@ async function updateDialog(event: any): Promise<void> {
   pageDialog.value = !!event
 }
 
-async function onCreate(): Promise<void> {
+async function onCreateDialog(): Promise<void> {
   if (tableManager?.supportedActions?.includes(TableAction.CREATE)) {
     selectedItem.value = {}
     selectedAction.value = TableAction.CREATE
@@ -74,7 +75,7 @@ async function onCreate(): Promise<void> {
   }
 }
 
-async function onEdit(id: string): Promise<void> {
+async function onEditDialog(id: string): Promise<void> {
   if (tableManager?.supportedActions?.includes(TableAction.UPDATE)) {
     selectedItem.value = await db.getById(props.table, id)
     selectedAction.value = TableAction.UPDATE
@@ -86,7 +87,7 @@ async function onEdit(id: string): Promise<void> {
   }
 }
 
-async function onReport(id: string): Promise<void> {
+async function onReportDialog(id: string): Promise<void> {
   if (tableManager?.supportedActions?.includes(TableAction.REPORT)) {
     selectedItem.value = await db.getById(props.table, id)
     selectedAction.value = TableAction.REPORT
@@ -98,7 +99,7 @@ async function onReport(id: string): Promise<void> {
   }
 }
 
-async function onInspect(id: string): Promise<void> {
+async function onInspectDialog(id: string): Promise<void> {
   if (tableManager?.supportedActions?.includes(TableAction.INSPECT)) {
     selectedItem.value = await db.getById(props.table, id)
     selectedAction.value = TableAction.INSPECT
@@ -110,7 +111,7 @@ async function onInspect(id: string): Promise<void> {
   }
 }
 
-async function onClear(): Promise<void> {
+async function onClearDialog(): Promise<void> {
   if (tableManager?.supportedActions?.includes(TableAction.CLEAR)) {
     confirmDialog(
       'Clear',
@@ -122,7 +123,7 @@ async function onClear(): Promise<void> {
           await db.clear(props.table)
           await updateTableRows()
         } catch (error) {
-          log.error('onClear', error)
+          log.error('onClearDialog', error)
         }
       }
     )
@@ -131,7 +132,7 @@ async function onClear(): Promise<void> {
   }
 }
 
-async function onDelete(id: string): Promise<void> {
+async function onDeleteDialog(id: string): Promise<void> {
   if (tableManager?.supportedActions?.includes(TableAction.DELETE)) {
     confirmDialog(
       'Delete',
@@ -143,7 +144,7 @@ async function onDelete(id: string): Promise<void> {
           await db.deleteById(props.table, id)
           await updateTableRows()
         } catch (error) {
-          log.error('onDelete', error)
+          log.error('onDeleteDialog', error)
         }
       }
     )
@@ -152,7 +153,7 @@ async function onDelete(id: string): Promise<void> {
   }
 }
 
-async function onSaved(): Promise<void> {
+async function onSave(): Promise<void> {
   if (tableManager?.supportedActions?.includes(TableAction.CREATE)) {
     console.log('create - save')
   } else if (tableManager?.supportedActions?.includes(TableAction.UPDATE)) {
@@ -214,14 +215,14 @@ async function onSaved(): Promise<void> {
           color="positive"
           label="Create"
           class="q-mr-sm q-mb-sm"
-          @click="onCreate()"
+          @click="onCreateDialog()"
         />
         <!-- Clear Btn -->
         <QBtn
           v-if="tableManager?.supportedActions?.includes(TableAction.CLEAR)"
           color="negative"
           label="Clear"
-          @click="onClear()"
+          @click="onClearDialog()"
           class="q-mb-sm"
         />
       </div>
@@ -250,7 +251,7 @@ async function onSaved(): Promise<void> {
             dense
             class="q-ml-xs"
             color="accent"
-            @click="onReport(props.cols[0].value)"
+            @click="onReportDialog(props.cols[0].value)"
             :icon="Icon.REPORT"
           />
           <!-- Details Btn -->
@@ -261,7 +262,7 @@ async function onSaved(): Promise<void> {
             dense
             class="q-ml-xs"
             color="primary"
-            @click="onInspect(props.cols[0].value)"
+            @click="onInspectDialog(props.cols[0].value)"
             :icon="Icon.DETAILS"
           />
           <!-- Edit Btn -->
@@ -272,7 +273,7 @@ async function onSaved(): Promise<void> {
             dense
             class="q-ml-xs"
             color="orange-9"
-            @click="onEdit(props.cols[0].value)"
+            @click="onEditDialog(props.cols[0].value)"
             :icon="Icon.EDIT"
           />
           <!-- Delete Btn -->
@@ -283,7 +284,7 @@ async function onSaved(): Promise<void> {
             dense
             class="q-ml-xs"
             color="negative"
-            @click="onDelete(props.cols[0].value)"
+            @click="onDeleteDialog(props.cols[0].value)"
             :icon="Icon.DELETE"
           />
         </QTd>
@@ -298,14 +299,14 @@ async function onSaved(): Promise<void> {
     :label="selectedLabel"
     :canSave="selectedCanSave"
     @update:dialog="updateDialog($event)"
-    @on-save="onSaved()"
+    @on-save="onSave()"
   >
     <PageInspect
       v-if="selectedAction === TableAction.INSPECT"
       :selectedItem="selectedItem"
       :tableColumns="tableManager?.columns"
     />
-    <!-- Other page table action components needed! -->
+    <PageMutations :table="table" />
   </PageDialog>
 
   <!-- Async component TEST -->
