@@ -8,10 +8,18 @@ export function useInputProvide(
   const model: Ref<any> = ref(null)
   const inputRef: Ref<any> = ref(null)
 
+  /**
+   * Access the model ref.
+   * @param value
+   */
   function updateModel(value: any) {
     model.value = value
   }
 
+  /**
+   * Returns the validation status of the input using the inputRef.
+   * @returns boolean
+   */
   function validate(): boolean {
     return !!inputRef?.value?.validate()
   }

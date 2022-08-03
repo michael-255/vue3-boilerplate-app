@@ -2,6 +2,7 @@ import { DexieTable, TableField, TableAction } from '@/constants/data-enums'
 import { db } from '@/services/LocalDatabase'
 import { DateTime } from 'luxon'
 import { truncateString } from '@/utils/common'
+import { defineAsyncComponent } from 'vue'
 import {
   isRequired,
   isIdValid,
@@ -10,7 +11,6 @@ import {
   isTextValid,
   isOptionalNumber,
 } from '@/utils/validators'
-import { defineAsyncComponent } from 'vue'
 
 export function useTableManager(table: DexieTable) {
   /**

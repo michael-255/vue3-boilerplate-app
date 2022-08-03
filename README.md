@@ -5,6 +5,8 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
+- [ ] `Page{TableAction}.vue` (`PageMutation` = Create and Update)
+- [ ] `PageReport.vue`
 - [ ] `TableManager` Features
   - [ ] Create sub composables for each table
   - [ ] Have the components on the table manager

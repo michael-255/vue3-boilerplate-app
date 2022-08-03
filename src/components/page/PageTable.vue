@@ -305,6 +305,7 @@ async function onSaved(): Promise<void> {
       :selectedItem="selectedItem"
       :tableColumns="tableManager?.columns"
     />
+    <!-- Other page table action components needed! -->
   </PageDialog>
 
   <!-- Async component TEST -->
