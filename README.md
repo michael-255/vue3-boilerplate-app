@@ -5,17 +5,12 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `Page{TableAction}.vue` (`PageMutation` = Create and Update)
-- [ ] `PageReport.vue`
-- [ ] `TableManager` Features
-  - [ ] Create sub composables for each table
-  - [ ] Have the components on the table manager
-  - [ ] Loop through fields to add the composables to the components (like dialogs)
-- [ ] QTable `LogsView`
-  - [ ] Replicate `TabContent` and `DataTable` from fit-v14 app
-    - [ ] Finish `PageTabContent` component (`TabContent`)
-    - [ ] Finish `PageTable` component (`DataTable`)
-  - [ ] Quasar `ellipsis` CSS class for cols (may need max width)
+- [ ] Test new `TableManager` Service in the `DashboardView`
+- [ ] `Examples` table fleshes out (make similar to Measurements for now)
+  - [ ] `CreatedDateInput`
+  - [ ] `NameInput`
+  - [ ] `DescriptionInput`
+- [ ] Quasar `ellipsis` CSS class for cols (may need max width)
 - [ ] Implement `Defaults` with random data for Examples and Logs
 
 ---

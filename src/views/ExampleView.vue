@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Icon } from '@/constants/ui-enums'
+import { DexieTable } from '@/constants/data-enums'
 import PageTabs from '@/components/page/PageTabs.vue'
-import DefaultsButton from '@/components/buttons/DefaultsButton.vue'
+import PageTable from '@/components/page/PageTable.vue'
 </script>
 
 <template>
@@ -12,48 +13,11 @@ import DefaultsButton from '@/components/buttons/DefaultsButton.vue'
     :secondaryIcon="Icon.RECORDS"
   >
     <template v-slot:primary>
-      <div>Primary</div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
-      <div><DefaultsButton /></div>
+      <PageTable :table="DexieTable.EXAMPLES" />
     </template>
 
     <template v-slot:secondary>
-      <div>Secondary</div>
+      <PageTable :table="DexieTable.EXAMPLE_RECORDS" />
     </template>
   </PageTabs>
 </template>

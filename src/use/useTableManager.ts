@@ -57,7 +57,6 @@ export function useTableManager(table: DexieTable) {
           TableAction.DELETE,
           TableAction.CLEAR,
           TableAction.INSPECT,
-          TableAction.REPORT,
         ],
         fields: getTableFields(table),
         rows: async () => await db.getAll(table),
@@ -253,7 +252,17 @@ export function useTableManager(table: DexieTable) {
     return getTableFields(table).map((field: any) => fieldProperties(field))
   }
 
+  /**
+   * Table Manager utility for checking if a Table Action is supported by the current table.
+   * @param tableAction
+   * @returns boolean
+   */
+  function isSupported(tableAction: TableAction): boolean {
+    return tableManager?.supportedActions?.includes(tableAction)
+  }
+
   return {
+    isSupported,
     tableManager,
     [table + 'TableManager']: tableManager, // Named output if needed
   }

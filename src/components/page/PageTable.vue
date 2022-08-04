@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import { QSelect, QInput, QIcon } from 'quasar'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { type DexieTable, TableAction, TableField } from '@/constants/data-enums'
-import { type Ref, ref, onMounted, computed } from 'vue'
+import { type DexieTable, TableAction } from '@/constants/data-enums'
+import { type Ref, ref, onMounted } from 'vue'
 import { useTableManager } from '@/use/useTableManager'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { useInputProvide } from '@/use/useInputProvide'
 import { db } from '@/services/LocalDatabase.js'
 import PageDialog from '@/components/dialogs/PageDialog.vue'
 import PageInspect from '@/components/page/PageInspect.vue'
-import PageMutations from '@/components/page/PageMutations.vue'
-
-const { idModel, idValidate } = useInputProvide(TableField.ID)
+import PageCreate from '@/components/page/PageCreate.vue'
+import PageUpdate from '@/components/page/PageUpdate.vue'
+import PageReport from '@/components/page/PageReport.vue'
 
 const props = defineProps<{
   table: DexieTable
@@ -20,7 +19,7 @@ const props = defineProps<{
 
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
-const { tableManager } = useTableManager(props.table)
+const { tableManager, isSupported } = useTableManager(props.table)
 
 const searchFilter: Ref<string> = ref('')
 const rows: Ref<any[]> = ref([])
@@ -33,11 +32,6 @@ const selectedItem: Ref<any> = ref({})
 const selectedAction: Ref<TableAction | ''> = ref('')
 const selectedLabel: Ref<string> = ref('')
 const selectedCanSave: Ref<boolean | undefined> = ref(false)
-
-// TEST
-const fieldComponent = computed(() => {
-  return tableManager?.columns[0].component
-})
 
 onMounted(async () => {
   rows.value = await tableManager?.rows()
@@ -64,7 +58,7 @@ async function updateDialog(event: any): Promise<void> {
 }
 
 async function onCreateDialog(): Promise<void> {
-  if (tableManager?.supportedActions?.includes(TableAction.CREATE)) {
+  if (isSupported(TableAction.CREATE)) {
     selectedItem.value = {}
     selectedAction.value = TableAction.CREATE
     selectedLabel.value = tableManager?.label('singular')
@@ -76,7 +70,7 @@ async function onCreateDialog(): Promise<void> {
 }
 
 async function onEditDialog(id: string): Promise<void> {
-  if (tableManager?.supportedActions?.includes(TableAction.UPDATE)) {
+  if (isSupported(TableAction.UPDATE)) {
     selectedItem.value = await db.getById(props.table, id)
     selectedAction.value = TableAction.UPDATE
     selectedLabel.value = tableManager?.label('singular')
@@ -88,7 +82,7 @@ async function onEditDialog(id: string): Promise<void> {
 }
 
 async function onReportDialog(id: string): Promise<void> {
-  if (tableManager?.supportedActions?.includes(TableAction.REPORT)) {
+  if (isSupported(TableAction.REPORT)) {
     selectedItem.value = await db.getById(props.table, id)
     selectedAction.value = TableAction.REPORT
     selectedLabel.value = tableManager?.label('singular')
@@ -100,7 +94,7 @@ async function onReportDialog(id: string): Promise<void> {
 }
 
 async function onInspectDialog(id: string): Promise<void> {
-  if (tableManager?.supportedActions?.includes(TableAction.INSPECT)) {
+  if (isSupported(TableAction.INSPECT)) {
     selectedItem.value = await db.getById(props.table, id)
     selectedAction.value = TableAction.INSPECT
     selectedLabel.value = tableManager?.label('singular')
@@ -112,7 +106,7 @@ async function onInspectDialog(id: string): Promise<void> {
 }
 
 async function onClearDialog(): Promise<void> {
-  if (tableManager?.supportedActions?.includes(TableAction.CLEAR)) {
+  if (isSupported(TableAction.CLEAR)) {
     confirmDialog(
       'Clear',
       `Permanently delete all data from ${tableManager?.label('plural')} table?`,
@@ -133,7 +127,7 @@ async function onClearDialog(): Promise<void> {
 }
 
 async function onDeleteDialog(id: string): Promise<void> {
-  if (tableManager?.supportedActions?.includes(TableAction.DELETE)) {
+  if (isSupported(TableAction.DELETE)) {
     confirmDialog(
       'Delete',
       `Permanently delete "${id}" from ${tableManager?.label('plural')} table?`,
@@ -154,14 +148,18 @@ async function onDeleteDialog(id: string): Promise<void> {
 }
 
 async function onSave(): Promise<void> {
-  if (tableManager?.supportedActions?.includes(TableAction.CREATE)) {
+  if (isSupported(TableAction.CREATE)) {
     console.log('create - save')
-  } else if (tableManager?.supportedActions?.includes(TableAction.UPDATE)) {
+  } else if (isSupported(TableAction.UPDATE)) {
     console.log('update - save')
   } else {
     log.warn(`Save not supported for ${tableManager?.label('plural')} table`)
   }
 }
+
+// function isSupported(tableAction: TableAction): boolean {
+//   return tableManager?.supportedActions?.includes(tableAction)
+// }
 </script>
 
 <template>
@@ -211,7 +209,7 @@ async function onSave(): Promise<void> {
       <div>
         <!-- Create Btn -->
         <QBtn
-          v-if="tableManager?.supportedActions?.includes(TableAction.CREATE)"
+          v-if="isSupported(TableAction.CREATE)"
           color="positive"
           label="Create"
           class="q-mr-sm q-mb-sm"
@@ -219,7 +217,7 @@ async function onSave(): Promise<void> {
         />
         <!-- Clear Btn -->
         <QBtn
-          v-if="tableManager?.supportedActions?.includes(TableAction.CLEAR)"
+          v-if="isSupported(TableAction.CLEAR)"
           color="negative"
           label="Clear"
           @click="onClearDialog()"
@@ -245,7 +243,7 @@ async function onSave(): Promise<void> {
         <QTd auto-width>
           <!-- Report Btn -->
           <QBtn
-            v-if="tableManager?.supportedActions?.includes(TableAction.REPORT)"
+            v-if="isSupported(TableAction.REPORT)"
             flat
             round
             dense
@@ -256,7 +254,7 @@ async function onSave(): Promise<void> {
           />
           <!-- Details Btn -->
           <QBtn
-            v-if="tableManager?.supportedActions?.includes(TableAction.INSPECT)"
+            v-if="isSupported(TableAction.INSPECT)"
             flat
             round
             dense
@@ -267,7 +265,7 @@ async function onSave(): Promise<void> {
           />
           <!-- Edit Btn -->
           <QBtn
-            v-if="tableManager?.supportedActions?.includes(TableAction.UPDATE)"
+            v-if="isSupported(TableAction.UPDATE)"
             flat
             round
             dense
@@ -278,7 +276,7 @@ async function onSave(): Promise<void> {
           />
           <!-- Delete Btn -->
           <QBtn
-            v-if="tableManager?.supportedActions?.includes(TableAction.DELETE)"
+            v-if="isSupported(TableAction.DELETE)"
             flat
             round
             dense
@@ -304,11 +302,18 @@ async function onSave(): Promise<void> {
     <PageInspect
       v-if="selectedAction === TableAction.INSPECT"
       :selectedItem="selectedItem"
-      :tableColumns="tableManager?.columns"
+      :tableColumns="columns"
     />
-    <PageMutations :table="table" />
+    <PageCreate
+      v-if="selectedAction === TableAction.CREATE"
+      :table="table"
+      :tableColumns="columns"
+    />
+    <PageUpdate
+      v-if="selectedAction === TableAction.UPDATE"
+      :table="table"
+      :tableColumns="columns"
+    />
+    <PageReport v-if="selectedAction === TableAction.REPORT" :table="table" />
   </PageDialog>
-
-  <!-- Async component TEST -->
-  <component :is="fieldComponent" />
 </template>
