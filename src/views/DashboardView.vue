@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { QSeparator, QBtn } from 'quasar'
 import { useLogger } from '@/use/useLogger'
-import { useTableManager } from '@/use/useTableManager'
 import { DexieTable } from '@/constants/data-enums'
+import { useTableManager } from '@/use/useTableManager.js'
 
 const { log } = useLogger()
-const { tableManager, logsTableManager } = useTableManager(DexieTable.LOGS)
+const { tableManager } = useTableManager(DexieTable.LOGS)
 
 async function button1() {
-  console.log('---tableManager---')
   console.log('name:', tableManager?.name)
   console.log('relatedTable:', tableManager?.relatedTable)
-  console.log('label:', tableManager?.label('plural'))
+  console.log('label:', tableManager?.labelPlural)
   console.log('actions:', tableManager?.actions)
-  console.log('supportedActions:', tableManager?.supportedActions)
-  console.log('rows:', await tableManager?.rows())
+  console.log('supportedActions:', tableManager?.supportedOperations)
+  console.log('rows:', await tableManager?.rows)
   console.log('fields:', tableManager?.fields)
   console.log('columns:', tableManager?.columns)
   console.log('columnOptions:', tableManager?.columnOptions)
@@ -22,8 +21,7 @@ async function button1() {
 }
 
 async function button2() {
-  console.log('---logsTableManager---')
-  console.log(logsTableManager)
+  console.log(tableManager)
 }
 
 async function print() {

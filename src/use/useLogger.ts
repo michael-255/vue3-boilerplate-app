@@ -1,7 +1,7 @@
 import { logger } from '@/services/Logger'
 import { DexieTable, Severity } from '@/constants/data-enums'
 import { NotifyColor, Icon } from '@/constants/ui-enums'
-import { db } from '@/services/LocalDatabase'
+import { DB } from '@/services/LocalDatabase'
 import { Log } from '@/models/Log'
 import { useNotifications } from '@/use/useNotifications'
 import { useSettingsStore } from '@/stores/settings'
@@ -44,7 +44,7 @@ export function useLogger() {
       if (settings.DEBUG) {
         logger.log(`[${severity}]`, callerDetails, error)
       }
-      db.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+      DB.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
       if (settings.NOTIFY) {
         notify(`${severity} - ${callerDetails}`, Icon.INFO, NotifyColor.INFO)
       }
@@ -57,7 +57,7 @@ export function useLogger() {
       if (settings.DEBUG) {
         logger.warn(`[${severity}]`, callerDetails, error)
       }
-      db.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+      DB.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
       notify(`${severity} - ${callerDetails}`, Icon.WARN, NotifyColor.WARN)
     },
     /**
@@ -68,7 +68,7 @@ export function useLogger() {
       if (settings.DEBUG) {
         logger.error(`[${severity}]`, callerDetails, error)
       }
-      db.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+      DB.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
       notify(`${severity} - ${callerDetails}`, Icon.ERROR, NotifyColor.ERROR)
     },
     /**
@@ -79,7 +79,7 @@ export function useLogger() {
       if (settings.DEBUG) {
         logger.error(`[${severity}]`, callerDetails, error)
       }
-      db.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+      DB.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
       notify(`${severity} - ${callerDetails}`, Icon.CRITICAL, NotifyColor.CRITICAL)
     },
   }

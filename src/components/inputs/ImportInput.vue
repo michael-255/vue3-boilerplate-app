@@ -5,7 +5,7 @@ import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { DexieTable } from '@/constants/data-enums'
 import { AppData } from '@/models/AppData'
-import { db } from '@/services/LocalDatabase'
+import { DB } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 
 const { log, consoleDebug } = useLogger()
@@ -50,8 +50,8 @@ function onImport(): void {
         consoleDebug(appData)
 
         await Promise.all([
-          db.bulkAdd(DexieTable.EXAMPLES, appData?.examples),
-          db.bulkAdd(DexieTable.LOGS, appData?.logs), // @todo - TEMP REMOVE!
+          DB.bulkAdd(DexieTable.EXAMPLES, appData?.examples),
+          DB.bulkAdd(DexieTable.LOGS, appData?.logs), // @todo - TEMP REMOVE!
         ])
       } catch (error) {
         log.error('onImport', error)

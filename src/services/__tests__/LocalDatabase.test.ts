@@ -12,16 +12,16 @@ describe('LocalDatabase', () => {
   const orderByMock = vi.fn(() => ({ first: firstMock, last: lastMock }))
 
   beforeEach(() => {
-    db = new LocalDatabase('TestDatabase')
-    db.users = {
+    DB = new LocalDatabase('TestDatabase')
+    DB.users = {
       add: vi.fn(),
       where: whereMock,
     }
-    db.examples = {
+    DB.examples = {
       add: vi.fn(),
       orderBy: orderByMock,
     }
-    db.table = tableMock
+    DB.table = tableMock
     vi.clearAllMocks()
   })
 
@@ -32,8 +32,8 @@ describe('LocalDatabase', () => {
       id: 'USER-1234',
       name: 'Test User',
     }
-    db.addUser(mockUser)
-    expect(db.users.add).toHaveBeenCalledWith(mockUser)
+    DB.addUser(mockUser)
+    expect(DB.users.add).toHaveBeenCalledWith(mockUser)
   })
 
   test('should call Dexie methods from addExample with provided parameter', () => {
@@ -42,32 +42,32 @@ describe('LocalDatabase', () => {
       createdDate: '2022-02-02T05:00:00.000Z',
       id: 'EXAMPLE-1234',
     }
-    db.addExample(mockExample)
-    expect(db.examples.add).toHaveBeenCalledWith(mockExample)
+    DB.addExample(mockExample)
+    expect(DB.examples.add).toHaveBeenCalledWith(mockExample)
   })
 
   test('should call Dexie methods from getAllFromStore with provided parameter', () => {
-    db.getAllFromStore('test')
-    expect(db.table).toHaveBeenCalledWith('test')
+    DB.getAllFromStore('test')
+    expect(DB.table).toHaveBeenCalledWith('test')
     expect(toArrayMock).toHaveBeenCalled()
   })
 
   test('should call Dexie methods from getUserByName with provided parameter', () => {
-    db.getUserByName('Test User')
-    expect(db.users.where).toHaveBeenCalledWith('name')
+    DB.getUserByName('Test User')
+    expect(DB.users.where).toHaveBeenCalledWith('name')
     expect(equalsIgnoreCaseMock).toHaveBeenCalledWith('Test User')
     expect(firstMock).toHaveBeenCalled()
   })
 
   test('should call Dexie methods from getNewestExample with provided parameter', () => {
-    db.getNewestExample()
-    expect(db.examples.orderBy).toHaveBeenCalledWith('createdDate')
+    DB.getNewestExample()
+    expect(DB.examples.orderBy).toHaveBeenCalledWith('createdDate')
     expect(lastMock).toHaveBeenCalled()
   })
 
   test('should call Dexie methods from getOldestExample with provided parameter', () => {
-    db.getOldestExample()
-    expect(db.examples.orderBy).toHaveBeenCalledWith('createdDate')
+    DB.getOldestExample()
+    expect(DB.examples.orderBy).toHaveBeenCalledWith('createdDate')
     expect(firstMock).toHaveBeenCalled()
   })
 })

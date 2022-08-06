@@ -3,7 +3,7 @@ import { QBtn } from 'quasar'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { DexieTable } from '@/constants/data-enums'
-import { db } from '@/services/LocalDatabase'
+import { DB } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 
 const { log } = useLogger()
@@ -22,7 +22,7 @@ function onClear(): void {
       NotifyColor.ERROR,
       async (): Promise<void> => {
         try {
-          await Promise.all(Object.values(DexieTable).map((table) => db.clear(table as DexieTable)))
+          await Promise.all(Object.values(DexieTable).map((table) => DB.clear(table as DexieTable)))
         } catch (error) {
           log.error('onClear', error)
         }
@@ -36,7 +36,7 @@ function onClear(): void {
       NotifyColor.ERROR,
       async (): Promise<void> => {
         try {
-          await db.clear(props.table as DexieTable)
+          await DB.clear(props.table as DexieTable)
         } catch (error) {
           log.error('onClear', error)
         }

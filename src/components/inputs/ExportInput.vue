@@ -5,7 +5,7 @@ import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { DexieTable } from '@/constants/data-enums'
 import { AppData } from '@/models/AppData'
-import { db } from '@/services/LocalDatabase'
+import { DB } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 
 const { log, consoleDebug } = useLogger()
@@ -28,8 +28,8 @@ function onExport(): void {
     async (): Promise<void> => {
       try {
         const appData = new AppData({
-          examples: await db.getAll(DexieTable.EXAMPLES),
-          logs: await db.getAll(DexieTable.LOGS),
+          examples: await DB.getAll(DexieTable.EXAMPLES),
+          logs: await DB.getAll(DexieTable.LOGS),
         })
 
         consoleDebug(appData)

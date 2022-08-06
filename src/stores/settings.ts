@@ -1,6 +1,6 @@
 import { DexieTable, SettingKey } from '@/constants/data-enums'
 import type { ISetting } from '@/models/Setting'
-import { db } from '@/services/LocalDatabase'
+import { DB } from '@/services/LocalDatabase'
 import { defineStore } from 'pinia'
 
 /**
@@ -16,11 +16,11 @@ export const useSettingsStore = defineStore({
 
   actions: {
     async initSettings(): Promise<void> {
-      const debug: ISetting | undefined = await db.getById(DexieTable.SETTINGS, SettingKey.DEBUG)
-      const notify: ISetting | undefined = await db.getById(DexieTable.SETTINGS, SettingKey.NOTIFY)
+      const debug: ISetting | undefined = await DB.getById(DexieTable.SETTINGS, SettingKey.DEBUG)
+      const notify: ISetting | undefined = await DB.getById(DexieTable.SETTINGS, SettingKey.NOTIFY)
 
       const addSetting = async (id: SettingKey, value: boolean | string | number) => {
-        return await db.add(DexieTable.SETTINGS, { id, value })
+        return await DB.add(DexieTable.SETTINGS, { id, value })
       }
 
       if (!debug) {
@@ -36,12 +36,12 @@ export const useSettingsStore = defineStore({
     },
 
     async setDEBUG(bool: boolean): Promise<void> {
-      await db.updateById(DexieTable.SETTINGS, SettingKey.DEBUG, { value: !!bool })
+      await DB.updateById(DexieTable.SETTINGS, SettingKey.DEBUG, { value: !!bool })
       this.DEBUG = !!bool
     },
 
     async setNOTIFY(bool: boolean): Promise<void> {
-      await db.updateById(DexieTable.SETTINGS, SettingKey.NOTIFY, { value: !!bool })
+      await DB.updateById(DexieTable.SETTINGS, SettingKey.NOTIFY, { value: !!bool })
       this.NOTIFY = !!bool
     },
   },

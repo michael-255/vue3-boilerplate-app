@@ -5,7 +5,6 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] Test new `TableManager` Service in the `DashboardView`
 - [ ] `Examples` table fleshes out (make similar to Measurements for now)
   - [ ] `CreatedDateInput`
   - [ ] `NameInput`
@@ -354,7 +353,7 @@ you'll need to copy over based on your selection.
 
 ### Dexie (IndexedDB)
 
-Using this package to store the apps data in an easy to use local db. I've wrapped `Dexie` with a
+Using this package to store the apps data in an easy to use local DB. I've wrapped `Dexie` with a
 class called `LocalDatabase` in this project.
 
 Installing the package.
