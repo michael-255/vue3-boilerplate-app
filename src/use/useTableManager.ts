@@ -1,4 +1,4 @@
-import { DexieTable, TableField, TableAction } from '@/constants/data-enums'
+import { DexieTable, TableField, TableOperation } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { DateTime } from 'luxon'
 import { truncateString } from '@/utils/common'
@@ -37,18 +37,18 @@ export function useTableManager(table: DexieTable) {
           getRows: async () => await DB.getAll(table),
         },
         supportedOperations: [
-          TableAction.CREATE,
-          TableAction.UPDATE,
-          TableAction.DELETE,
-          TableAction.CLEAR,
-          TableAction.INSPECT,
-          TableAction.REPORT,
+          TableOperation.CREATE,
+          TableOperation.UPDATE,
+          TableOperation.DELETE,
+          TableOperation.CLEAR,
+          TableOperation.INSPECT,
+          TableOperation.REPORT,
         ],
         fields: [TableField.ID, TableField.CREATED_DATE],
         rows: [],
         columns: [],
         columnOptions: [],
-        visibleColumns: [], // @todo
+        visibleColumns: [TableField.CREATED_DATE], // @todo
       },
       [DexieTable.EXAMPLE_RECORDS]: {
         name: DexieTable.EXAMPLE_RECORDS,
@@ -59,17 +59,17 @@ export function useTableManager(table: DexieTable) {
           getRows: async () => await DB.getAll(table),
         },
         supportedOperations: [
-          TableAction.CREATE,
-          TableAction.UPDATE,
-          TableAction.DELETE,
-          TableAction.CLEAR,
-          TableAction.INSPECT,
+          TableOperation.CREATE,
+          TableOperation.UPDATE,
+          TableOperation.DELETE,
+          TableOperation.CLEAR,
+          TableOperation.INSPECT,
         ],
         fields: [TableField.ID, TableField.CREATED_DATE],
         rows: [],
         columns: [],
         columnOptions: [],
-        visibleColumns: [], // @todo
+        visibleColumns: [TableField.CREATED_DATE], // @todo
       },
       [DexieTable.LOGS]: {
         name: DexieTable.LOGS,
@@ -79,7 +79,7 @@ export function useTableManager(table: DexieTable) {
         actions: {
           getRows: async () => await DB.getAll(table),
         },
-        supportedOperations: [TableAction.DELETE, TableAction.CLEAR, TableAction.INSPECT],
+        supportedOperations: [TableOperation.DELETE, TableOperation.CLEAR, TableOperation.INSPECT],
         fields: [
           TableField.ID,
           TableField.CREATED_DATE,
@@ -92,7 +92,12 @@ export function useTableManager(table: DexieTable) {
         rows: [],
         columns: [],
         columnOptions: [],
-        visibleColumns: [TableField.SEVERITY, TableField.CALLER_DETAILS, TableField.ERROR_NAME],
+        visibleColumns: [
+          TableField.CREATED_DATE,
+          TableField.SEVERITY,
+          TableField.CALLER_DETAILS,
+          TableField.ERROR_NAME,
+        ],
       },
     }[table as string] || {} // Selecting table as string so I can ignore uneeded tables (like settings)
   )
@@ -270,11 +275,11 @@ export function useTableManager(table: DexieTable) {
 
   /**
    * Checking if a Table Action is supported by the current table.
-   * @param tableAction
+   * @param tableOperation
    * @returns boolean
    */
-  function isSupported(tableAction: TableAction): boolean {
-    return tableManager.supportedOperations?.includes(tableAction)
+  function isSupported(tableOperation: TableOperation): boolean {
+    return tableManager.supportedOperations?.includes(tableOperation)
   }
 
   async function updateRows(): Promise<void> {

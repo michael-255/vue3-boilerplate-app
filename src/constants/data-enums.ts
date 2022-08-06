@@ -19,7 +19,8 @@ export enum TableField {
   STACK = 'stack',
 }
 
-export enum TableAction {
+export enum TableOperation {
+  NO_OP = 'No Operation',
   CREATE = 'Create',
   UPDATE = 'Update',
   DELETE = 'Delete',

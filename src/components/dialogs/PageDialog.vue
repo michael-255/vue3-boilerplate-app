@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { QDialog, QCard, QCardSection, QCardActions, QBtn } from 'quasar'
-import type { TableAction } from '@/constants/data-enums'
+import type { TableOperation } from '@/constants/data-enums'
 import { Icon } from '@/constants/ui-enums'
 import { useVModel } from '@vueuse/core'
 
 const props = defineProps<{
   dialog: boolean
-  action: TableAction | ''
+  action: TableOperation
   label: string
-  canSave: boolean | undefined
+  canSave: boolean
 }>()
 
 const emits = defineEmits<{

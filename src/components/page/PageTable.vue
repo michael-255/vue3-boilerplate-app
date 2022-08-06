@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { QSelect, QInput, QIcon } from 'quasar'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { type DexieTable, TableAction } from '@/constants/data-enums'
+import { type DexieTable, TableOperation } from '@/constants/data-enums'
 import { type Ref, ref, onMounted } from 'vue'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
@@ -25,73 +25,70 @@ const searchFilter: Ref<string> = ref('')
 // Selected Row (Page Dialog)
 const pageDialog: Ref<boolean> = ref(false)
 const selectedItem: Ref<any> = ref({})
-const selectedAction: Ref<TableAction | ''> = ref('')
+const selectedOperation: Ref<TableOperation> = ref(TableOperation.NO_OP)
 const selectedLabel: Ref<string> = ref('')
-const selectedCanSave: Ref<boolean | undefined> = ref(false)
+const selectedCanSave: Ref<boolean> = ref(false)
 
-onMounted(async () => {
-  await updateRows()
-})
+onMounted(async () => await updateRows())
+
+function updateSelectedRefs({
+  operation = TableOperation.NO_OP,
+  item = {},
+  label = '',
+  canSave = false,
+  dialog = true,
+} = {}): void {
+  if (isSupported(operation)) {
+    selectedItem.value = item
+    selectedOperation.value = operation
+    selectedLabel.value = label
+    selectedCanSave.value = canSave
+    pageDialog.value = dialog
+  } else {
+    log.warn(`${operation} not supported for ${TM.labelPlural} table`)
+  }
+}
 
 async function updateDialog(event: any): Promise<void> {
   await updateRows()
   selectedItem.value = {}
-  selectedAction.value = ''
+  selectedOperation.value = TableOperation.NO_OP
   selectedLabel.value = ''
   selectedCanSave.value = false
   pageDialog.value = !!event
 }
 
 async function onCreateDialog(): Promise<void> {
-  if (isSupported(TableAction.CREATE)) {
-    selectedItem.value = {}
-    selectedAction.value = TableAction.CREATE
-    selectedLabel.value = TM?.labelSingular
-    selectedCanSave.value = true
-    pageDialog.value = true
-  } else {
-    log.warn(`Create not supported for ${TM.labelPlural} table`)
-  }
+  updateSelectedRefs({ operation: TableOperation.CREATE, label: TM.labelSingular, canSave: true })
 }
 
 async function onEditDialog(id: string): Promise<void> {
-  if (isSupported(TableAction.UPDATE)) {
-    selectedItem.value = await DB.getById(props.table, id)
-    selectedAction.value = TableAction.UPDATE
-    selectedLabel.value = TM?.labelSingular
-    selectedCanSave.value = true
-    pageDialog.value = true
-  } else {
-    log.warn(`Update not supported for ${TM.labelPlural} table`)
-  }
+  updateSelectedRefs({
+    operation: TableOperation.UPDATE,
+    item: await DB.getById(props.table, id),
+    label: TM.labelSingular,
+    canSave: true,
+  })
 }
 
 async function onReportDialog(id: string): Promise<void> {
-  if (isSupported(TableAction.REPORT)) {
-    selectedItem.value = await DB.getById(props.table, id)
-    selectedAction.value = TableAction.REPORT
-    selectedLabel.value = TM?.labelSingular
-    selectedCanSave.value = false
-    pageDialog.value = true
-  } else {
-    log.warn(`Report not supported for ${TM.labelPlural} table`)
-  }
+  updateSelectedRefs({
+    operation: TableOperation.REPORT,
+    item: await DB.getById(props.table, id),
+    label: TM.labelSingular,
+  })
 }
 
 async function onInspectDialog(id: string): Promise<void> {
-  if (isSupported(TableAction.INSPECT)) {
-    selectedItem.value = await DB.getById(props.table, id)
-    selectedAction.value = TableAction.INSPECT
-    selectedLabel.value = TM?.labelSingular
-    selectedCanSave.value = false
-    pageDialog.value = true
-  } else {
-    log.warn(`Inspect not supported for ${TM.labelPlural} table`)
-  }
+  updateSelectedRefs({
+    operation: TableOperation.INSPECT,
+    item: await DB.getById(props.table, id),
+    label: TM.labelSingular,
+  })
 }
 
 async function onClearDialog(): Promise<void> {
-  if (isSupported(TableAction.CLEAR)) {
+  if (isSupported(TableOperation.CLEAR)) {
     confirmDialog(
       'Clear',
       `Permanently delete all data from ${TM.labelPlural} table?`,
@@ -112,7 +109,7 @@ async function onClearDialog(): Promise<void> {
 }
 
 async function onDeleteDialog(id: string): Promise<void> {
-  if (isSupported(TableAction.DELETE)) {
+  if (isSupported(TableOperation.DELETE)) {
     confirmDialog(
       'Delete',
       `Permanently delete "${id}" from ${TM.labelPlural} table?`,
@@ -133,9 +130,9 @@ async function onDeleteDialog(id: string): Promise<void> {
 }
 
 async function onSave(): Promise<void> {
-  if (isSupported(TableAction.CREATE)) {
+  if (isSupported(TableOperation.CREATE)) {
     console.log('create - save')
-  } else if (isSupported(TableAction.UPDATE)) {
+  } else if (isSupported(TableOperation.UPDATE)) {
     console.log('update - save')
   } else {
     log.warn(`Save not supported for ${TM.labelPlural} table`)
@@ -190,7 +187,7 @@ async function onSave(): Promise<void> {
       <div>
         <!-- Create Btn -->
         <QBtn
-          v-if="isSupported(TableAction.CREATE)"
+          v-if="isSupported(TableOperation.CREATE)"
           color="positive"
           label="Create"
           class="q-mr-sm q-mb-sm"
@@ -198,7 +195,7 @@ async function onSave(): Promise<void> {
         />
         <!-- Clear Btn -->
         <QBtn
-          v-if="isSupported(TableAction.CLEAR)"
+          v-if="isSupported(TableOperation.CLEAR)"
           color="negative"
           label="Clear"
           @click="onClearDialog()"
@@ -224,7 +221,7 @@ async function onSave(): Promise<void> {
         <QTd auto-width>
           <!-- Report Btn -->
           <QBtn
-            v-if="isSupported(TableAction.REPORT)"
+            v-if="isSupported(TableOperation.REPORT)"
             flat
             round
             dense
@@ -235,7 +232,7 @@ async function onSave(): Promise<void> {
           />
           <!-- Details Btn -->
           <QBtn
-            v-if="isSupported(TableAction.INSPECT)"
+            v-if="isSupported(TableOperation.INSPECT)"
             flat
             round
             dense
@@ -246,7 +243,7 @@ async function onSave(): Promise<void> {
           />
           <!-- Edit Btn -->
           <QBtn
-            v-if="isSupported(TableAction.UPDATE)"
+            v-if="isSupported(TableOperation.UPDATE)"
             flat
             round
             dense
@@ -257,7 +254,7 @@ async function onSave(): Promise<void> {
           />
           <!-- Delete Btn -->
           <QBtn
-            v-if="isSupported(TableAction.DELETE)"
+            v-if="isSupported(TableOperation.DELETE)"
             flat
             round
             dense
@@ -274,27 +271,27 @@ async function onSave(): Promise<void> {
   <!-- Fullscreen Dialog -->
   <PageDialog
     :dialog="pageDialog"
-    :action="selectedAction"
+    :action="selectedOperation"
     :label="selectedLabel"
     :canSave="selectedCanSave"
     @update:dialog="updateDialog($event)"
     @on-save="onSave()"
   >
     <PageInspect
-      v-if="selectedAction === TableAction.INSPECT"
+      v-if="selectedOperation === TableOperation.INSPECT"
       :selectedItem="selectedItem"
       :tableColumns="TM.columns"
     />
     <PageCreate
-      v-if="selectedAction === TableAction.CREATE"
+      v-if="selectedOperation === TableOperation.CREATE"
       :table="table"
       :tableColumns="TM.columns"
     />
     <PageUpdate
-      v-if="selectedAction === TableAction.UPDATE"
+      v-if="selectedOperation === TableOperation.UPDATE"
       :table="table"
       :tableColumns="TM.columns"
     />
-    <PageReport v-if="selectedAction === TableAction.REPORT" :table="table" />
+    <PageReport v-if="selectedOperation === TableOperation.REPORT" :table="table" />
   </PageDialog>
 </template>
