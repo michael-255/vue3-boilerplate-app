@@ -1,8 +1,8 @@
 import { DexieTable, TableField, TableOperation } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
-import { DateTime } from 'luxon'
 import { truncateString } from '@/utils/common'
 import { reactive, defineAsyncComponent } from 'vue'
+import { isoToDisplayDate } from '@/utils/luxon'
 import {
   isRequired,
   isIdValid,
@@ -44,7 +44,7 @@ export function useTableManager(table: DexieTable) {
           TableOperation.INSPECT,
           TableOperation.REPORT,
         ],
-        fields: [TableField.ID, TableField.CREATED_DATE],
+        fields: [TableField.ID, TableField.CREATED_DATE, TableField.NAME, TableField.DESCRIPTION],
         rows: [],
         columns: [],
         columnOptions: [],
@@ -129,7 +129,7 @@ export function useTableManager(table: DexieTable) {
         sortable: true,
         required: false,
         field: (row: any) => row.createdDate,
-        format: (val: string) => DateTime.fromISO(val).toFormat('ccc LLL d yyyy ttt'),
+        format: (val: string) => isoToDisplayDate(val),
       },
       [TableField.NAME]: {
         name: TableField.NAME,
@@ -245,11 +245,11 @@ export function useTableManager(table: DexieTable) {
     return {
       [TableField.ID]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
       [TableField.CREATED_DATE]: defineAsyncComponent(
-        () => import('@/components/inputs/IdInput.vue')
+        () => import('@/components/inputs/CreatedDateInput.vue')
       ),
-      [TableField.NAME]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
+      [TableField.NAME]: defineAsyncComponent(() => import('@/components/inputs/NameInput.vue')),
       [TableField.DESCRIPTION]: defineAsyncComponent(
-        () => import('@/components/inputs/IdInput.vue')
+        () => import('@/components/inputs/DescriptionInput.vue')
       ),
       [TableField.NOTES]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
       [TableField.VALUE]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),

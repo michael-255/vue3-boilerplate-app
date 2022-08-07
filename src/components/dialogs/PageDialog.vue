@@ -8,19 +8,13 @@ const props = defineProps<{
   dialog: boolean
   action: TableOperation
   label: string
-  canSave: boolean
 }>()
 
 const emits = defineEmits<{
   (event: 'update:dialog', bool: boolean): void
-  (eventName: 'on-save'): void
 }>()
 
 const dialog = useVModel(props, 'dialog', emits)
-
-function onSave() {
-  emits('on-save')
-}
 </script>
 
 <template>
@@ -35,8 +29,7 @@ function onSave() {
       <QCardActions class="bg-primary text-white">
         <div class="q-table__title text-weight-bold q-ml-sm">{{ action }}</div>
         <QSpace />
-        <QBtn v-if="canSave" outline :icon="Icon.SAVE" label="Save" @click="onSave()" />
-        <QBtn outline :icon="Icon.CLOSE" label="Close" v-close-popup />
+        <QBtn flat round :icon="Icon.CLOSE" v-close-popup />
       </QCardActions>
 
       <QCardSection class="q-table__title text-weight-bold">{{ label }}</QCardSection>

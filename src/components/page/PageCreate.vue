@@ -1,27 +1,54 @@
 <script setup lang="ts">
 import { DexieTable, TableField } from '@/constants/data-enums.js'
-import { computed } from 'vue'
+import { Icon, NotifyColor } from '@/constants/ui-enums'
+import { useTableManager } from '@/use/useTableManager'
 import { useInputProvide } from '@/use/useInputProvide'
+import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 
 /**
- * Component for handling table item Creates and Updates
+ * Component for handling table item Creates
  */
 
 const props = defineProps<{
-  table: DexieTable // To determine what input data to emit back
-  tableColumns: { [x: string]: any }[]
+  table: DexieTable
 }>()
 
-// TEST
-const fieldComponent = computed(() => {
-  return props.tableColumns[0].component
-})
+const emits = defineEmits<{
+  (eventName: 'on-create'): void
+}>()
+
+const { confirmDialog } = useSimpleDialogs()
+const { TM, getFieldComponent } = useTableManager(props.table)
 
 const { idModel, idValidate } = useInputProvide(TableField.ID)
+const { createdDateModel, createdDateValidate } = useInputProvide(TableField.CREATED_DATE)
+const { nameModel, nameValidate } = useInputProvide(TableField.NAME)
+const { descriptionModel, descriptionValidate } = useInputProvide(TableField.DESCRIPTION)
+
+function onCreate() {
+  confirmDialog(
+    'Create',
+    `Are you sure you want to create this ${TM.labelSingular}?`,
+    Icon.SAVE,
+    NotifyColor.INFO,
+    () => {
+      // @todo create logic from TM
+      emits('on-create')
+    }
+  )
+}
 </script>
 
 <template>
-  <component :is="fieldComponent" />
-  <component :is="fieldComponent" />
-  <component :is="fieldComponent" />
+  <div v-for="(field, i) in TM.fields" :key="i">
+    <component :is="getFieldComponent(field)" />
+  </div>
+
+  <QBtn
+    class="q-mt-lg"
+    color="primary"
+    :icon="Icon.SAVE"
+    :label="`Create ${TM.labelSingular}`"
+    @click="onCreate()"
+  />
 </template>

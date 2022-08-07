@@ -6,7 +6,7 @@ import { type Ref, ref, onMounted } from 'vue'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { DB } from '@/services/LocalDatabase'
-import { useTableManager } from '@/use/useTableManager.js'
+import { useTableManager } from '@/use/useTableManager'
 import PageDialog from '@/components/dialogs/PageDialog.vue'
 import PageInspect from '@/components/page/PageInspect.vue'
 import PageCreate from '@/components/page/PageCreate.vue'
@@ -24,10 +24,9 @@ const { TM, isSupported, updateRows } = useTableManager(props.table)
 const searchFilter: Ref<string> = ref('')
 // Selected Row (Page Dialog)
 const pageDialog: Ref<boolean> = ref(false)
-const selectedItem: Ref<any> = ref({})
+const selectedItem: Ref<{ [x: string]: any }> = ref({})
 const selectedOperation: Ref<TableOperation> = ref(TableOperation.NO_OP)
 const selectedLabel: Ref<string> = ref('')
-const selectedCanSave: Ref<boolean> = ref(false)
 
 onMounted(async () => await updateRows())
 
@@ -35,14 +34,12 @@ function updateSelectedRefs({
   operation = TableOperation.NO_OP,
   item = {},
   label = '',
-  canSave = false,
-  dialog = true,
+  dialog = true, // Open the page dialog by default
 } = {}): void {
-  if (isSupported(operation)) {
+  if (isSupported(operation) || operation === TableOperation.NO_OP) {
     selectedItem.value = item
     selectedOperation.value = operation
     selectedLabel.value = label
-    selectedCanSave.value = canSave
     pageDialog.value = dialog
   } else {
     log.warn(`${operation} not supported for ${TM.labelPlural} table`)
@@ -51,27 +48,22 @@ function updateSelectedRefs({
 
 async function updateDialog(event: any): Promise<void> {
   await updateRows()
-  selectedItem.value = {}
-  selectedOperation.value = TableOperation.NO_OP
-  selectedLabel.value = ''
-  selectedCanSave.value = false
-  pageDialog.value = !!event
+  updateSelectedRefs({ dialog: !!event })
 }
 
-async function onCreateDialog(): Promise<void> {
-  updateSelectedRefs({ operation: TableOperation.CREATE, label: TM.labelSingular, canSave: true })
+async function onCreate(): Promise<void> {
+  updateSelectedRefs({ operation: TableOperation.CREATE, label: TM.labelSingular })
 }
 
-async function onEditDialog(id: string): Promise<void> {
+async function onEdit(id: string): Promise<void> {
   updateSelectedRefs({
     operation: TableOperation.UPDATE,
     item: await DB.getById(props.table, id),
     label: TM.labelSingular,
-    canSave: true,
   })
 }
 
-async function onReportDialog(id: string): Promise<void> {
+async function onReport(id: string): Promise<void> {
   updateSelectedRefs({
     operation: TableOperation.REPORT,
     item: await DB.getById(props.table, id),
@@ -79,7 +71,7 @@ async function onReportDialog(id: string): Promise<void> {
   })
 }
 
-async function onInspectDialog(id: string): Promise<void> {
+async function onInspect(id: string): Promise<void> {
   updateSelectedRefs({
     operation: TableOperation.INSPECT,
     item: await DB.getById(props.table, id),
@@ -87,7 +79,7 @@ async function onInspectDialog(id: string): Promise<void> {
   })
 }
 
-async function onClearDialog(): Promise<void> {
+async function onClear(): Promise<void> {
   if (isSupported(TableOperation.CLEAR)) {
     confirmDialog(
       'Clear',
@@ -99,7 +91,7 @@ async function onClearDialog(): Promise<void> {
           await DB.clear(props.table)
           await updateRows()
         } catch (error) {
-          log.error('onClearDialog', error)
+          log.error('onClear', error)
         }
       }
     )
@@ -108,7 +100,7 @@ async function onClearDialog(): Promise<void> {
   }
 }
 
-async function onDeleteDialog(id: string): Promise<void> {
+async function onDelete(id: string): Promise<void> {
   if (isSupported(TableOperation.DELETE)) {
     confirmDialog(
       'Delete',
@@ -120,22 +112,12 @@ async function onDeleteDialog(id: string): Promise<void> {
           await DB.deleteById(props.table, id)
           await updateRows()
         } catch (error) {
-          log.error('onDeleteDialog', error)
+          log.error('onDelete', error)
         }
       }
     )
   } else {
     log.warn(`Delete not supported for ${TM.labelPlural} table`)
-  }
-}
-
-async function onSave(): Promise<void> {
-  if (isSupported(TableOperation.CREATE)) {
-    console.log('create - save')
-  } else if (isSupported(TableOperation.UPDATE)) {
-    console.log('update - save')
-  } else {
-    log.warn(`Save not supported for ${TM.labelPlural} table`)
   }
 }
 </script>
@@ -157,6 +139,7 @@ async function onSave(): Promise<void> {
       <QSpace />
       <!-- Search Input -->
       <QInput
+        :disable="!TM.rows.length"
         outlined
         dense
         debounce="300"
@@ -171,6 +154,7 @@ async function onSave(): Promise<void> {
       <!-- Column Select -->
       <QSelect
         v-model="TM.visibleColumns"
+        :disable="!TM.rows.length"
         multiple
         outlined
         dense
@@ -191,14 +175,15 @@ async function onSave(): Promise<void> {
           color="positive"
           label="Create"
           class="q-mr-sm q-mb-sm"
-          @click="onCreateDialog()"
+          @click="onCreate()"
         />
         <!-- Clear Btn -->
         <QBtn
           v-if="isSupported(TableOperation.CLEAR)"
+          :disable="!TM.rows.length"
           color="negative"
           label="Clear"
-          @click="onClearDialog()"
+          @click="onClear()"
           class="q-mb-sm"
         />
       </div>
@@ -227,7 +212,7 @@ async function onSave(): Promise<void> {
             dense
             class="q-ml-xs"
             color="accent"
-            @click="onReportDialog(props.cols[0].value)"
+            @click="onReport(props.cols[0].value)"
             :icon="Icon.REPORT"
           />
           <!-- Details Btn -->
@@ -238,7 +223,7 @@ async function onSave(): Promise<void> {
             dense
             class="q-ml-xs"
             color="primary"
-            @click="onInspectDialog(props.cols[0].value)"
+            @click="onInspect(props.cols[0].value)"
             :icon="Icon.DETAILS"
           />
           <!-- Edit Btn -->
@@ -249,7 +234,7 @@ async function onSave(): Promise<void> {
             dense
             class="q-ml-xs"
             color="orange-9"
-            @click="onEditDialog(props.cols[0].value)"
+            @click="onEdit(props.cols[0].value)"
             :icon="Icon.EDIT"
           />
           <!-- Delete Btn -->
@@ -260,7 +245,7 @@ async function onSave(): Promise<void> {
             dense
             class="q-ml-xs"
             color="negative"
-            @click="onDeleteDialog(props.cols[0].value)"
+            @click="onDelete(props.cols[0].value)"
             :icon="Icon.DELETE"
           />
         </QTd>
@@ -273,9 +258,7 @@ async function onSave(): Promise<void> {
     :dialog="pageDialog"
     :action="selectedOperation"
     :label="selectedLabel"
-    :canSave="selectedCanSave"
     @update:dialog="updateDialog($event)"
-    @on-save="onSave()"
   >
     <PageInspect
       v-if="selectedOperation === TableOperation.INSPECT"
@@ -285,12 +268,13 @@ async function onSave(): Promise<void> {
     <PageCreate
       v-if="selectedOperation === TableOperation.CREATE"
       :table="table"
-      :tableColumns="TM.columns"
+      @on-create="updateDialog(false)"
     />
     <PageUpdate
       v-if="selectedOperation === TableOperation.UPDATE"
       :table="table"
-      :tableColumns="TM.columns"
+      :selectedItem="selectedItem"
+      @on-create="updateDialog(false)"
     />
     <PageReport v-if="selectedOperation === TableOperation.REPORT" :table="table" />
   </PageDialog>

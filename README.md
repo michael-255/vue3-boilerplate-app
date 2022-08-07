@@ -6,9 +6,6 @@ have a better understanding of how this project is setup.
 ## Todos
 
 - [ ] `Examples` table fleshes out (make similar to Measurements for now)
-  - [ ] `CreatedDateInput`
-  - [ ] `NameInput`
-  - [ ] `DescriptionInput`
 - [ ] Quasar `ellipsis` CSS class for cols (may need max width)
 - [ ] Implement `Defaults` with random data for Examples and Logs
 
