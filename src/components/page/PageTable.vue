@@ -137,6 +137,7 @@ async function onDelete(id: string): Promise<void> {
     <template v-slot:top>
       <div class="q-table__title text-weight-bold">{{ TM.labelPlural }}</div>
       <QSpace />
+
       <!-- Search Input -->
       <QInput
         :disable="!TM.rows.length"
@@ -151,6 +152,7 @@ async function onDelete(id: string): Promise<void> {
           <QIcon name="search" />
         </template>
       </QInput>
+
       <!-- Column Select -->
       <QSelect
         v-model="TM.visibleColumns"
@@ -188,6 +190,7 @@ async function onDelete(id: string): Promise<void> {
         />
       </div>
     </template>
+
     <!-- Column Headers -->
     <template v-slot:header="props">
       <QTr :props="props">
@@ -197,6 +200,7 @@ async function onDelete(id: string): Promise<void> {
         <QTh auto-width />
       </QTr>
     </template>
+
     <!-- Rows -->
     <template v-slot:body="props">
       <QTr :props="props">

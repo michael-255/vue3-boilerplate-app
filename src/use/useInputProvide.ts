@@ -3,7 +3,7 @@ import { type Ref, ref, provide } from 'vue'
 
 export function useInputProvide(
   injectionKey: TableField,
-  table?: DexieTable
+  dexieTable?: DexieTable
 ): { [x: string]: any } {
   const model: Ref<any> = ref(null)
   const inputRef: Ref<any> = ref(null)
@@ -25,13 +25,13 @@ export function useInputProvide(
   }
 
   provide(injectionKey, {
-    table,
     model,
     inputRef,
     updateModel,
   })
 
   return {
+    table: dexieTable,
     [injectionKey + 'Model']: model,
     [injectionKey + 'Validate']: validate,
   }

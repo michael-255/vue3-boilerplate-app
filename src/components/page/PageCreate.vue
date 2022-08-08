@@ -9,13 +9,8 @@ import { useSimpleDialogs } from '@/use/useSimpleDialogs'
  * Component for handling table item Creates
  */
 
-const props = defineProps<{
-  table: DexieTable
-}>()
-
-const emits = defineEmits<{
-  (eventName: 'on-create'): void
-}>()
+const props = defineProps<{ table: DexieTable }>()
+const emits = defineEmits<{ (eventName: 'on-create'): void }>()
 
 const { confirmDialog } = useSimpleDialogs()
 const { TM, getFieldComponent } = useTableManager(props.table)
@@ -24,6 +19,7 @@ const { idModel, idValidate } = useInputProvide(TableField.ID)
 const { createdDateModel, createdDateValidate } = useInputProvide(TableField.CREATED_DATE)
 const { nameModel, nameValidate } = useInputProvide(TableField.NAME)
 const { descriptionModel, descriptionValidate } = useInputProvide(TableField.DESCRIPTION)
+const { parentIdModel, parentIdValidate } = useInputProvide(TableField.PARENT_ID)
 
 function onCreate() {
   confirmDialog(
@@ -41,7 +37,7 @@ function onCreate() {
 
 <template>
   <div v-for="(field, i) in TM.fields" :key="i">
-    <component :is="getFieldComponent(field)" />
+    <component :is="getFieldComponent(field)" :table="table" />
   </div>
 
   <QBtn

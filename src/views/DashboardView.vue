@@ -3,25 +3,17 @@ import { QSeparator, QBtn } from 'quasar'
 import { useLogger } from '@/use/useLogger'
 import { DexieTable } from '@/constants/data-enums'
 import { useTableManager } from '@/use/useTableManager.js'
+import { isoToDisplayDate } from '@/utils/luxon'
 
 const { log } = useLogger()
-const { tableManager } = useTableManager(DexieTable.LOGS)
+const { TM } = useTableManager(DexieTable.LOGS)
 
 async function button1() {
-  console.log('name:', tableManager?.name)
-  console.log('relatedTable:', tableManager?.relatedTable)
-  console.log('label:', tableManager?.labelPlural)
-  console.log('actions:', tableManager?.actions)
-  console.log('supportedActions:', tableManager?.supportedOperations)
-  console.log('rows:', await tableManager?.rows)
-  console.log('fields:', tableManager?.fields)
-  console.log('columns:', tableManager?.columns)
-  console.log('columnOptions:', tableManager?.columnOptions)
-  console.log('visibleColumns:', tableManager?.visibleColumns)
+  console.log(isoToDisplayDate(new Date().toISOString()))
 }
 
 async function button2() {
-  console.log(tableManager)
+  console.log(TM)
 }
 
 async function print() {

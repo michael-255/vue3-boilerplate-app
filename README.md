@@ -5,7 +5,10 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `Examples` table fleshes out (make similar to Measurements for now)
+- [ ] Examples fleshed out similar to Measurements for now
+  - [ ] `Example Records`
+    - [ ] `ParentId`
+    - [ ] `Value`
 - [ ] Quasar `ellipsis` CSS class for cols (may need max width)
 - [ ] Implement `Defaults` with random data for Examples and Logs
 

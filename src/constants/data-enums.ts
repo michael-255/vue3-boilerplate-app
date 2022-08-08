@@ -10,6 +10,7 @@ export enum TableField {
   CREATED_DATE = 'createdDate',
   NAME = 'name',
   DESCRIPTION = 'description',
+  PARENT_ID = 'parentId',
   NOTES = 'notes',
   VALUE = 'value',
   SEVERITY = 'severity',

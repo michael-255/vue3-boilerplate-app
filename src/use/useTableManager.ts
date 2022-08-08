@@ -1,22 +1,15 @@
 import { DexieTable, TableField, TableOperation } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
-import { truncateString } from '@/utils/common'
-import { reactive, defineAsyncComponent } from 'vue'
-import { isoToDisplayDate } from '@/utils/luxon'
-import {
-  isRequired,
-  isIdValid,
-  isRequiredDateValid,
-  isShortTextValid,
-  isTextValid,
-  isOptionalNumber,
-} from '@/utils/validators'
+import { reactive } from 'vue'
+import { useFields } from './useFields'
 
 export function useTableManager(table: DexieTable) {
+  const { getFieldDisplayProperties, getFieldValidator, getFieldComponent } = useFields()
+
   /**
    * Table Manager is an object where the passed in Dexie table makes the selection.
    * @param name Dexie table name
-   * @param relatedTable Name of a related Dexie table (like a records table)
+   * @param relatedTable Name of related Dexie table
    * @param labelSingular Singular table label
    * @param labelPlural Plural table label
    * @param actions Database actions for this table
@@ -65,7 +58,7 @@ export function useTableManager(table: DexieTable) {
           TableOperation.CLEAR,
           TableOperation.INSPECT,
         ],
-        fields: [TableField.ID, TableField.CREATED_DATE],
+        fields: [TableField.ID, TableField.CREATED_DATE, TableField.PARENT_ID],
         rows: [],
         columns: [],
         columnOptions: [],
@@ -99,7 +92,7 @@ export function useTableManager(table: DexieTable) {
           TableField.ERROR_NAME,
         ],
       },
-    }[table as string] || {} // Selecting table as string so I can ignore uneeded tables (like settings)
+    }[table as string] || {} // As string so table without a value will return {}
   )
 
   // Some required PRE operations to fully setup table manager
@@ -107,170 +100,11 @@ export function useTableManager(table: DexieTable) {
   tableManager.columnOptions = getTableColumns().filter((i: any) => i.name !== TableField.ID)
 
   /**
-   * Get the table column display properties for a field.
-   * @param tableField
-   * @returns Object with the properties needed for data table display
-   */
-  function getFieldProps(tableField: TableField): { [x: string]: any } | undefined {
-    return {
-      [TableField.ID]: {
-        name: TableField.ID,
-        label: 'Id',
-        align: 'left',
-        sortable: true,
-        required: true,
-        field: (row: any) => row.id,
-        format: (val: string) => val,
-      },
-      [TableField.CREATED_DATE]: {
-        name: TableField.CREATED_DATE,
-        label: 'Created Date',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.createdDate,
-        format: (val: string) => isoToDisplayDate(val),
-      },
-      [TableField.NAME]: {
-        name: TableField.NAME,
-        label: 'Name',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.name,
-        format: (val: string) => truncateString(val),
-      },
-      [TableField.DESCRIPTION]: {
-        name: TableField.DESCRIPTION,
-        label: 'Description',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.description,
-        format: (val: string) => truncateString(val),
-      },
-      [TableField.NOTES]: {
-        name: TableField.NOTES,
-        label: 'Notes',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.id,
-        format: (val: string) => truncateString(val),
-      },
-      [TableField.VALUE]: {
-        name: TableField.VALUE,
-        label: 'Value',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.value,
-        format: (val: number) => val,
-      },
-      [TableField.SEVERITY]: {
-        name: TableField.SEVERITY,
-        label: 'Severity',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.severity,
-        format: (val: string) => val,
-      },
-      [TableField.CALLER_DETAILS]: {
-        name: TableField.CALLER_DETAILS,
-        label: 'Caller Details',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.callerDetails,
-        format: (val: string) => truncateString(val),
-      },
-      [TableField.ERROR_NAME]: {
-        name: TableField.ERROR_NAME,
-        label: 'Error Name',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.errorName,
-        format: (val: string) => truncateString(val),
-      },
-      [TableField.MESSAGE]: {
-        name: TableField.MESSAGE,
-        label: 'Messages',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.message,
-        format: (val: string) => truncateString(val),
-      },
-      [TableField.STACK]: {
-        name: TableField.STACK,
-        label: 'Stack',
-        align: 'left',
-        sortable: true,
-        required: false,
-        field: (row: any) => row.stack,
-        format: (val: string) => truncateString(val),
-      },
-    }[tableField as string] // As string so fields without a value will return undefined
-  }
-
-  /**
-   * Get the component that should render for a specific Dexie table field.
-   * @param tableField
-   * @returns Lazy loaded Vue Component
-   */
-  function getFieldValidator(tableField: TableField): { [x: string]: any } | undefined {
-    return {
-      [TableField.ID]: (val: string) => isIdValid(val),
-      [TableField.CREATED_DATE]: (val: string) => isRequiredDateValid(val),
-      [TableField.NAME]: (val: string) => isShortTextValid(val),
-      [TableField.DESCRIPTION]: (val: string) => isTextValid(val),
-      [TableField.NOTES]: (val: string) => isTextValid(val),
-      [TableField.VALUE]: (val: number | undefined) => isOptionalNumber(val),
-      [TableField.SEVERITY]: (val: string) => isRequired(val),
-      [TableField.CALLER_DETAILS]: (val: string) => isRequired(val),
-      [TableField.ERROR_NAME]: () => true,
-      [TableField.MESSAGE]: () => true,
-      [TableField.STACK]: () => true,
-    }[tableField as string] // As string so fields without a value will return undefined
-  }
-
-  /**
-   * Get the component that should render for a specific Dexie table field.
-   * @param tableField
-   * @returns Lazy loaded Vue Component
-   */
-  function getFieldComponent(tableField: TableField): { [x: string]: any } | undefined {
-    return {
-      [TableField.ID]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
-      [TableField.CREATED_DATE]: defineAsyncComponent(
-        () => import('@/components/inputs/CreatedDateInput.vue')
-      ),
-      [TableField.NAME]: defineAsyncComponent(() => import('@/components/inputs/NameInput.vue')),
-      [TableField.DESCRIPTION]: defineAsyncComponent(
-        () => import('@/components/inputs/DescriptionInput.vue')
-      ),
-      [TableField.NOTES]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
-      [TableField.VALUE]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
-      [TableField.SEVERITY]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
-      [TableField.CALLER_DETAILS]: defineAsyncComponent(
-        () => import('@/components/inputs/IdInput.vue')
-      ),
-      [TableField.ERROR_NAME]: defineAsyncComponent(
-        () => import('@/components/inputs/IdInput.vue')
-      ),
-      [TableField.MESSAGE]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
-      [TableField.STACK]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
-    }[tableField as string] // As string so fields without a value will return undefined
-  }
-
-  /**
    * Get the field column display properties for a Dexie table.
    * @returns Array of field column display properties
    */
   function getTableColumns(): { [x: string]: any }[] {
-    return tableManager.fields.map((field: TableField) => getFieldProps(field))
+    return tableManager.fields.map((field: TableField) => getFieldDisplayProperties(field))
   }
 
   /**
@@ -287,12 +121,10 @@ export function useTableManager(table: DexieTable) {
   }
 
   return {
-    getFieldValidator,
-    getFieldComponent,
+    getFieldValidator, // Pass these through from useFields
+    getFieldComponent, // Pass these through from useFields
     isSupported,
     updateRows,
     TM: tableManager,
-    tableManager,
-    [table + 'TableManager']: tableManager, // Named output if needed
   }
 }

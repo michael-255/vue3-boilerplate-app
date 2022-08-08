@@ -1,12 +1,10 @@
-// import { DateTime } from 'luxon'
-
 export interface IEntity {
   id: string
   createdDate: string
 }
 
 /**
- * _Entity Class
+ * Entity Class
  * @param params IEntity
  */
 export class Entity {
@@ -17,8 +15,4 @@ export class Entity {
     this.id = params.id
     this.createdDate = params.createdDate
   }
-
-  // getReadableCreatedAt(): string {
-  //   return DateTime.fromISO(this.createdDate).toFormat('ccc LLL d yyyy ttt')
-  // }
 }
