@@ -20,6 +20,7 @@ const { createdDateModel, createdDateValidate } = useInputProvide(TableField.CRE
 const { nameModel, nameValidate } = useInputProvide(TableField.NAME)
 const { descriptionModel, descriptionValidate } = useInputProvide(TableField.DESCRIPTION)
 const { parentIdModel, parentIdValidate } = useInputProvide(TableField.PARENT_ID)
+const { valueModel, valueValidate } = useInputProvide(TableField.VALUE)
 
 function onCreate() {
   confirmDialog(

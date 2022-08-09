@@ -24,12 +24,16 @@ export function isRequired(value: any): boolean {
   }
 }
 
+export function isValidNumber(num: number): boolean {
+  return num >= 0 && num <= 999999999 && typeof num === 'number' && isFinite(num)
+}
+
 export function isRequiredNumber(num: number): boolean {
-  return isRequired(num) && typeof num === 'number' && isFinite(num)
+  return isRequired(num) && isValidNumber(num)
 }
 
 export function isOptionalNumber(num: number | undefined): boolean {
-  return num === undefined || (typeof num === 'number' && isFinite(num))
+  return num === undefined || isValidNumber(num)
 }
 
 export function isBlank(value: any): boolean {

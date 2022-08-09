@@ -5,22 +5,15 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] Examples fleshed out similar to Measurements for now
-  - [ ] `Example Records`
-    - [ ] `ParentId`
-    - [ ] `Value`
+- [ ] Examples logic fleshed out similar to Measurements for now
+  - [ ] Create logic for `Examples`
+  - [ ] Create logic for `Example Records`
 - [ ] Quasar `ellipsis` CSS class for cols (may need max width)
 - [ ] Implement `Defaults` with random data for Examples and Logs
-
----
-
-- [ ] Settings and more (ABOVE)
-
-- [x] Make `useLogs`
 - [ ] File-by-file transfer and cleanup
 - [ ] Clean up boilerplate app
-- [ ] `TableInterface` implemented for boilerplate test data
 - [ ] Update `hygen class new`
+- [ ] Clean up and build out your tests
 
 ```bash
 ###############################################################################

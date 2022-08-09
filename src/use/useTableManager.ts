@@ -58,7 +58,7 @@ export function useTableManager(table: DexieTable) {
           TableOperation.CLEAR,
           TableOperation.INSPECT,
         ],
-        fields: [TableField.ID, TableField.CREATED_DATE, TableField.PARENT_ID],
+        fields: [TableField.ID, TableField.CREATED_DATE, TableField.PARENT_ID, TableField.VALUE],
         rows: [],
         columns: [],
         columnOptions: [],

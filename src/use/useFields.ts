@@ -7,7 +7,8 @@ import {
   isRequiredDateValid,
   isShortTextValid,
   isTextValid,
-  isOptionalNumber,
+  isRequiredNumber,
+  isRequired,
 } from '@/utils/validators'
 
 /**
@@ -133,19 +134,29 @@ export function useFields() {
   }
 
   /**
-   * Get field validator function.
+   * Get field validator function. True returning function for non-validated fields.
    * @param tableField
    * @returns Validator function
    */
-  function getFieldValidator(tableField: TableField): ((x: any) => any) | undefined {
+  function getFieldValidator(tableField: TableField): (x: any) => any {
     return {
-      [TableField.ID]: (val: string) => isIdValid(val),
-      [TableField.CREATED_DATE]: (val: string) => isRequiredDateValid(val),
-      [TableField.NAME]: (val: string) => isShortTextValid(val),
-      [TableField.DESCRIPTION]: (val: string) => isTextValid(val),
-      [TableField.NOTES]: (val: string) => isTextValid(val),
-      [TableField.VALUE]: (val: number | undefined) => isOptionalNumber(val),
-    }[tableField as string] // As string so fields without a value will return undefined
+      [TableField.ID]: (val: string) => isIdValid(val) || 'Id must be between 1 and 40 characters',
+      [TableField.CREATED_DATE]: (val: string) =>
+        isRequiredDateValid(val) || 'Date must be of format YYYY-MM-DDTHH:MM:SS.###Z',
+      [TableField.NAME]: (val: string) =>
+        isShortTextValid(val) || 'Name must be between 1 and 40 characters',
+      [TableField.DESCRIPTION]: (val: string) =>
+        isTextValid(val) || 'Description is limited to 500 characters',
+      [TableField.PARENT_ID]: (val: string) => isRequired(val) || '* Required',
+      [TableField.VALUE]: (val: number) =>
+        isRequiredNumber(val) || 'Positive number not exceeding 999,999,999 is required',
+      [TableField.NOTES]: isTextValid,
+      [TableField.SEVERITY]: () => true,
+      [TableField.CALLER_DETAILS]: () => true,
+      [TableField.ERROR_NAME]: () => true,
+      [TableField.MESSAGE]: () => true,
+      [TableField.STACK]: () => true,
+    }[tableField]
   }
 
   /**
@@ -166,8 +177,8 @@ export function useFields() {
       [TableField.PARENT_ID]: defineAsyncComponent(
         () => import('@/components/inputs/ParentIdSelect.vue')
       ),
+      [TableField.VALUE]: defineAsyncComponent(() => import('@/components/inputs/ValueInput.vue')),
       [TableField.NOTES]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
-      [TableField.VALUE]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
     }[tableField as string] // As string so fields without a value will return undefined
   }
 

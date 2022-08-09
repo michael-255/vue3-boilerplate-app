@@ -2,18 +2,19 @@
 import { QInput, QDate, QBtn, QTime, QPopupProxy } from 'quasar'
 import { type Ref, ref, onMounted } from 'vue'
 import { isoToDisplayDate } from '@/utils/luxon'
-import { TableField } from '@/constants/data-enums'
+import { DexieTable, TableField } from '@/constants/data-enums'
 import { Icon } from '@/constants/ui-enums'
-import { isRequiredDateValid } from '@/utils/validators'
 import { useInputInject } from '@/use/useInputInject'
+import { useTableManager } from '@/use/useTableManager'
 
 /**
  * @todo
  */
+const props = defineProps<{ table: DexieTable }>()
+const field = TableField.CREATED_DATE
 
-const { createdDateModel, createdDateInputRef, createdDateUpdateModel } = useInputInject(
-  TableField.CREATED_DATE
-)
+const { getFieldValidator } = useTableManager(props.table)
+const { createdDateModel, createdDateInputRef, createdDateUpdateModel } = useInputInject(field)
 const userDisplayedDate: Ref<string> = ref('')
 const dateTimePicker: Ref<string> = ref('')
 
@@ -53,9 +54,7 @@ function onPickerDateTime(): void {
     v-model="userDisplayedDate"
     ref="createdDateInputRef"
     label="Created Date"
-    :rules="[
-      (val: string) => isRequiredDateValid(val) || 'Date must be of format YYYY-MM-DDTHH:MM:SS.###Z'
-    ]"
+    :rules="[getFieldValidator(field)]"
     dense
     outlined
     disable

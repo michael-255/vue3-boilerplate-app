@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { QInput } from 'quasar'
-import { onMounted } from 'vue'
 import { DexieTable, TableField } from '@/constants/data-enums'
 import { useInputInject } from '@/use/useInputInject'
 import { useTableManager } from '@/use/useTableManager'
@@ -9,30 +8,21 @@ import { useTableManager } from '@/use/useTableManager'
  * @todo
  */
 const props = defineProps<{ table: DexieTable }>()
-const field = TableField.NAME
+const field = TableField.VALUE
 
 const { getFieldValidator } = useTableManager(props.table)
-const { nameModel, nameInputRef, nameUpdateModel } = useInputInject(field)
-
-/**
- * @todo
- */
-onMounted(() => {
-  if (!nameModel.value) {
-    nameUpdateModel('Example')
-  }
-})
+const { valueModel, valueInputRef } = useInputInject(field)
 </script>
 
 <template>
   <QInput
-    v-model="nameModel"
-    ref="nameInputRef"
-    label="Name"
+    v-model.number="valueModel"
+    ref="valueInputRef"
+    label="Value"
     :rules="[getFieldValidator(field)]"
-    :maxlength="40"
     dense
     outlined
+    type="number"
     color="primary"
     class="q-mb-xs"
   />
