@@ -23,13 +23,23 @@ const { parentIdModel, parentIdValidate } = useInputProvide(TableField.PARENT_ID
 const { valueModel, valueValidate } = useInputProvide(TableField.VALUE)
 
 function onCreate() {
+  /**
+   * @todo - Validate inputs, dismiss dialog if failed (if condition)
+   */
   confirmDialog(
     'Create',
     `Are you sure you want to create this ${TM.labelSingular}?`,
     Icon.SAVE,
     NotifyColor.INFO,
-    () => {
-      // @todo create logic from TM
+    async () => {
+      await TM.actions.create(
+        idModel.value,
+        createdDateModel.value,
+        nameModel.value,
+        descriptionModel.value,
+        parentIdModel.value,
+        valueModel.value
+      )
       emits('on-create')
     }
   )

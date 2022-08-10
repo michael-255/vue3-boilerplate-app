@@ -1,10 +1,7 @@
-import type { DexieTable, TableField } from '@/constants/data-enums'
+import type { TableField } from '@/constants/data-enums'
 import { type Ref, ref, provide } from 'vue'
 
-export function useInputProvide(
-  injectionKey: TableField,
-  dexieTable?: DexieTable
-): { [x: string]: any } {
+export function useInputProvide(injectionKey: TableField): { [x: string]: any } {
   const model: Ref<any> = ref(null)
   const inputRef: Ref<any> = ref(null)
 
@@ -24,6 +21,9 @@ export function useInputProvide(
     return !!inputRef?.value?.validate()
   }
 
+  /**
+   * -----Provide Statement-----
+   */
   provide(injectionKey, {
     model,
     inputRef,
@@ -31,7 +31,6 @@ export function useInputProvide(
   })
 
   return {
-    table: dexieTable,
     [injectionKey + 'Model']: model,
     [injectionKey + 'Validate']: validate,
   }

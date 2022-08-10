@@ -138,7 +138,7 @@ export function useFields() {
    * @param tableField
    * @returns Validator function
    */
-  function getFieldValidator(tableField: TableField): (x: any) => any {
+  function getFieldValidator(tableField: TableField): any | undefined {
     return {
       [TableField.ID]: (val: string) => isIdValid(val) || 'Id must be between 1 and 40 characters',
       [TableField.CREATED_DATE]: (val: string) =>
@@ -151,12 +151,7 @@ export function useFields() {
       [TableField.VALUE]: (val: number) =>
         isRequiredNumber(val) || 'Positive number not exceeding 999,999,999 is required',
       [TableField.NOTES]: isTextValid,
-      [TableField.SEVERITY]: () => true,
-      [TableField.CALLER_DETAILS]: () => true,
-      [TableField.ERROR_NAME]: () => true,
-      [TableField.MESSAGE]: () => true,
-      [TableField.STACK]: () => true,
-    }[tableField]
+    }[tableField as string] // As string so fields without a value will return undefined
   }
 
   /**

@@ -1,10 +1,41 @@
 import { DexieTable, TableField, TableOperation } from '@/constants/data-enums'
+import { Example } from '@/models/Example'
+import { ExampleRecord } from '@/models/ExampleRecord'
+import { Log } from '@/models/Log'
 import { DB } from '@/services/LocalDatabase'
 import { reactive } from 'vue'
 import { useFields } from './useFields'
 
 export function useTableManager(table: DexieTable) {
   const { getFieldDisplayProperties, getFieldValidator, getFieldComponent } = useFields()
+
+  // Setup initial table properties
+  const initTM = {
+    [DexieTable.EXAMPLES]: Example.getTableProperties(),
+    [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getTableProperties(),
+    [DexieTable.LOGS]: Log.getTableProperties(),
+    [DexieTable.SETTINGS]: {},
+  }[table]
+
+  initTM.columns = initTM?.fields.map((field: TableField) => getFieldDisplayProperties(field))
+
+  initTM.columnOptions = initTM?.columns.filter((i: any) => i.name !== TableField.ID)
+
+  initTM.actions = {
+    [DexieTable.EXAMPLES]: {
+      getRows: async () => await DB.getAll(table),
+      create: async (...args: any[]) => {
+        console.log('create', args)
+      },
+    },
+    [DexieTable.EXAMPLE_RECORDS]: {
+      getRows: async () => await DB.getAll(table),
+    },
+    [DexieTable.LOGS]: {
+      getRows: async () => await DB.getAll(table),
+    },
+    [DexieTable.SETTINGS]: {},
+  }[table]
 
   /**
    * Table Manager is an object where the passed in Dexie table makes the selection.
@@ -19,93 +50,7 @@ export function useTableManager(table: DexieTable) {
    * @param columnOptions Selectable field properties (Select component)
    * @param visibleColumns Names of fields that are displayed by default
    */
-  const tableManager: { [x: string]: any } = reactive(
-    {
-      [DexieTable.EXAMPLES]: {
-        name: DexieTable.EXAMPLES,
-        relatedTable: DexieTable.EXAMPLE_RECORDS,
-        labelSingular: 'Example',
-        labelPlural: 'Examples',
-        actions: {
-          getRows: async () => await DB.getAll(table),
-        },
-        supportedOperations: [
-          TableOperation.CREATE,
-          TableOperation.UPDATE,
-          TableOperation.DELETE,
-          TableOperation.CLEAR,
-          TableOperation.INSPECT,
-          TableOperation.REPORT,
-        ],
-        fields: [TableField.ID, TableField.CREATED_DATE, TableField.NAME, TableField.DESCRIPTION],
-        rows: [],
-        columns: [],
-        columnOptions: [],
-        visibleColumns: [TableField.CREATED_DATE], // @todo
-      },
-      [DexieTable.EXAMPLE_RECORDS]: {
-        name: DexieTable.EXAMPLE_RECORDS,
-        relatedTable: DexieTable.EXAMPLES,
-        labelSingular: 'Example Record',
-        labelPlural: 'Example Records',
-        actions: {
-          getRows: async () => await DB.getAll(table),
-        },
-        supportedOperations: [
-          TableOperation.CREATE,
-          TableOperation.UPDATE,
-          TableOperation.DELETE,
-          TableOperation.CLEAR,
-          TableOperation.INSPECT,
-        ],
-        fields: [TableField.ID, TableField.CREATED_DATE, TableField.PARENT_ID, TableField.VALUE],
-        rows: [],
-        columns: [],
-        columnOptions: [],
-        visibleColumns: [TableField.CREATED_DATE], // @todo
-      },
-      [DexieTable.LOGS]: {
-        name: DexieTable.LOGS,
-        relatedTable: null,
-        labelSingular: 'Log',
-        labelPlural: 'Logs',
-        actions: {
-          getRows: async () => await DB.getAll(table),
-        },
-        supportedOperations: [TableOperation.DELETE, TableOperation.CLEAR, TableOperation.INSPECT],
-        fields: [
-          TableField.ID,
-          TableField.CREATED_DATE,
-          TableField.SEVERITY,
-          TableField.CALLER_DETAILS,
-          TableField.ERROR_NAME,
-          TableField.MESSAGE,
-          TableField.STACK,
-        ],
-        rows: [],
-        columns: [],
-        columnOptions: [],
-        visibleColumns: [
-          TableField.CREATED_DATE,
-          TableField.SEVERITY,
-          TableField.CALLER_DETAILS,
-          TableField.ERROR_NAME,
-        ],
-      },
-    }[table as string] || {} // As string so table without a value will return {}
-  )
-
-  // Some required PRE operations to fully setup table manager
-  tableManager.columns = getTableColumns()
-  tableManager.columnOptions = getTableColumns().filter((i: any) => i.name !== TableField.ID)
-
-  /**
-   * Get the field column display properties for a Dexie table.
-   * @returns Array of field column display properties
-   */
-  function getTableColumns(): { [x: string]: any }[] {
-    return tableManager.fields.map((field: TableField) => getFieldDisplayProperties(field))
-  }
+  const tableManager: { [x: string]: any } = reactive(initTM)
 
   /**
    * Checking if a Table Action is supported by the current table.

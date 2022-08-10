@@ -6,6 +6,7 @@ have a better understanding of how this project is setup.
 ## Todos
 
 - [ ] Examples logic fleshed out similar to Measurements for now
+  - [ ] Provide/Inject control table wide field input validation
   - [ ] Create logic for `Examples`
   - [ ] Create logic for `Example Records`
 - [ ] Quasar `ellipsis` CSS class for cols (may need max width)
