@@ -2,24 +2,23 @@
 import { QInput } from 'quasar'
 import { onMounted } from 'vue'
 import { DexieTable, TableField } from '@/constants/data-enums'
-import { useInputInject } from '@/use/useInputInject'
 import { useTableManager } from '@/use/useTableManager'
+import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
 /**
  * @todo
  */
 const props = defineProps<{ table: DexieTable }>()
-const field = TableField.NAME
 
 const { getFieldValidator } = useTableManager(props.table)
-const { nameModel, nameInputRef, nameUpdateModel } = useInputInject(field)
+const { nameModel, nameInputRef, updateModel } = useInjectTableInputs()
 
 /**
  * @todo
  */
 onMounted(() => {
   if (!nameModel.value) {
-    nameUpdateModel('Example')
+    updateModel(nameModel, 'Example')
   }
 })
 </script>
@@ -29,7 +28,7 @@ onMounted(() => {
     v-model="nameModel"
     ref="nameInputRef"
     label="Name"
-    :rules="[getFieldValidator(field)]"
+    :rules="[getFieldValidator(TableField.NAME)]"
     :maxlength="40"
     dense
     outlined

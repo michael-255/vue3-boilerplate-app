@@ -2,20 +2,19 @@
 import { QSelect } from 'quasar'
 import { onMounted, ref, type Ref } from 'vue'
 import { DexieTable, TableField } from '@/constants/data-enums'
-import { useInputInject } from '@/use/useInputInject'
 import { DB } from '@/services/LocalDatabase'
 import { truncateString } from '@/utils/common'
 import { useTableManager } from '@/use/useTableManager'
+import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
 /**
  * @todo
  */
 
 const props = defineProps<{ table: DexieTable }>()
-const field = TableField.PARENT_ID
 
 const { TM, getFieldValidator } = useTableManager(props.table)
-const { parentIdModel, parentIdInputRef } = useInputInject(field)
+const { parentIdModel, parentIdInputRef } = useInjectTableInputs()
 const options: Ref<any[]> = ref([])
 
 /**
@@ -41,7 +40,7 @@ onMounted(async () => {
     v-model="parentIdModel"
     label="Parent"
     :options="options"
-    :rules="[getFieldValidator(field)]"
+    :rules="[getFieldValidator(TableField.PARENT_ID)]"
     emit-value
     map-options
     options-dense

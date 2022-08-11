@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { DexieTable, TableField } from '@/constants/data-enums.js'
+import { DexieTable } from '@/constants/data-enums'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { useTableManager } from '@/use/useTableManager'
-import { useInputProvide } from '@/use/useInputProvide'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
+import { useProvideTableInputs } from '@/use/useProvideTableInputs'
+import { useTableManager } from '@/use/useTableManager'
 
 /**
  * Component for handling table item Creates
@@ -12,34 +12,59 @@ import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 const props = defineProps<{ table: DexieTable }>()
 const emits = defineEmits<{ (eventName: 'on-create'): void }>()
 
-const { confirmDialog } = useSimpleDialogs()
+const { confirmDialog, dismissDialog } = useSimpleDialogs()
 const { TM, getFieldComponent } = useTableManager(props.table)
-
-const { idModel, idValidate } = useInputProvide(TableField.ID)
-const { createdDateModel, createdDateValidate } = useInputProvide(TableField.CREATED_DATE)
-const { nameModel, nameValidate } = useInputProvide(TableField.NAME)
-const { descriptionModel, descriptionValidate } = useInputProvide(TableField.DESCRIPTION)
-const { parentIdModel, parentIdValidate } = useInputProvide(TableField.PARENT_ID)
-const { valueModel, valueValidate } = useInputProvide(TableField.VALUE)
+const {
+  // Models
+  idModel,
+  createdDateModel,
+  nameModel,
+  descriptionModel,
+  parentIdModel,
+  valueModel,
+  areExampleInputsValid,
+  areExampleRecordInputsValid,
+} = useProvideTableInputs()
 
 function onCreate() {
-  /**
-   * @todo - Validate inputs, dismiss dialog if failed (if condition)
-   */
+  const areInputsValid = {
+    [DexieTable.EXAMPLES]: areExampleInputsValid(),
+    [DexieTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
+    [DexieTable.LOGS]: false,
+    [DexieTable.SETTINGS]: false,
+  }[props.table]
+
+  if (!areInputsValid) {
+    createDismissDialog()
+  } else {
+    createConfirmDialog()
+  }
+}
+
+function createDismissDialog(): void {
+  dismissDialog(
+    'Validation Failed',
+    'One or more inputs have invalid entries.',
+    Icon.WARN,
+    NotifyColor.WARN
+  )
+}
+
+function createConfirmDialog(): void {
   confirmDialog(
     'Create',
     `Are you sure you want to create this ${TM.labelSingular}?`,
     Icon.SAVE,
     NotifyColor.INFO,
     async () => {
-      await TM.actions.create(
-        idModel.value,
-        createdDateModel.value,
-        nameModel.value,
-        descriptionModel.value,
-        parentIdModel.value,
-        valueModel.value
-      )
+      await TM.actions.create({
+        id: idModel.value,
+        createdDate: createdDateModel.value,
+        name: nameModel.value,
+        description: descriptionModel.value,
+        parentId: parentIdModel.value,
+        value: valueModel.value,
+      })
       emits('on-create')
     }
   )

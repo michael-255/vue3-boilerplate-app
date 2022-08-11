@@ -4,24 +4,23 @@ import { onMounted } from 'vue'
 import { v4 as createId } from 'uuid'
 import { Icon } from '@/constants/ui-enums'
 import { DexieTable, TableField } from '@/constants/data-enums'
-import { useInputInject } from '@/use/useInputInject'
 import { useTableManager } from '@/use/useTableManager'
+import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
 /**
  * @todo
  */
 const props = defineProps<{ table: DexieTable }>()
-const field = TableField.ID
 
 const { getFieldValidator } = useTableManager(props.table)
-const { idModel, idInputRef, idUpdateModel } = useInputInject(field)
+const { idModel, idInputRef, updateModel } = useInjectTableInputs()
 
 /**
  * @todo
  */
 onMounted(() => {
   if (!idModel.value) {
-    idUpdateModel(createId())
+    updateModel(idModel, createId())
   }
 })
 </script>
@@ -31,7 +30,7 @@ onMounted(() => {
     v-model="idModel"
     ref="idInputRef"
     label="Id"
-    :rules="[getFieldValidator(field)]"
+    :rules="[getFieldValidator(TableField.ID)]"
     :maxlength="40"
     dense
     outlined
@@ -43,7 +42,7 @@ onMounted(() => {
         :icon="Icon.RENEW"
         color="primary"
         class="q-ml-xs q-px-sm"
-        @click="idUpdateModel(createId())"
+        @click="updateModel(idModel, createId())"
       />
     </template>
   </QInput>

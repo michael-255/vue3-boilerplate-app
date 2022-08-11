@@ -24,8 +24,8 @@ export function useTableManager(table: DexieTable) {
   initTM.actions = {
     [DexieTable.EXAMPLES]: {
       getRows: async () => await DB.getAll(table),
-      create: async (...args: any[]) => {
-        console.log('create', args)
+      create: async (fields: { [x: string]: any }) => {
+        console.log('create:', fields)
       },
     },
     [DexieTable.EXAMPLE_RECORDS]: {

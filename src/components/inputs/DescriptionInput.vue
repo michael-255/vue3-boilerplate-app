@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { QInput } from 'quasar'
 import { DexieTable, TableField } from '@/constants/data-enums'
-import { useInputInject } from '@/use/useInputInject'
 import { useTableManager } from '@/use/useTableManager'
+import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
 /**
  * @todo
  */
 const props = defineProps<{ table: DexieTable }>()
-const field = TableField.DESCRIPTION
 
 const { getFieldValidator } = useTableManager(props.table)
-const { descriptionModel, descriptionInputRef } = useInputInject(field)
+const { descriptionModel, descriptionInputRef } = useInjectTableInputs()
 const maxLength = 500
 </script>
 
@@ -20,7 +19,7 @@ const maxLength = 500
     v-model="descriptionModel"
     ref="descriptionInputRef"
     label="Description"
-    :rules="[getFieldValidator(field)]"
+    :rules="[getFieldValidator(TableField.DESCRIPTION)]"
     :maxlength="maxLength"
     :hint="`${descriptionModel?.length || '0'}/${maxLength}`"
     dense

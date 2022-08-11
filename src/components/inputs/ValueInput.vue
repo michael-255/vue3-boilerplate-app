@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { QInput } from 'quasar'
 import { DexieTable, TableField } from '@/constants/data-enums'
-import { useInputInject } from '@/use/useInputInject'
 import { useTableManager } from '@/use/useTableManager'
+import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
 /**
  * @todo
  */
 const props = defineProps<{ table: DexieTable }>()
-const field = TableField.VALUE
 
 const { getFieldValidator } = useTableManager(props.table)
-const { valueModel, valueInputRef } = useInputInject(field)
+const { valueModel, valueInputRef } = useInjectTableInputs()
 </script>
 
 <template>
@@ -19,7 +18,7 @@ const { valueModel, valueInputRef } = useInputInject(field)
     v-model.number="valueModel"
     ref="valueInputRef"
     label="Value"
-    :rules="[getFieldValidator(field)]"
+    :rules="[getFieldValidator(TableField.VALUE)]"
     dense
     outlined
     type="number"

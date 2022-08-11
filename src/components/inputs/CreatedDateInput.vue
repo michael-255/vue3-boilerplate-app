@@ -4,17 +4,16 @@ import { type Ref, ref, onMounted } from 'vue'
 import { isoToDisplayDate } from '@/utils/luxon'
 import { DexieTable, TableField } from '@/constants/data-enums'
 import { Icon } from '@/constants/ui-enums'
-import { useInputInject } from '@/use/useInputInject'
 import { useTableManager } from '@/use/useTableManager'
+import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
 /**
  * @todo
  */
 const props = defineProps<{ table: DexieTable }>()
-const field = TableField.CREATED_DATE
 
 const { getFieldValidator } = useTableManager(props.table)
-const { createdDateModel, createdDateInputRef, createdDateUpdateModel } = useInputInject(field)
+const { createdDateModel, createdDateInputRef, updateModel } = useInjectTableInputs()
 const userDisplayedDate: Ref<string> = ref('')
 const dateTimePicker: Ref<string> = ref('')
 
@@ -34,7 +33,7 @@ onMounted(() => {
  */
 function onNowDate(): void {
   const now = new Date().toISOString()
-  createdDateUpdateModel(now)
+  updateModel(createdDateModel, now)
   userDisplayedDate.value = isoToDisplayDate(now)
 }
 
@@ -43,7 +42,7 @@ function onNowDate(): void {
  */
 function onPickerDateTime(): void {
   if (dateTimePicker.value) {
-    createdDateUpdateModel(new Date(dateTimePicker.value).toISOString())
+    updateModel(createdDateModel, new Date(dateTimePicker.value).toISOString())
     userDisplayedDate.value = isoToDisplayDate(dateTimePicker.value)
   }
 }
@@ -54,7 +53,7 @@ function onPickerDateTime(): void {
     v-model="userDisplayedDate"
     ref="createdDateInputRef"
     label="Created Date"
-    :rules="[getFieldValidator(field)]"
+    :rules="[getFieldValidator(TableField.CREATED_DATE)]"
     dense
     outlined
     disable

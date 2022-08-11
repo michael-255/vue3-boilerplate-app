@@ -30,6 +30,10 @@ export enum TableOperation {
   REPORT = 'Report',
 }
 
+export enum InjectionKey {
+  TABLE_INPUTS = 'AllTableInputs',
+}
+
 export enum SettingKey {
   DEBUG = 'DEBUG',
   NOTIFY = 'NOTIFY',
