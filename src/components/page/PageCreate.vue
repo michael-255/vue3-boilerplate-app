@@ -4,6 +4,7 @@ import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { useProvideTableInputs } from '@/use/useProvideTableInputs'
 import { useTableManager } from '@/use/useTableManager'
+import { useLogger } from '@/use/useLogger'
 
 /**
  * Component for handling table item Creates
@@ -12,6 +13,7 @@ import { useTableManager } from '@/use/useTableManager'
 const props = defineProps<{ table: DexieTable }>()
 const emits = defineEmits<{ (eventName: 'on-create'): void }>()
 
+const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
 const { TM, getFieldComponent } = useTableManager(props.table)
 const {
@@ -27,17 +29,21 @@ const {
 } = useProvideTableInputs()
 
 function onCreate() {
-  const areInputsValid = {
-    [DexieTable.EXAMPLES]: areExampleInputsValid(),
-    [DexieTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
-    [DexieTable.LOGS]: false,
-    [DexieTable.SETTINGS]: false,
-  }[props.table]
+  try {
+    const areInputsValid = {
+      [DexieTable.EXAMPLES]: areExampleInputsValid(),
+      [DexieTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
+      [DexieTable.LOGS]: false,
+      [DexieTable.SETTINGS]: false,
+    }[props.table]
 
-  if (!areInputsValid) {
-    createDismissDialog()
-  } else {
-    createConfirmDialog()
+    if (!areInputsValid) {
+      createDismissDialog()
+    } else {
+      createConfirmDialog()
+    }
+  } catch (error) {
+    log.error('onCreate', error)
   }
 }
 

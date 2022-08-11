@@ -278,7 +278,7 @@ async function onDelete(id: string): Promise<void> {
       v-if="selectedOperation === TableOperation.UPDATE"
       :table="table"
       :selectedItem="selectedItem"
-      @on-create="updateDialog(false)"
+      @on-update="updateDialog(false)"
     />
     <PageReport v-if="selectedOperation === TableOperation.REPORT" :table="table" />
   </PageDialog>

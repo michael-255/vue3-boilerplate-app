@@ -6,8 +6,13 @@ have a better understanding of how this project is setup.
 ## Todos
 
 - [ ] Examples logic fleshed out similar to Measurements for now
-  - [ ] Create logic for `Examples`
-  - [ ] Create logic for `Example Records`
+
+  - [x] Create logic for `Examples`
+  - [x] Create logic for `Example Records`
+  - [x] Update logic for `Examples`
+  - [x] Update logic for `Example Records`
+  - [ ] Report for `Examples`
+
 - [ ] Quasar `ellipsis` CSS class for cols (may need max width)
 - [ ] Implement `Defaults` with random data for Examples and Logs
 - [ ] File-by-file transfer and cleanup

@@ -25,11 +25,44 @@ export function useTableManager(table: DexieTable) {
     [DexieTable.EXAMPLES]: {
       getRows: async () => await DB.getAll(table),
       create: async (fields: { [x: string]: any }) => {
-        console.log('create:', fields)
+        const example = new Example({
+          id: fields.id,
+          createdDate: fields.createdDate,
+          name: fields.name,
+          description: fields.description,
+        })
+        await DB.add(DexieTable.EXAMPLES, example)
+      },
+      update: async (fields: { [x: string]: any }) => {
+        const updateObject = {
+          id: fields.id,
+          createdDate: fields.createdDate,
+          name: fields.name,
+          description: fields.description,
+        }
+        await DB.updateById(DexieTable.EXAMPLES, fields.originalId, updateObject)
       },
     },
     [DexieTable.EXAMPLE_RECORDS]: {
       getRows: async () => await DB.getAll(table),
+      create: async (fields: { [x: string]: any }) => {
+        const exampleRecord = new ExampleRecord({
+          id: fields.id,
+          createdDate: fields.createdDate,
+          parentId: fields.parentId,
+          value: fields.value,
+        })
+        await DB.add(DexieTable.EXAMPLE_RECORDS, exampleRecord)
+      },
+      update: async (fields: { [x: string]: any }) => {
+        const updateObject = {
+          id: fields.id,
+          createdDate: fields.createdDate,
+          parentId: fields.parentId,
+          value: fields.value,
+        }
+        await DB.updateById(DexieTable.EXAMPLE_RECORDS, fields.originalId, updateObject)
+      },
     },
     [DexieTable.LOGS]: {
       getRows: async () => await DB.getAll(table),
