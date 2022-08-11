@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { DexieTable, TableField } from '@/constants/data-enums.js'
+import type { DexieTable } from '@/constants/data-enums.js'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { useTableManager } from '@/use/useTableManager'
-import { useInputProvide } from '@/use/useInputProvide'
+// import { useInputProvide } from '@/use/useInputProvide'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 
 /**
@@ -21,10 +21,10 @@ const emits = defineEmits<{
 const { confirmDialog } = useSimpleDialogs()
 const { TM, getFieldComponent } = useTableManager(props.table)
 
-const { idModel, idValidate } = useInputProvide(TableField.ID)
-const { createdDateModel, createdDateValidate } = useInputProvide(TableField.CREATED_DATE)
-const { nameModel, nameValidate } = useInputProvide(TableField.NAME)
-const { descriptionModel, descriptionValidate } = useInputProvide(TableField.DESCRIPTION)
+// const { idModel, idValidate } = useInputProvide(TableField.ID)
+// const { createdDateModel, createdDateValidate } = useInputProvide(TableField.CREATED_DATE)
+// const { nameModel, nameValidate } = useInputProvide(TableField.NAME)
+// const { descriptionModel, descriptionValidate } = useInputProvide(TableField.DESCRIPTION)
 
 function onUpdate() {
   confirmDialog(
