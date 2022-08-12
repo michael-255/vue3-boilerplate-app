@@ -65,6 +65,10 @@ export enum Layouts {
   MENU = 'MenuLayout',
 }
 
+export enum Strings {
+  APP_NAME = 'My App',
+}
+
 /**
  * @todo Make a site you can use as a shortcut to all of your apps
  */

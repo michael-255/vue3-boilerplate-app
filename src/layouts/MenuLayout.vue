@@ -11,7 +11,7 @@ import {
   QSeparator,
 } from 'quasar'
 import DrawerItem from '@/components/drawer/DrawerItem.vue'
-import { Views, Icon } from '@/constants/ui-enums'
+import { Views, Icon, Strings } from '@/constants/ui-enums'
 import { useUIStore } from '@/stores/ui'
 
 const ui = useUIStore()
@@ -23,7 +23,7 @@ const ui = useUIStore()
       <QToolbar>
         <QBtn dense flat round icon="menu" @click="ui.toggleDrawer()" />
 
-        <QToolbarTitle>Fitness Tracker</QToolbarTitle>
+        <QToolbarTitle>{{ Strings.APP_NAME }}</QToolbarTitle>
 
         <QBtn flat dense label="Settings" :to="{ name: Views.SETTINGS }" :icon="Icon.SETTINGS" />
       </QToolbar>
@@ -32,7 +32,6 @@ const ui = useUIStore()
     <QDrawer v-model="ui.drawer" :width="220" show-if-above side="left" bordered>
       <QList>
         <DrawerItem :to="{ name: Views.DASHBOARD }" :icon="Icon.DASHBOARD" label="Dashboard" />
-        <DrawerItem :to="{ name: Views.ACTIVE }" :icon="Icon.ACTIVE" label="Active" />
 
         <QSeparator />
 

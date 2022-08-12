@@ -3,7 +3,7 @@ import { QItem, QItemSection, QIcon } from 'quasar'
 import type { Icon } from '@/constants/ui-enums'
 
 defineProps<{
-  to: string | object
+  to: string | { [x: string]: any }
   icon: Icon
   label: string
 }>()

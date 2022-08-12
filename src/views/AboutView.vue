@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { QPage, QCard, QCardSection, QCardActions, QBtn } from 'quasar'
-import { Links, Icon } from '@/constants/ui-enums'
+import { Links, Icon, Strings } from '@/constants/ui-enums'
 </script>
 
 <template>
@@ -10,7 +10,7 @@ import { Links, Icon } from '@/constants/ui-enums'
         <QCardSection class="bg-primary text-white text-h3">About</QCardSection>
 
         <QCardSection>
-          Fitness Tracker is a Vue 3 Typescript project created by michael-255 on GitHub
+          {{ Strings.APP_NAME }} is a Vue 3 Typescript project created by michael-255 on GitHub
         </QCardSection>
 
         <QCardActions align="left">

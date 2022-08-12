@@ -5,20 +5,24 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] Examples logic fleshed out similar to Measurements for now
-
-  - [x] Create logic for `Examples`
-  - [x] Create logic for `Example Records`
-  - [x] Update logic for `Examples`
-  - [x] Update logic for `Example Records`
-  - [ ] Report for `Examples`
-
+- [x] Create logic for `Examples`
+- [x] Create logic for `Example Records`
+- [x] Update logic for `Examples`
+- [x] Update logic for `Example Records`
+- [x] `Defaults` implemented for Examples and Example Records (nothing fancy)
+- [ ] `Report` for Examples
+- [ ] `Report` that loads same as Examples from Example Records?
 - [ ] Quasar `ellipsis` CSS class for cols (may need max width)
-- [ ] Implement `Defaults` with random data for Examples and Logs
-- [ ] File-by-file transfer and cleanup
-- [ ] Clean up boilerplate app
-- [ ] Update `hygen class new`
-- [ ] Clean up and build out your tests
+
+- [ ] `PORTING` File-by-file transfer and cleanup from fit-v14 (may not need anything)
+- [ ] `TESTS` Clean up and build out your tests
+- [ ] `APP` Add comments and description throughout
+- [ ] `APP` Dashboard description of boilerplate app and what to see
+- [ ] `APP` Dashboard print for logs to create viewable records
+- [ ] `APP` Dashboard generator for some fake Examples and Example Records (nothing too fancy)
+- [ ] `README` steps for adding models, fields, and their data table functionality
+- [ ] `README` notes on important changes
+- [ ] `STRETCH` Update `hygen class new`
 
 ```bash
 ###############################################################################

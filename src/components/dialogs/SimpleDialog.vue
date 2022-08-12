@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Icon } from '@/constants/enums'
+import type { Icon } from '@/constants/ui-enums'
 import { QDialog, QCard, QCardSection, QCardActions, QIcon, QBtn } from 'quasar'
 import { useDialogPluginComponent } from 'quasar'
 

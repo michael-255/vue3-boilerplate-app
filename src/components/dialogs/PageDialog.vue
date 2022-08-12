@@ -9,7 +9,6 @@ const props = defineProps<{
   action: TableOperation
   label: string
 }>()
-
 const emits = defineEmits<{
   (event: 'update:dialog', bool: boolean): void
 }>()

@@ -9,18 +9,18 @@ import { useFields } from './useFields'
 export function useTableManager(table: DexieTable) {
   const { getFieldDisplayProperties, getFieldValidator, getFieldComponent } = useFields()
 
-  // Setup initial table properties
+  // Setup initial table properties from the app models
   const initTM = {
     [DexieTable.EXAMPLES]: Example.getTableProperties(),
     [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getTableProperties(),
     [DexieTable.LOGS]: Log.getTableProperties(),
     [DexieTable.SETTINGS]: {},
   }[table]
-
+  // Setup field display column properties for tables
   initTM.columns = initTM?.fields.map((field: TableField) => getFieldDisplayProperties(field))
-
+  // Setup which columns can be controled by the column selector in table views (just no id)
   initTM.columnOptions = initTM?.columns.filter((i: any) => i.name !== TableField.ID)
-
+  // Setup actions for each table type
   initTM.actions = {
     [DexieTable.EXAMPLES]: {
       getRows: async () => await DB.getAll(table),
@@ -41,6 +41,9 @@ export function useTableManager(table: DexieTable) {
           description: fields.description,
         }
         await DB.updateById(DexieTable.EXAMPLES, fields.originalId, updateObject)
+      },
+      report: async (fields: { [x: string]: any }) => {
+        console.log(fields)
       },
     },
     [DexieTable.EXAMPLE_RECORDS]: {
@@ -94,6 +97,9 @@ export function useTableManager(table: DexieTable) {
     return tableManager.supportedOperations?.includes(tableOperation)
   }
 
+  /**
+   * Call to update the current table rows for table views.
+   */
   async function updateRows(): Promise<void> {
     tableManager.rows = await tableManager.actions?.getRows()
   }
