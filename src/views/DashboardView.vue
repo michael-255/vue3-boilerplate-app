@@ -1,39 +1,70 @@
 <script setup lang="ts">
-import { QSeparator, QBtn } from 'quasar'
+import { QBtn } from 'quasar'
 import { useLogger } from '@/use/useLogger'
-import { DexieTable } from '@/constants/data-enums'
-import { useTableManager } from '@/use/useTableManager.js'
-import { isoToDisplayDate } from '@/utils/luxon'
+import DefaultsButton from '@/components/buttons/DefaultsButton.vue'
 
 const { log } = useLogger()
-const { TM } = useTableManager(DexieTable.LOGS)
 
-async function button1() {
-  console.log(isoToDisplayDate(new Date().toISOString()))
-}
-
-async function button2() {
-  console.log(TM)
-}
-
-async function print() {
-  console.log('---print---')
-  log.debug('debug')
-  log.info('info')
-  log.warn('warning')
-  log.error('error')
-  log.critical('critical')
+/**
+ * @deprecate
+ * Temp function for generating test logs in the database.
+ */
+function generateTestLogs(): void {
+  log.debug('This is a Debug Log', {
+    errorName: 'generateTestLogs:Debug',
+    message: 'Debug message',
+    stack: 'Debug stack',
+  })
+  log.info('This is a Debug Log', {
+    errorName: 'generateTestLogs:Info',
+    message: 'Info message',
+    stack: 'Info stack',
+  })
+  log.warn('This is a Debug Log', {
+    errorName: 'generateTestLogs:Warning',
+    message: 'Warning message',
+    stack: 'Warning stack',
+  })
+  log.error('This is a Debug Log', {
+    errorName: 'generateTestLogs:Error',
+    message: 'Error message',
+    stack: 'Error stack',
+  })
+  log.critical('This is a Debug Log', {
+    errorName: 'generateTestLogs:Critical',
+    message: 'Critical message',
+    stack: 'Critical stack',
+  })
 }
 </script>
 
 <template>
-  <h3>Dashboard</h3>
+  <QPage padding>
+    <div class="row justify-center">
+      <QCard>
+        <QCardSection class="bg-primary text-white text-h3">Dashboard</QCardSection>
 
-  <div class="q-my-sm">
-    <QSeparator />
-    <QBtn color="primary" label="button 1" class="q-ma-sm" @click="button1()" />
-    <QBtn color="primary" label="button 2" class="q-ma-sm" @click="button2()" />
-    <QBtn color="primary" label="Print" class="q-ma-sm" @click="print()" />
-    <QSeparator />
-  </div>
+        <QCardSection>
+          This is a Vue 3 Typescript Boilerplate web app. It has basic data table and routing setup
+          out of the box. Look through the code and README to get an understanding of how it is
+          organized.
+        </QCardSection>
+
+        <QCardSection>
+          The app settings are located at the right side of the nav bar and the menu is located at
+          the left side of the nav bar.
+        </QCardSection>
+
+        <QCardSection>
+          You can generate test logs that you can view by navigating to the settings and you can
+          generate mock example records that you can view by navigating to the menu.
+        </QCardSection>
+
+        <QCardActions align="left">
+          <QBtn class="q-my-sm" color="primary" label="Generate Logs" @click="generateTestLogs()" />
+          <DefaultsButton />
+        </QCardActions>
+      </QCard>
+    </div>
+  </QPage>
 </template>

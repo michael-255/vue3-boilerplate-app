@@ -5,9 +5,9 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `APP` Dashboard description of boilerplate app - What to see / How it works (Card component)
-- [ ] `APP` Dashboard print for logs to create viewable records
-- [ ] `APP` Dashboard generator for some fake Examples and Example Records (nothing too fancy)
+- [x] `APP` Dashboard description of boilerplate app - What to see / How it works (Card component)
+- [x] `APP` Dashboard print for logs to create viewable records
+- [x] `APP` Dashboard generator for some fake Examples and Example Records (nothing too fancy)
 - [ ] `PORTING` File-by-file transfer from fit-v14 (may not need anything)
 - [ ] `TESTS` Clean up and build out your tests
 - [ ] `APP` Add comments and description throughout codebase
