@@ -8,7 +8,7 @@ import type { ColumnProps } from '@/constants/types-interfaces'
  * @param field
  * @returns Object with properties for QTable columns
  */
-export function getFieldDisplayProperties(field: Field): ColumnProps {
+export function getFieldColumnProps(field: Field): ColumnProps {
   return {
     [Field.ID]: {
       name: Field.ID,
@@ -82,22 +82,13 @@ export function getFieldDisplayProperties(field: Field): ColumnProps {
       field: (row: any) => row.severity,
       format: (val: string) => val,
     },
-    [Field.CALLER_DETAILS]: {
-      name: Field.CALLER_DETAILS,
-      label: 'Caller Details',
+    [Field.DETAILS]: {
+      name: Field.DETAILS,
+      label: 'Details',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row.callerDetails,
-      format: (val: string) => truncateString(val),
-    },
-    [Field.ERROR_NAME]: {
-      name: Field.ERROR_NAME,
-      label: 'Error Name',
-      align: 'left',
-      sortable: true,
-      required: false,
-      field: (row: any) => row.errorName,
+      field: (row: any) => row.details,
       format: (val: string) => truncateString(val),
     },
     [Field.MESSAGE]: {

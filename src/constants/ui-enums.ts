@@ -1,13 +1,27 @@
 export enum NotifyColor {
+  LOG = 'grey',
   DEBUG = 'deep-purple',
   INFO = 'primary',
-  WARN = 'orange',
-  ERROR = 'red',
-  CRITICAL = 'negative',
+  WARN = 'orange-9',
+  ERROR = 'negative',
+  CRITICAL = 'red-13',
 }
 
 export enum Icon {
-  EXAMPLE = 'cruelty_free',
+  // Severity
+  DEBUG = 'bug_report',
+  INFO = 'info',
+  WARN = 'warning',
+  ERROR = 'error',
+  CRITICAL = 'report',
+  // Operations
+  UNDO = 'undo',
+  SAVE = 'save',
+  CLOSE = 'close',
+  EDIT = 'edit',
+  DELETE = 'delete',
+  // Pages
+  EXAMPLE = 'smart_toy',
   ACTIVE = 'play_arrow',
   ACTIVITIES = 'directions_run',
   RECORDS = 'web_stories',
@@ -16,12 +30,6 @@ export enum Icon {
   WORKOUTS = 'assignment',
   APPLOGS = 'plagiarism',
   // Misc
-  // Severity
-  DEBUG = 'bug_report',
-  INFO = 'info',
-  WARN = 'warning',
-  ERROR = 'error',
-  CRITICAL = 'crisis_alert',
   CALENDAR_DATE = 'event',
   CALENDAR_CHECK = 'event_available',
   TIME = 'access_time',
@@ -30,23 +38,12 @@ export enum Icon {
   REPORT = 'timeline',
   MANAGEMENT = 'tune',
   WORKOUT = 'assignment',
-  DOTS = 'more_vert',
   SETTINGS = 'settings',
   DETAILS = 'summarize',
-  UNDO = 'undo',
-  SAVE = 'save',
-  CLOSE = 'close',
-  EDIT = 'edit',
-  DELETE = 'delete',
   CODE = 'code',
   WEB = 'language',
-  NOTES = 'assignment',
-  REST = 'hourglass_empty',
-  TEMPO = 'speed',
-  INTENSITY = 'whatshot',
-  RESISTENCE = 'fitness_center',
-  INCLINE = 'signal_cellular_null',
-  MAXIMUM = 'priority_high',
+  MENU = 'menu',
+  HOME = 'home',
 }
 
 export enum Views {

@@ -26,61 +26,61 @@ export function useLogger() {
     /**
      * @todo
      */
-    debug: (callerDetails: string, error?: Error | any) => {
+    debug: (details: string, error?: Error | any) => {
       if (settings.DEBUG) {
         const severity = Severity.DEBUG
-        logger.log(`[${severity}]`, callerDetails, error)
+        logger.debug(`[${severity}]`, details, error)
         // No DB call on DEBUG
         if (settings.NOTIFY) {
-          notify(`${severity} - ${callerDetails}`, Icon.DEBUG, NotifyColor.DEBUG)
+          notify(`${severity} - ${details}`, Icon.DEBUG, NotifyColor.DEBUG)
         }
       }
     },
     /**
      * @todo
      */
-    info: (callerDetails: string, error?: Error | any) => {
+    info: (details: string, error?: Error | any) => {
       const severity = Severity.INFO
       if (settings.DEBUG) {
-        logger.log(`[${severity}]`, callerDetails, error)
+        logger.info(`[${severity}]`, details, error)
       }
-      DB.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
+      DB.add(DexieTable.LOGS, new Log({ error, severity, details }))
       if (settings.NOTIFY) {
-        notify(`${severity} - ${callerDetails}`, Icon.INFO, NotifyColor.INFO)
+        notify(`${severity} - ${details}`, Icon.INFO, NotifyColor.INFO)
       }
     },
     /**
      * @todo
      */
-    warn: (callerDetails: string, error?: Error | any) => {
+    warn: (details: string, error?: Error | any) => {
       const severity = Severity.WARN
       if (settings.DEBUG) {
-        logger.warn(`[${severity}]`, callerDetails, error)
+        logger.warn(`[${severity}]`, details, error)
       }
-      DB.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
-      notify(`${severity} - ${callerDetails}`, Icon.WARN, NotifyColor.WARN)
+      DB.add(DexieTable.LOGS, new Log({ error, severity, details }))
+      notify(`${severity} - ${details}`, Icon.WARN, NotifyColor.WARN)
     },
     /**
      * @todo
      */
-    error: (callerDetails: string, error?: Error | any) => {
+    error: (details: string, error?: Error | any) => {
       const severity = Severity.ERROR
       if (settings.DEBUG) {
-        logger.error(`[${severity}]`, callerDetails, error)
+        logger.error(`[${severity}]`, details, error)
       }
-      DB.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
-      notify(`${severity} - ${callerDetails}`, Icon.ERROR, NotifyColor.ERROR)
+      DB.add(DexieTable.LOGS, new Log({ error, severity, details }))
+      notify(`${severity} - ${details}`, Icon.ERROR, NotifyColor.ERROR)
     },
     /**
      * @todo
      */
-    critical: (callerDetails: string, error?: Error | any) => {
+    critical: (details: string, error?: Error | any) => {
       const severity = Severity.CRITICAL
       if (settings.DEBUG) {
-        logger.error(`[${severity}]`, callerDetails, error)
+        logger.critical(`[${severity}]`, details, error)
       }
-      DB.add(DexieTable.LOGS, new Log({ error, severity, callerDetails }))
-      notify(`${severity} - ${callerDetails}`, Icon.CRITICAL, NotifyColor.CRITICAL)
+      DB.add(DexieTable.LOGS, new Log({ error, severity, details }))
+      notify(`${severity} - ${details}`, Icon.CRITICAL, NotifyColor.CRITICAL)
     },
   }
 

@@ -14,8 +14,7 @@ export enum Field {
   NOTES = 'notes',
   VALUE = 'value',
   SEVERITY = 'severity',
-  CALLER_DETAILS = 'callerDetails',
-  ERROR_NAME = 'errorName',
+  DETAILS = 'details',
   MESSAGE = 'message',
   STACK = 'stack',
 }

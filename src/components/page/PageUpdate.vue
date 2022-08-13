@@ -92,7 +92,7 @@ function updateConfirmDialog(): void {
         })
         emits('on-update')
       } else {
-        log.critical('PageUpdate:updateConfirmDialog', { errorName: 'Missing updateRow action' })
+        log.critical('Missing updateRow action', { name: 'PageUpdate:updateConfirmDialog' })
       }
     }
   )

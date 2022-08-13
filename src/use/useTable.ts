@@ -80,7 +80,7 @@ export function useTable() {
   }
 
   /**
-   * @todo type for results?
+   *
    * @param table
    * @returns
    */

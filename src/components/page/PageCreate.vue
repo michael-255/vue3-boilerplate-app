@@ -45,7 +45,7 @@ function onCreate() {
       createConfirmDialog()
     }
   } catch (error) {
-    log.error('onCreate', error)
+    log.error('PageCreate:onCreate', error)
   }
 }
 
@@ -65,15 +65,20 @@ function createConfirmDialog(): void {
     Icon.SAVE,
     NotifyColor.INFO,
     async () => {
-      await getActions(props.table).createRow({
-        id: idModel.value,
-        createdDate: createdDateModel.value,
-        name: nameModel.value,
-        description: descriptionModel.value,
-        parentId: parentIdModel.value,
-        value: valueModel.value,
-      })
-      emits('on-create')
+      const { createRow } = getActions(props.table)
+      if (createRow) {
+        await createRow({
+          id: idModel.value,
+          createdDate: createdDateModel.value,
+          name: nameModel.value,
+          description: descriptionModel.value,
+          parentId: parentIdModel.value,
+          value: valueModel.value,
+        })
+        emits('on-create')
+      } else {
+        log.critical('Missing createRow action', { name: 'PageCreate:createConfirmDialog' })
+      }
     }
   )
 }

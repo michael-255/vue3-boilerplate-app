@@ -64,7 +64,12 @@ function updateSelectedRefs({
 }
 
 async function updateRows(): Promise<void> {
-  rows.value = await getActions(props.table).getRows()
+  const { getRows } = getActions(props.table)
+  if (getRows) {
+    rows.value = await getRows()
+  } else {
+    log.critical('Missing getRows action', { name: 'PageTable:updateRows' })
+  }
 }
 
 async function updateDialog(event: any): Promise<void> {
@@ -104,7 +109,7 @@ async function onClear(): Promise<void> {
   if (isSupported(props.table, Operation.CLEAR)) {
     confirmDialog(
       'Clear',
-      `Permanently delete all data from ${getPluralLabel(props.table)} table?`,
+      `Permanently delete all ${getPluralLabel(props.table)}?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {
@@ -125,7 +130,7 @@ async function onDelete(id: string): Promise<void> {
   if (isSupported(props.table, Operation.DELETE)) {
     confirmDialog(
       'Delete',
-      `Permanently delete "${id}" from ${getPluralLabel(props.table)} table?`,
+      `Permanently delete "${id}" from ${getPluralLabel(props.table)}?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {

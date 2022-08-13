@@ -1,34 +1,34 @@
 import type { ColumnProps } from '@/constants/types-interfaces'
 import { Field, Operation } from '@/constants/data-enums'
-import { getFieldDisplayProperties } from '@/utils/fields'
+import { getFieldColumnProps } from '@/helpers/field-column-props'
 import { _Entity } from '@/models/_Entity'
 import type { Severity } from '@/constants/data-enums'
 import { v4 as createId } from 'uuid'
 
 export interface ILog {
   severity: Severity
-  callerDetails: string
-  errorName?: string
+  details: string
+  name?: string
   message?: string
   stack?: string
 }
 
 export interface LogParams {
   severity: Severity
-  callerDetails: string
+  details: string
   error?: Error | any
 }
 
 /**
  * Log Class
  * @param params.error Error or any if unknown
- * @param params.severity Severity severity
- * @param params.callerDetails Name of caller, data causing the issue, etc.
+ * @param params.severity Severity
+ * @param params.details Information about the error
  */
 export class Log extends _Entity {
   severity: Severity
-  callerDetails: string
-  errorName?: string
+  details: string
+  name?: string
   message?: string
   stack?: string
 
@@ -36,8 +36,8 @@ export class Log extends _Entity {
     super({ id: createId(), createdDate: new Date().toISOString() })
 
     this.severity = params?.severity
-    this.callerDetails = params?.callerDetails
-    this.errorName = params?.error?.name
+    this.details = params?.details
+    this.name = params?.error?.name
     this.message = params?.error?.message
     this.stack = params?.error?.stack
   }
@@ -46,15 +46,15 @@ export class Log extends _Entity {
     return [
       ..._Entity.getFields(),
       Field.SEVERITY,
-      Field.CALLER_DETAILS,
-      Field.ERROR_NAME,
+      Field.DETAILS,
+      Field.NAME,
       Field.MESSAGE,
       Field.STACK,
     ]
   }
 
   static getColumns(): ColumnProps[] {
-    return this.getFields().map((field: Field) => getFieldDisplayProperties(field))
+    return this.getFields().map((field: Field) => getFieldColumnProps(field))
   }
 
   static getColumnOptions(): ColumnProps[] {
@@ -78,6 +78,6 @@ export class Log extends _Entity {
   }
 
   static getVisibleColumns(): Field[] {
-    return [Field.CREATED_DATE, Field.SEVERITY, Field.CALLER_DETAILS, Field.ERROR_NAME]
+    return [Field.CREATED_DATE, Field.SEVERITY, Field.DETAILS, Field.NAME]
   }
 }

@@ -1,6 +1,6 @@
 import type { ColumnProps } from '@/constants/types-interfaces'
 import { DexieTable, Field, Operation } from '@/constants/data-enums'
-import { getFieldDisplayProperties } from '@/utils/fields'
+import { getFieldColumnProps } from '@/helpers/field-column-props'
 import { _Entity, type IEntity } from '@/models/_Entity'
 
 export interface IExampleRecord extends IEntity {
@@ -23,7 +23,7 @@ export class ExampleRecord extends _Entity {
   }
 
   static getColumns(): ColumnProps[] {
-    return this.getFields().map((field: Field) => getFieldDisplayProperties(field))
+    return this.getFields().map((field: Field) => getFieldColumnProps(field))
   }
 
   static getColumnOptions(): ColumnProps[] {

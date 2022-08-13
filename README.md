@@ -7,20 +7,10 @@ have a better understanding of how this project is setup.
 
 - [ ] `Improvements` -> Work from `bp-improvements-refactor` branch
 
-  - [ ] `PageTable` action getRows TS error
-  - [ ] `ClearButton` used instead of PageTable duplicate
-  - [ ] `Logger` add `debug` and `critical` functions (only color changes)
-  - [ ] `Logger` style colors as enums? (hex values)
-  - [ ] `AppColor` instead of `NotifyColor`
-  - [ ] `Icons` cleanup
-  - [ ] `helpers` and `utils` and readme explaining the differences as you see them
   - [ ] `BaseComponents` mini base components to cleanup larger components
   - [ ] Convert Luxon date function to normal JS Date function
     - [ ] Validate that yours works the same!
 
-- [x] `APP` Dashboard description of boilerplate app - What to see / How it works (Card component)
-- [x] `APP` Dashboard print for logs to create viewable records
-- [x] `APP` Dashboard generator for some fake Examples and Example Records (nothing too fancy)
 - [ ] `PORTING` File-by-file transfer from fit-v14 (may not need anything)
 - [ ] `TESTS` Clean up and build out your tests
 - [ ] `APP` Add comments and description throughout codebase
