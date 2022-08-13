@@ -5,6 +5,14 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
+- [ ] `Improvements` -> Work from `bp-improvements-refactor` branch
+
+  - [ ] `_Entity` try it as an abstract class if (will it cause issues with `_Activity`?)
+  - [ ] `_Entity` with `Object.keys(this) as Field[]` method
+  - [ ] `ENUMS` renaming by removing `Table` prefix
+  - [ ] `TM` (tableManager) to a method based composable (easier to test)
+  - [ ] `BaseComponents` mini base components to cleanup larger components
+
 - [x] `APP` Dashboard description of boilerplate app - What to see / How it works (Card component)
 - [x] `APP` Dashboard print for logs to create viewable records
 - [x] `APP` Dashboard generator for some fake Examples and Example Records (nothing too fancy)
