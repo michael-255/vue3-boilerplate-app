@@ -66,7 +66,7 @@ export enum Layouts {
 }
 
 export enum Strings {
-  APP_NAME = 'My App',
+  APP_NAME = 'Boilerplate App',
 }
 
 /**

@@ -1,5 +1,7 @@
-import { DexieTable, TableField, TableOperation } from '@/constants/data-enums'
-import { Entity } from '@/models/Entity'
+import type { ColumnProps } from '@/constants/types-interfaces'
+import { Field, Operation } from '@/constants/data-enums'
+import { getFieldDisplayProperties } from '@/utils/fields'
+import { _Entity } from '@/models/_Entity'
 import type { Severity } from '@/constants/data-enums'
 import { v4 as createId } from 'uuid'
 
@@ -23,7 +25,7 @@ export interface LogParams {
  * @param params.severity Severity severity
  * @param params.callerDetails Name of caller, data causing the issue, etc.
  */
-export class Log extends Entity {
+export class Log extends _Entity {
   severity: Severity
   callerDetails: string
   errorName?: string
@@ -40,32 +42,42 @@ export class Log extends Entity {
     this.stack = params?.error?.stack
   }
 
-  static getTableProperties(): { [x: string]: any } {
-    return {
-      name: DexieTable.LOGS,
-      relatedTable: null,
-      labelSingular: 'Log',
-      labelPlural: 'Logs',
-      actions: {},
-      supportedOperations: [TableOperation.DELETE, TableOperation.CLEAR, TableOperation.INSPECT],
-      fields: [
-        TableField.ID,
-        TableField.CREATED_DATE,
-        TableField.SEVERITY,
-        TableField.CALLER_DETAILS,
-        TableField.ERROR_NAME,
-        TableField.MESSAGE,
-        TableField.STACK,
-      ],
-      rows: [],
-      columns: [],
-      columnOptions: [],
-      visibleColumns: [
-        TableField.CREATED_DATE,
-        TableField.SEVERITY,
-        TableField.CALLER_DETAILS,
-        TableField.ERROR_NAME,
-      ],
-    }
+  static getFields(): Field[] {
+    return [
+      ..._Entity.getFields(),
+      Field.SEVERITY,
+      Field.CALLER_DETAILS,
+      Field.ERROR_NAME,
+      Field.MESSAGE,
+      Field.STACK,
+    ]
+  }
+
+  static getColumns(): ColumnProps[] {
+    return this.getFields().map((field: Field) => getFieldDisplayProperties(field))
+  }
+
+  static getColumnOptions(): ColumnProps[] {
+    return this.getColumns().filter((col: ColumnProps) => !col.required)
+  }
+
+  static getRelatedTable(): null {
+    return null
+  }
+
+  static getSingularLabel(): 'Log' {
+    return 'Log'
+  }
+
+  static getPluralLabel(): 'Logs' {
+    return 'Logs'
+  }
+
+  static getSupportedOperations(): Operation[] {
+    return [Operation.DELETE, Operation.CLEAR, Operation.INSPECT]
+  }
+
+  static getVisibleColumns(): Field[] {
+    return [Field.CREATED_DATE, Field.SEVERITY, Field.CALLER_DETAILS, Field.ERROR_NAME]
   }
 }

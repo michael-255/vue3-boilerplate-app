@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { DexieTable } from '@/constants/data-enums'
+import { DexieTable, Field } from '@/constants/data-enums'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { useProvideTableInputs } from '@/use/useProvideTableInputs'
-import { useTableManager } from '@/use/useTableManager'
 import { useLogger } from '@/use/useLogger'
+import { useTable } from '@/use/useTable'
+import { useFields } from '@/use/useFields'
 
 /**
  * Component for handling table item Creates
@@ -15,7 +16,8 @@ const emits = defineEmits<{ (eventName: 'on-create'): void }>()
 
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
-const { TM, getFieldComponent } = useTableManager(props.table)
+const { getFieldComponent } = useFields()
+const { getFields, getActions, getSingularLabel } = useTable()
 const {
   // Models
   idModel,
@@ -59,11 +61,11 @@ function createDismissDialog(): void {
 function createConfirmDialog(): void {
   confirmDialog(
     'Create',
-    `Are you sure you want to create this ${TM.labelSingular}?`,
+    `Are you sure you want to create this ${getSingularLabel(props.table)}?`,
     Icon.SAVE,
     NotifyColor.INFO,
     async () => {
-      await TM.actions.create({
+      await getActions(props.table).createRow({
         id: idModel.value,
         createdDate: createdDateModel.value,
         name: nameModel.value,
@@ -78,15 +80,16 @@ function createConfirmDialog(): void {
 </script>
 
 <template>
-  <div v-for="(field, i) in TM.fields" :key="i">
-    <component :is="getFieldComponent(field)" :table="table" />
+  <div v-for="(field, i) in getFields(table)" :key="i">
+    <component v-if="field === Field.PARENT_ID" :is="getFieldComponent(field)" :table="table" />
+    <component v-else :is="getFieldComponent(field)" />
   </div>
 
   <QBtn
     class="q-mt-lg"
     color="primary"
     :icon="Icon.SAVE"
-    :label="`Create ${TM.labelSingular}`"
+    :label="`Create ${getSingularLabel(props.table)}`"
     @click="onCreate()"
   />
 </template>

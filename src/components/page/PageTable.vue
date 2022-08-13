@@ -1,49 +1,70 @@
 <script setup lang="ts">
 import { QSelect, QInput, QIcon } from 'quasar'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { type DexieTable, TableOperation } from '@/constants/data-enums'
+import { type DexieTable, Operation, Field } from '@/constants/data-enums'
 import { type Ref, ref, onMounted } from 'vue'
+import type { ActionData } from '@/constants/types-interfaces'
+import { DB } from '@/services/LocalDatabase'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { DB } from '@/services/LocalDatabase'
-import { useTableManager } from '@/use/useTableManager'
+import { useTable } from '@/use/useTable'
 import PageDialog from '@/components/dialogs/PageDialog.vue'
 import PageInspect from '@/components/page/PageInspect.vue'
 import PageCreate from '@/components/page/PageCreate.vue'
 import PageUpdate from '@/components/page/PageUpdate.vue'
 import PageReport from '@/components/page/PageReport.vue'
 
-const props = defineProps<{
-  table: DexieTable
-}>()
+const props = defineProps<{ table: DexieTable }>()
 
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
-const { TM, isSupported, updateRows } = useTableManager(props.table)
+const {
+  getActions,
+  getColumns,
+  getColumnOptions,
+  getVisibleColumns,
+  getSingularLabel,
+  getPluralLabel,
+  isSupported,
+} = useTable()
 
 const searchFilter: Ref<string> = ref('')
+// Table Entity Refs
+const rows: Ref<ActionData[]> = ref([])
+const columns: Ref<any[]> = ref([])
+const columnOptions: Ref<any[]> = ref([])
+const visibleColumns: Ref<Field[]> = ref([])
 // Selected Row (Page Dialog)
 const pageDialog: Ref<boolean> = ref(false)
 const selectedItem: Ref<{ [x: string]: any }> = ref({})
-const selectedOperation: Ref<TableOperation> = ref(TableOperation.NO_OP)
+const selectedOperation: Ref<Operation> = ref(Operation.NO_OP)
 const selectedLabel: Ref<string> = ref('')
 
-onMounted(async () => await updateRows())
+onMounted(async () => {
+  await updateRows()
+  columns.value = getColumns(props.table)
+  columnOptions.value = getColumnOptions(props.table)
+  visibleColumns.value = getVisibleColumns(props.table)
+})
 
 function updateSelectedRefs({
-  operation = TableOperation.NO_OP,
+  operation = Operation.NO_OP,
   item = {},
   label = '',
   dialog = true, // Open the page dialog by default
 } = {}): void {
-  if (isSupported(operation) || operation === TableOperation.NO_OP) {
+  if (isSupported(props.table, operation) || operation === Operation.NO_OP) {
     selectedItem.value = item
     selectedOperation.value = operation
     selectedLabel.value = label
     pageDialog.value = dialog
   } else {
-    log.warn(`${operation} not supported for ${TM.labelPlural} table`)
+    log.warn(`${operation} not supported for ${getPluralLabel(props.table)} table`)
   }
+}
+
+async function updateRows(): Promise<void> {
+  rows.value = await getActions(props.table).getRows()
 }
 
 async function updateDialog(event: any): Promise<void> {
@@ -52,38 +73,38 @@ async function updateDialog(event: any): Promise<void> {
 }
 
 async function onCreate(): Promise<void> {
-  updateSelectedRefs({ operation: TableOperation.CREATE, label: TM.labelSingular })
+  updateSelectedRefs({ operation: Operation.CREATE, label: getSingularLabel(props.table) })
 }
 
 async function onEdit(id: string): Promise<void> {
   updateSelectedRefs({
-    operation: TableOperation.UPDATE,
+    operation: Operation.UPDATE,
     item: await DB.getById(props.table, id),
-    label: TM.labelSingular,
+    label: getSingularLabel(props.table),
   })
 }
 
 async function onReport(id: string): Promise<void> {
   updateSelectedRefs({
-    operation: TableOperation.REPORT,
+    operation: Operation.REPORT,
     item: await DB.getById(props.table, id),
-    label: TM.labelSingular,
+    label: getSingularLabel(props.table),
   })
 }
 
 async function onInspect(id: string): Promise<void> {
   updateSelectedRefs({
-    operation: TableOperation.INSPECT,
+    operation: Operation.INSPECT,
     item: await DB.getById(props.table, id),
-    label: TM.labelSingular,
+    label: getSingularLabel(props.table),
   })
 }
 
 async function onClear(): Promise<void> {
-  if (isSupported(TableOperation.CLEAR)) {
+  if (isSupported(props.table, Operation.CLEAR)) {
     confirmDialog(
       'Clear',
-      `Permanently delete all data from ${TM.labelPlural} table?`,
+      `Permanently delete all data from ${getPluralLabel(props.table)} table?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {
@@ -96,15 +117,15 @@ async function onClear(): Promise<void> {
       }
     )
   } else {
-    log.warn(`Clear not supported for ${TM.labelPlural} table`)
+    log.warn(`Clear not supported for ${getPluralLabel(props.table)} table`)
   }
 }
 
 async function onDelete(id: string): Promise<void> {
-  if (isSupported(TableOperation.DELETE)) {
+  if (isSupported(props.table, Operation.DELETE)) {
     confirmDialog(
       'Delete',
-      `Permanently delete "${id}" from ${TM.labelPlural} table?`,
+      `Permanently delete "${id}" from ${getPluralLabel(props.table)} table?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {
@@ -117,30 +138,30 @@ async function onDelete(id: string): Promise<void> {
       }
     )
   } else {
-    log.warn(`Delete not supported for ${TM.labelPlural} table`)
+    log.warn(`Delete not supported for ${getPluralLabel(props.table)} table`)
   }
 }
 </script>
 
 <template>
   <QTable
-    :rows="TM.rows"
-    :columns="TM.columns"
+    :rows="rows"
+    :columns="columns"
     :rows-per-page-options="[0]"
     virtual-scroll
     style="height: 85vh"
     row-key="id"
-    :visible-columns="TM.visibleColumns"
+    :visible-columns="visibleColumns"
     :filter="searchFilter"
   >
     <!-- Table Heading -->
     <template v-slot:top>
-      <div class="q-table__title text-weight-bold">{{ TM.labelPlural }}</div>
+      <div class="q-table__title text-weight-bold">{{ getPluralLabel(table) }}</div>
       <QSpace />
 
       <!-- Search Input -->
       <QInput
-        :disable="!TM.rows.length"
+        :disable="!rows.length"
         outlined
         dense
         debounce="300"
@@ -155,8 +176,8 @@ async function onDelete(id: string): Promise<void> {
 
       <!-- Column Select -->
       <QSelect
-        v-model="TM.visibleColumns"
-        :disable="!TM.rows.length"
+        v-model="visibleColumns"
+        :disable="!rows.length"
         multiple
         outlined
         dense
@@ -164,7 +185,7 @@ async function onDelete(id: string): Promise<void> {
         display-value="Columns"
         emit-value
         map-options
-        :options="TM.columnOptions"
+        :options="columnOptions"
         option-value="name"
         options-cover
         style="min-width: 150px"
@@ -173,7 +194,7 @@ async function onDelete(id: string): Promise<void> {
       <div>
         <!-- Create Btn -->
         <QBtn
-          v-if="isSupported(TableOperation.CREATE)"
+          v-if="isSupported(table, Operation.CREATE)"
           color="positive"
           label="Create"
           class="q-mr-sm q-mb-sm"
@@ -181,8 +202,8 @@ async function onDelete(id: string): Promise<void> {
         />
         <!-- Clear Btn -->
         <QBtn
-          v-if="isSupported(TableOperation.CLEAR)"
-          :disable="!TM.rows.length"
+          v-if="isSupported(table, Operation.CLEAR)"
+          :disable="!rows.length"
           color="negative"
           label="Clear"
           @click="onClear()"
@@ -210,7 +231,7 @@ async function onDelete(id: string): Promise<void> {
         <QTd auto-width>
           <!-- Report Btn -->
           <QBtn
-            v-if="isSupported(TableOperation.REPORT)"
+            v-if="isSupported(table, Operation.REPORT)"
             flat
             round
             dense
@@ -221,7 +242,7 @@ async function onDelete(id: string): Promise<void> {
           />
           <!-- Details Btn -->
           <QBtn
-            v-if="isSupported(TableOperation.INSPECT)"
+            v-if="isSupported(table, Operation.INSPECT)"
             flat
             round
             dense
@@ -232,7 +253,7 @@ async function onDelete(id: string): Promise<void> {
           />
           <!-- Edit Btn -->
           <QBtn
-            v-if="isSupported(TableOperation.UPDATE)"
+            v-if="isSupported(table, Operation.UPDATE)"
             flat
             round
             dense
@@ -243,7 +264,7 @@ async function onDelete(id: string): Promise<void> {
           />
           <!-- Delete Btn -->
           <QBtn
-            v-if="isSupported(TableOperation.DELETE)"
+            v-if="isSupported(table, Operation.DELETE)"
             flat
             round
             dense
@@ -265,23 +286,23 @@ async function onDelete(id: string): Promise<void> {
     @update:dialog="updateDialog($event)"
   >
     <PageInspect
-      v-if="selectedOperation === TableOperation.INSPECT"
+      v-if="selectedOperation === Operation.INSPECT"
       :selectedItem="selectedItem"
-      :tableColumns="TM.columns"
+      :columns="columns"
     />
     <PageCreate
-      v-if="selectedOperation === TableOperation.CREATE"
+      v-if="selectedOperation === Operation.CREATE"
       :table="table"
       @on-create="updateDialog(false)"
     />
     <PageUpdate
-      v-if="selectedOperation === TableOperation.UPDATE"
+      v-if="selectedOperation === Operation.UPDATE"
       :table="table"
       :selectedItem="selectedItem"
       @on-update="updateDialog(false)"
     />
     <PageReport
-      v-if="selectedOperation === TableOperation.REPORT"
+      v-if="selectedOperation === Operation.REPORT"
       :table="table"
       :selectedItem="selectedItem"
     />

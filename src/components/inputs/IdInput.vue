@@ -3,16 +3,15 @@ import { QInput } from 'quasar'
 import { onMounted } from 'vue'
 import { v4 as createId } from 'uuid'
 import { Icon } from '@/constants/ui-enums'
-import { DexieTable, TableField } from '@/constants/data-enums'
-import { useTableManager } from '@/use/useTableManager'
+import { Field } from '@/constants/data-enums'
+import { useFields } from '@/use/useFields'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
 /**
  * @todo
  */
-const props = defineProps<{ table: DexieTable }>()
 
-const { getFieldValidator } = useTableManager(props.table)
+const { getFieldValidator } = useFields()
 const { idModel, idInputRef, updateModel } = useInjectTableInputs()
 
 /**
@@ -30,7 +29,7 @@ onMounted(() => {
     v-model="idModel"
     ref="idInputRef"
     label="Id"
-    :rules="[getFieldValidator(TableField.ID)]"
+    :rules="[getFieldValidator(Field.ID)]"
     :maxlength="40"
     dense
     outlined

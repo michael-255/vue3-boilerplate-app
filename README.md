@@ -7,11 +7,16 @@ have a better understanding of how this project is setup.
 
 - [ ] `Improvements` -> Work from `bp-improvements-refactor` branch
 
-  - [ ] `_Entity` try it as an abstract class if (will it cause issues with `_Activity`?)
-  - [ ] `_Entity` with `Object.keys(this) as Field[]` method
-  - [ ] `ENUMS` renaming by removing `Table` prefix
-  - [ ] `TM` (tableManager) to a method based composable (easier to test)
+  - [ ] `PageTable` action getRows TS error
+  - [ ] `ClearButton` used instead of PageTable duplicate
+  - [ ] `Logger` add `debug` and `critical` functions (only color changes)
+  - [ ] `Logger` style colors as enums? (hex values)
+  - [ ] `AppColor` instead of `NotifyColor`
+  - [ ] `Icons` cleanup
+  - [ ] `helpers` and `utils` and readme explaining the differences as you see them
   - [ ] `BaseComponents` mini base components to cleanup larger components
+  - [ ] Convert Luxon date function to normal JS Date function
+    - [ ] Validate that yours works the same!
 
 - [x] `APP` Dashboard description of boilerplate app - What to see / How it works (Card component)
 - [x] `APP` Dashboard print for logs to create viewable records

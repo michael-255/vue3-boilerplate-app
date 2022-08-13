@@ -2,17 +2,16 @@
 import { QInput, QDate, QBtn, QTime, QPopupProxy } from 'quasar'
 import { type Ref, ref, onMounted } from 'vue'
 import { isoToDisplayDate } from '@/utils/luxon'
-import { DexieTable, TableField } from '@/constants/data-enums'
+import { Field } from '@/constants/data-enums'
 import { Icon } from '@/constants/ui-enums'
-import { useTableManager } from '@/use/useTableManager'
+import { useFields } from '@/use/useFields'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
 /**
  * @todo
  */
-const props = defineProps<{ table: DexieTable }>()
 
-const { getFieldValidator } = useTableManager(props.table)
+const { getFieldValidator } = useFields()
 const { createdDateModel, createdDateInputRef, updateModel } = useInjectTableInputs()
 const userDisplayedDate: Ref<string> = ref('')
 const dateTimePicker: Ref<string> = ref('')
@@ -53,7 +52,7 @@ function onPickerDateTime(): void {
     v-model="userDisplayedDate"
     ref="createdDateInputRef"
     label="Created Date"
-    :rules="[getFieldValidator(TableField.CREATED_DATE)]"
+    :rules="[getFieldValidator(Field.CREATED_DATE)]"
     dense
     outlined
     disable

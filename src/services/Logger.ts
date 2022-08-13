@@ -1,3 +1,5 @@
+import { Strings } from '@/constants/ui-enums'
+
 /**
  * Logger that adds some style to your console.
  * @param name Logger name appearing in the console
@@ -45,4 +47,4 @@ export class Logger {
 /**
  * Preconfigured Logger
  */
-export const logger = new Logger('Logger')
+export const logger = new Logger(Strings.APP_NAME)

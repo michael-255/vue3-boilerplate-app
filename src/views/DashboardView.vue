@@ -15,22 +15,22 @@ function generateTestLogs(): void {
     message: 'Debug message',
     stack: 'Debug stack',
   })
-  log.info('This is a Debug Log', {
+  log.info('This is a Info Log', {
     errorName: 'generateTestLogs:Info',
     message: 'Info message',
     stack: 'Info stack',
   })
-  log.warn('This is a Debug Log', {
+  log.warn('This is a Warning Log', {
     errorName: 'generateTestLogs:Warning',
     message: 'Warning message',
     stack: 'Warning stack',
   })
-  log.error('This is a Debug Log', {
+  log.error('This is a Error Log', {
     errorName: 'generateTestLogs:Error',
     message: 'Error message',
     stack: 'Error stack',
   })
-  log.critical('This is a Debug Log', {
+  log.critical('This is a Critical Log', {
     errorName: 'generateTestLogs:Critical',
     message: 'Critical message',
     stack: 'Critical stack',

@@ -4,6 +4,7 @@ import { Example, type IExample } from '@/models/Example'
 import { ExampleRecord, type IExampleRecord } from '@/models/ExampleRecord'
 import { Log, type ILog } from '@/models/Log'
 import { Setting, type ISetting } from '@/models/Setting'
+import { Strings } from '@/constants/ui-enums'
 
 /**
  * Wrapper for Dexie IndexedDB
@@ -60,9 +61,9 @@ export class LocalDatabase extends Dexie {
    * @param name
    * @returns Array of Activities
    */
-  async getActivitiesByName<T>(table: DexieTable, name: string): Promise<T[]> {
-    return await this.table(table).where('name').equalsIgnoreCase(name).toArray()
-  }
+  // async getActivitiesByName<T>(table: DexieTable, name: string): Promise<T[]> {
+  //   return await this.table(table).where('name').equalsIgnoreCase(name).toArray()
+  // }
 
   /**
    * Get Activities from table by status.
@@ -184,4 +185,4 @@ export class LocalDatabase extends Dexie {
 /**
  * Preconfigured LocalDatabase
  */
-export const DB = new LocalDatabase('Database')
+export const DB = new LocalDatabase(Strings.APP_NAME)
