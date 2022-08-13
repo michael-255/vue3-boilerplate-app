@@ -5,9 +5,11 @@ import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { DexieTable } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
+import { useSettingsStore } from '@/stores/settings'
 
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
+const settings = useSettingsStore()
 
 const props = defineProps<{
   table: DexieTable | 'ALL'
@@ -23,6 +25,8 @@ function onClear(): void {
       async (): Promise<void> => {
         try {
           await Promise.all(Object.values(DexieTable).map((table) => DB.clear(table as DexieTable)))
+          await settings.setDEBUG(false)
+          await settings.setNOTIFY(false)
         } catch (error) {
           log.error('onClear', error)
         }

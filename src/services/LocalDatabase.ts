@@ -91,7 +91,10 @@ export class LocalDatabase extends Dexie {
    * @returns Array of Records
    */
   async getRecordsByParentId<T>(table: DexieTable, parentId: string): Promise<T[]> {
-    return await this.table(table).where('parentId').equalsIgnoreCase(parentId).sortBy('createdAt')
+    return await this.table(table)
+      .where('parentId')
+      .equalsIgnoreCase(parentId)
+      .sortBy('createdDate')
   }
 
   /**
@@ -102,7 +105,7 @@ export class LocalDatabase extends Dexie {
    */
   async getNewestRecordByParentId<T>(table: DexieTable, parentId: string): Promise<T | undefined> {
     return (
-      await this.table(table).where('parentId').equalsIgnoreCase(parentId).sortBy('createdAt')
+      await this.table(table).where('parentId').equalsIgnoreCase(parentId).sortBy('createdDate')
     ).reverse()[0]
   }
 

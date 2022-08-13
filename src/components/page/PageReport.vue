@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { DexieTable } from '@/constants/data-enums.js'
-import { onMounted } from 'vue'
+import type { DexieTable } from '@/constants/data-enums.js'
+import { onMounted, computed, ref, type Ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
 import { useTableManager } from '@/use/useTableManager'
-import { DoughnutChart } from 'vue-chart-3'
+import { LineChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 
 /**
@@ -20,27 +20,46 @@ const { TM } = useTableManager(props.table)
 
 // Report
 Chart.register(...registerables)
-const testData = {
-  labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
+
+const firstDate: Ref<string> = ref('')
+const lastDate: Ref<string> = ref('')
+
+const datasetLabels: Ref<string[]> = ref([])
+const datasetData: Ref<number[]> = ref([])
+
+const chartOptions: { [x: string]: any } = {
+  responsive: true,
+  fill: true,
+  radius: 3,
+  plugins: {
+    legend: {
+      display: false,
+    },
+    title: {
+      display: true,
+      text: props.selectedItem.name,
+    },
+  },
+}
+
+const chartData = computed<any>(() => ({
+  labels: datasetLabels.value,
   datasets: [
     {
-      data: [30, 40, 60, 70, 5],
-      backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED'],
+      data: datasetData.value,
+      borderColor: 'rgb(25, 118, 210)',
+      backgroundColor: 'rgba(25, 118, 210, 0.25)',
     },
   ],
-}
+}))
 
 onMounted(async () => {
   try {
-    const { id, createdDate, name, description, parentId, value } = props.selectedItem
-    await TM.actions.report({
-      id,
-      createdDate,
-      name,
-      description,
-      parentId,
-      value,
-    })
+    const dataset = await TM.actions.report(props.selectedItem.id)
+    datasetLabels.value = dataset.labels
+    datasetData.value = dataset.data
+    firstDate.value = dataset.firstDate
+    lastDate.value = dataset.lastDate
   } catch (error) {
     log.critical('PageReport:onMounted', error)
   }
@@ -48,7 +67,13 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="text-bold">{{ DexieTable.EXAMPLES }}</div>
-  <div>{{ selectedItem }}</div>
-  <DoughnutChart :chartData="testData" />
+  <LineChart :options="chartOptions" :chartData="chartData" />
+  <div class="q-mb-sm">
+    <div class="text-subtitle1 text-weight-bold">First Record Date</div>
+    <div>{{ firstDate || '-' }}</div>
+  </div>
+  <div class="q-mb-sm">
+    <div class="text-subtitle1 text-weight-bold">Last Record Date</div>
+    <div>{{ lastDate || '-' }}</div>
+  </div>
 </template>

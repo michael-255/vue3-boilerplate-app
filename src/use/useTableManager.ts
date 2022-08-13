@@ -5,6 +5,7 @@ import { Log } from '@/models/Log'
 import { DB } from '@/services/LocalDatabase'
 import { reactive } from 'vue'
 import { useFields } from './useFields'
+import { isoToDisplayDate } from '@/utils/luxon'
 
 export function useTableManager(table: DexieTable) {
   const { getFieldDisplayProperties, getFieldValidator, getFieldComponent } = useFields()
@@ -42,8 +43,16 @@ export function useTableManager(table: DexieTable) {
         }
         await DB.updateById(DexieTable.EXAMPLES, fields.originalId, updateObject)
       },
-      report: async (fields: { [x: string]: any }) => {
-        console.log(fields)
+      report: async (id: string) => {
+        const records: ExampleRecord[] = await DB.getRecordsByParentId(
+          DexieTable.EXAMPLE_RECORDS,
+          id
+        )
+        const labels = records.map(() => '')
+        const data = records.map((r: ExampleRecord) => r.value)
+        const firstDate = isoToDisplayDate(records[0]?.createdDate)
+        const lastDate = isoToDisplayDate(records[records.length - 1]?.createdDate)
+        return { firstDate, lastDate, labels, data }
       },
     },
     [DexieTable.EXAMPLE_RECORDS]: {

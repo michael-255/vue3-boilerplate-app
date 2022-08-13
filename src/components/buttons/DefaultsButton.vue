@@ -13,9 +13,8 @@ const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
 
 /**
- * @todo ability to load defaults of many types
+ * Confirm if you what to load defaults for your data tables.
  */
-
 function onDefaults(): void {
   confirmDialog(
     'Load All Defaults',
@@ -33,11 +32,14 @@ function onDefaults(): void {
 }
 
 /**
+ * @deprecate
  * Temp function to create example records for viewing.
  */
 async function createExampleDefaults(): Promise<void> {
+  let date = new Date('2022/01/01')
   const limit = 5
 
+  // Generating unique ids for the main Example items
   const ids = []
   for (let i = 0; i < limit; i++) {
     ids.push(createId())
@@ -46,22 +48,26 @@ async function createExampleDefaults(): Promise<void> {
   const defaultExamples = []
   const defaultExampleRecords = []
   for (let i = 0; i < limit; i++) {
+    // Add the Example item
     defaultExamples.push(
       new Example({
         id: ids[i],
-        createdDate: new Date().toISOString(),
+        createdDate: date.toISOString(),
         name: `Example ${i}`,
         description: 'Default Example!',
       })
     )
-    // Build out records for the Example item
-    for (let j = 0; j < 20; j++) {
+
+    for (let j = 0; j < 45; j++) {
+      // Increment the date by 1 day each iteration
+      date = new Date(date.setDate(date.getDate() + 1))
+      // Add the Example Record item
       defaultExampleRecords.push(
         new ExampleRecord({
           id: createId(),
-          createdDate: new Date().toISOString(),
+          createdDate: date.toISOString(),
           parentId: ids[i],
-          value: Number(Math.random().toString(10).substring(2, 4)) + i + j, // Steady increase
+          value: Number(Math.random().toString(10).substring(2, 3)) + i + j, // Increment value
         })
       )
     }
