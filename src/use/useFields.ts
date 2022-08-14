@@ -12,7 +12,7 @@ import {
 /**
  * This composable is for determining the behaviour of different Fields.
  */
-export function useFields() {
+export function useFields(): { [x: string]: any } {
   /**
    * Get field validator function. True returning function for non-validated fields.
    * @param field

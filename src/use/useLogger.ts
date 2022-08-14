@@ -10,7 +10,7 @@ import { useSettingsStore } from '@/stores/settings'
  * Composable with utilities for logging, notifications, and basic dialogs.
  * Never awaiting for any logging calls. Don't want to slow down the UI.
  */
-export function useLogger() {
+export function useLogger(): { [x: string]: any } {
   const settings = useSettingsStore()
   const { notify } = useNotifications()
 
@@ -24,7 +24,7 @@ export function useLogger() {
    */
   const log = {
     /**
-     * @todo
+     * DEBUG logs never get saved to the database. Controlled by DEBUG and NOTIFY settings.
      */
     debug: (details: string, error?: Error | any) => {
       if (settings.DEBUG) {
@@ -37,20 +37,22 @@ export function useLogger() {
       }
     },
     /**
-     * @todo
+     * INFO logs can be suppressed if desired. Controlled by DEBUG, NOTIFY, and INFO settings.
      */
     info: (details: string, error?: Error | any) => {
       const severity = Severity.INFO
       if (settings.DEBUG) {
         logger.info(`[${severity}]`, details, error)
       }
-      DB.add(DexieTable.LOGS, new Log({ error, severity, details }))
+      if (settings.INFO) {
+        DB.add(DexieTable.LOGS, new Log({ error, severity, details }))
+      }
       if (settings.NOTIFY) {
         notify(`${severity} - ${details}`, Icon.INFO, NotifyColor.INFO)
       }
     },
     /**
-     * @todo
+     * WARN logs cannot be suppressed. Can hide the console output with DEBUG setting.
      */
     warn: (details: string, error?: Error | any) => {
       const severity = Severity.WARN
@@ -61,7 +63,7 @@ export function useLogger() {
       notify(`${severity} - ${details}`, Icon.WARN, NotifyColor.WARN)
     },
     /**
-     * @todo
+     * ERROR logs cannot be suppressed. Can hide the console output with DEBUG setting.
      */
     error: (details: string, error?: Error | any) => {
       const severity = Severity.ERROR
@@ -72,7 +74,7 @@ export function useLogger() {
       notify(`${severity} - ${details}`, Icon.ERROR, NotifyColor.ERROR)
     },
     /**
-     * @todo
+     * CRITICAL logs cannot be suppressed. Can hide the console output with DEBUG setting.
      */
     critical: (details: string, error?: Error | any) => {
       const severity = Severity.CRITICAL

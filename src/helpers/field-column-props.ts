@@ -9,6 +9,10 @@ import type { ColumnProps } from '@/constants/types-interfaces'
  * @returns Object with properties for QTable columns
  */
 export function getFieldColumnProps(field: Field): ColumnProps {
+  /**
+   * @see
+   * MUST ADD NEW FIELDS BELOW
+   */
   return {
     [Field.ID]: {
       name: Field.ID,

@@ -22,13 +22,25 @@ const NOTIFY = computed({
     await settings.setNOTIFY(bool)
   },
 })
+
+const INFO = computed({
+  get() {
+    return settings.INFO
+  },
+  async set(bool: boolean) {
+    await settings.setINFO(bool)
+  },
+})
 </script>
 
 <template>
   <div>
-    <QToggle v-model="DEBUG" label="Debug" />
+    <QToggle v-model="DEBUG" label="Debug Logging" />
   </div>
   <div>
-    <QToggle v-model="NOTIFY" label="Notify" />
+    <QToggle v-model="NOTIFY" label="View All Alerts" />
+  </div>
+  <div>
+    <QToggle v-model="INFO" label="Save Info Logs" />
   </div>
 </template>

@@ -23,9 +23,14 @@ async function onClearAll(): Promise<void> {
     async (): Promise<void> => {
       try {
         await Promise.all(Object.values(DexieTable).map((table) => DB.clear(table as DexieTable)))
+        /**
+         * @see
+         * DEFAULT SETTINGS BELOW
+         */
         await settings.initSettings()
         await settings.setDEBUG(false)
         await settings.setNOTIFY(false)
+        await settings.setINFO(false)
       } catch (error) {
         log.error('onClearAll', error)
       }

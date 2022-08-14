@@ -12,9 +12,16 @@ const route = useRoute()
 const layout: Ref<any> = ref(null)
 
 onMounted(async () => {
+  /**
+   * @see
+   * Ideal location to initialize all of your app settings.
+   */
   await settings.initSettings()
 })
 
+/**
+ * Watching the route for the meta layout property to change. Sets the layout component.
+ */
 watch(
   () => route.meta?.layout as string | undefined,
   async (metaLayout) => {

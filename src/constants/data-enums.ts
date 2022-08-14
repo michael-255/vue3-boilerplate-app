@@ -34,8 +34,9 @@ export enum InjectionKey {
 }
 
 export enum SettingKey {
-  DEBUG = 'DEBUG',
-  NOTIFY = 'NOTIFY',
+  DEBUG = 'debug-logging',
+  NOTIFY = 'all-alerts',
+  INFO = 'save-info-logs',
 }
 
 export enum Severity {

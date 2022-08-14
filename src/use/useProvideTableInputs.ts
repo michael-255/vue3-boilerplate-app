@@ -1,6 +1,11 @@
 import { type Ref, ref, provide } from 'vue'
 import { InjectionKey } from '@/constants/data-enums'
 
+/**
+ * Used for dynamic inputs.
+ * @see
+ * Must add additional validation checks for new inputs as you create them.
+ */
 export function useProvideTableInputs(): { [x: string]: any } {
   // Field Models
   const idModel: Ref<any> = ref(null)

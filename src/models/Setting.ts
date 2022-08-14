@@ -9,7 +9,7 @@ export interface ISetting {
  * @param params.value Value
  */
 export class Setting {
-  id: string
+  id: string // id instead of key so a new DB get method isn't needed
   value: boolean | string | number
 
   constructor(params: ISetting) {

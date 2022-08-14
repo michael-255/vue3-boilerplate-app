@@ -1,6 +1,9 @@
 import { inject } from 'vue'
 import { InjectionKey } from '@/constants/data-enums'
 
+/**
+ * Used for dynamic inputs.
+ */
 export function useInjectTableInputs(): { [x: string]: any } {
   // Inject Statement - Injects all needed refs for data tables into component
   const {

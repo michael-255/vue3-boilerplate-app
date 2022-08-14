@@ -6,7 +6,14 @@ import { Log } from '@/models/Log'
 import { DB } from '@/services/LocalDatabase'
 import { isoToDisplayDate } from '@/utils/luxon'
 
-export function useTable() {
+/**
+ * Composable with functions for working with data tables.
+ */
+export function useTable(): { [x: string]: any } {
+  /**
+   * Gets an array of the fields used by the table.
+   * @param table
+   */
   function getFields(table: DexieTable): Field[] {
     return {
       [DexieTable.EXAMPLES]: Example.getFields(),
@@ -16,6 +23,10 @@ export function useTable() {
     }[table]
   }
 
+  /**
+   * Gets the table that is related to the current table (Examples -> Example Records)
+   * @param table
+   */
   function getRelatedTable(table: DexieTable): DexieTable | null {
     return {
       [DexieTable.EXAMPLES]: Example.getRelatedTable(),
@@ -25,6 +36,10 @@ export function useTable() {
     }[table]
   }
 
+  /**
+   * Gets the singular label for the table (Example).
+   * @param table
+   */
   function getSingularLabel(table: DexieTable): string {
     return {
       [DexieTable.EXAMPLES]: Example.getSingularLabel(),
@@ -34,6 +49,10 @@ export function useTable() {
     }[table]
   }
 
+  /**
+   * Gets the plural label for the table (Examples).
+   * @param table
+   */
   function getPluralLabel(table: DexieTable): string {
     return {
       [DexieTable.EXAMPLES]: Example.getPluralLabel(),
@@ -43,6 +62,10 @@ export function useTable() {
     }[table]
   }
 
+  /**
+   * Gets an array of Operations that are supported by this table.
+   * @param table
+   */
   function getSupportedOperations(table: DexieTable): Operation[] {
     return {
       [DexieTable.EXAMPLES]: Example.getSupportedOperations(),
@@ -52,6 +75,10 @@ export function useTable() {
     }[table]
   }
 
+  /**
+   * Gets an array of columns that are visible by default for the select box for this table.
+   * @param table
+   */
   function getVisibleColumns(table: DexieTable): Field[] {
     return {
       [DexieTable.EXAMPLES]: Example.getVisibleColumns(),
@@ -61,6 +88,10 @@ export function useTable() {
     }[table]
   }
 
+  /**
+   * Gets an array of the column properties needed for QTables for this table.
+   * @param table
+   */
   function getColumns(table: DexieTable): ColumnProps[] {
     return {
       [DexieTable.EXAMPLES]: Example.getColumns(),
@@ -70,6 +101,10 @@ export function useTable() {
     }[table]
   }
 
+  /**
+   * Gets an array of the column option properties needed for QTables for this table.
+   * @param table
+   */
   function getColumnOptions(table: DexieTable): ColumnProps[] {
     return {
       [DexieTable.EXAMPLES]: Example.getColumnOptions(),
@@ -80,7 +115,7 @@ export function useTable() {
   }
 
   /**
-   *
+   * Gets an object that contains the actions that can be performed on this table.
    * @param table
    * @returns
    */
@@ -149,7 +184,7 @@ export function useTable() {
   }
 
   /**
-   * Check table's operation to see if it is supported.
+   * Check table operation to see if it is supported.
    * @param table
    * @param operation
    * @returns boolean

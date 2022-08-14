@@ -1,9 +1,9 @@
-import { defineStore } from 'pinia'
+import { defineStore, type StoreDefinition } from 'pinia'
 
 /**
  * @todo Typescript for the state?
  */
-export const useUIStore = defineStore({
+export const useUIStore: StoreDefinition = defineStore({
   id: 'ui',
 
   state: () => ({

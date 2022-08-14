@@ -21,8 +21,9 @@ import ClearAllBtn from '@/components/settings/ClearAllBtn.vue'
           <div class="text-h6 q-mb-sm">Debugging & Notifications</div>
 
           <div class="q-mb-sm">
-            Turning Debug on will cause all logs to appear in the console. Turning on Notify will
-            allow you to see low priority notifications on screen.
+            Turning on Debug Logging will cause all logs to appear in the console. Turning on View
+            All Alerts will allow you to see low priority notifications on screen. Turning on Save
+            Info Logs will cause informational logs to be stored in the database for later review.
           </div>
 
           <SettingToggles />

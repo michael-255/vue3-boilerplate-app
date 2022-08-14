@@ -5,7 +5,7 @@ import SimpleDialog from '@/components/dialogs/SimpleDialog.vue'
 /**
  * Simple customizable dialogs.
  */
-export function useSimpleDialogs() {
+export function useSimpleDialogs(): { [x: string]: any } {
   const $quasar = useQuasar()
 
   /**

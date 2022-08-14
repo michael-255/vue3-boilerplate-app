@@ -174,7 +174,7 @@ export class LocalDatabase extends Dexie {
    * Update provided properties on table item by id.
    * @param table
    * @param id
-   * @param properties
+   * @param props
    * @returns 1 on a successful update
    */
   async updateById<T>(table: DexieTable, id: string, props: Partial<T>): Promise<IndexableType> {

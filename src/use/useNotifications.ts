@@ -4,7 +4,7 @@ import { NotifyColor, Icon } from '@/constants/ui-enums'
 /**
  * Simple customizable notifications.
  */
-export function useNotifications() {
+export function useNotifications(): { [x: string]: any } {
   const $quasar = useQuasar()
 
   /**
