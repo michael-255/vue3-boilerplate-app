@@ -1,28 +1,84 @@
 import { describe, test, expect } from 'vitest'
-import { Example } from '../Example'
-
-const isoDateRegex = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})Z/
+import { Example } from '@/models/Example'
+import { DexieTable, Field, Operation } from '@/constants/data-enums'
 
 describe('Example', () => {
-  const exampleId = 'TEST-4321'
-  const exampleDate = new Date('2022/1/1').toISOString()
-  const exampleAttrs = { abc: 123 }
+  const testId = 'test-id'
+  const testDate = '2022-01-01T00:00:00.000Z'
+  const testName = 'test-name'
+  const testDesc = 'test-desc'
 
-  const example = new Example({
-    id: exampleId,
-    createdDate: exampleDate,
-    data: exampleAttrs,
+  test('create Example with params', () => {
+    const params = {
+      id: testId,
+      createdDate: testDate,
+      name: testName,
+      description: testDesc,
+    }
+    const example = new Example(params)
+    expect(example.id).toBe(testId)
+    expect(example.createdDate).toBe(testDate)
+    expect(example.name).toBe(testName)
+    expect(example.description).toBe(testDesc)
   })
 
-  test('should return an id when calling getId', () => {
-    expect(example.getId()).toBe(exampleId)
+  test('Example static getFields returns correct fields', () => {
+    expect(Example.getFields()).toEqual([
+      Field.ID,
+      Field.CREATED_DATE,
+      Field.NAME,
+      Field.DESCRIPTION,
+    ])
   })
 
-  test('should return an ISO string date when calling getDate', () => {
-    expect(example.getDate()).toMatch(isoDateRegex)
+  test('Example static getColumns returns correct columns', () => {
+    Example.getColumns().forEach((col) => {
+      expect(col).toHaveProperty('name')
+      expect(col).toHaveProperty('label')
+      expect(col).toHaveProperty('align')
+      expect(col).toHaveProperty('sortable')
+      expect(col).toHaveProperty('required')
+      expect(col).toHaveProperty('field')
+      expect(col).toHaveProperty('format')
+    })
   })
 
-  test('should return the example attributes object when calling getAttributes', () => {
-    expect(example.getData()).toMatchObject(exampleAttrs)
+  test('Example static getColumnOptions returns correct column options', () => {
+    Example.getColumnOptions().forEach((col) => {
+      expect(col).toHaveProperty('name')
+      expect(col).toHaveProperty('label')
+      expect(col).toHaveProperty('align')
+      expect(col).toHaveProperty('sortable')
+      expect(col).toHaveProperty('required')
+      expect(col).toHaveProperty('field')
+      expect(col).toHaveProperty('format')
+    })
+  })
+
+  test('Example static getRelatedTable returns correct related table', () => {
+    expect(Example.getRelatedTable()).toBe(DexieTable.EXAMPLE_RECORDS)
+  })
+
+  test('Example static getSingularLabel returns the singular label', () => {
+    expect(Example.getSingularLabel()).toBe('Example')
+  })
+
+  test('Example static getPluralLabel returns the plural label', () => {
+    expect(Example.getPluralLabel()).toBe('Examples')
+  })
+
+  test('Example static getSupportedOperations returns correct operations', () => {
+    expect(Example.getSupportedOperations()).toEqual([
+      Operation.CREATE,
+      Operation.UPDATE,
+      Operation.DELETE,
+      Operation.CLEAR,
+      Operation.INSPECT,
+      Operation.REPORT,
+    ])
+  })
+
+  test('Example static getVisibleColumns returns default visible columns', () => {
+    expect(Example.getVisibleColumns()).toEqual([Field.CREATED_DATE])
   })
 })

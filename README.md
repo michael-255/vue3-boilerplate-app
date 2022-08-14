@@ -7,7 +7,7 @@ have a better understanding of how this project is setup.
 
 - [ ] `TESTS` Clean up and build out your tests
   - [x] `Services`
-  - [ ] `Models`
+  - [x] `Models`
   - [ ] `Helpers`
   - [ ] `Utils`
   - [ ] `Use`
