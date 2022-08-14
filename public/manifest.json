@@ -1,0 +1,12 @@
+{
+  "name": "Boilerplate App",
+  "short_name": "BP App",
+  "description": "",
+  "catagories": [],
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "display": "standalone",
+  "start_url": "/vue3-boilerplate-app",
+  "orientation": "any",
+  "icons": []
+}

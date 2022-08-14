@@ -5,29 +5,25 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `TESTS` Clean up and build out your tests
-  - [x] `Services`
-  - [x] `Models`
-  - [x] `Helpers`
-  - [x] `Stores`
-  - [x] `Utils`
-  - [ ] `Use`
-- [ ] `App Manifest` splash page
-- [ ] `README` steps for adding models, fields, and their data table functionality
-- [ ] `README` notes on important changes
+- [ ] `Examples`
+
+  - [ ] `Rounds` Similar to Exercise sets (multiple data points)
+  - [ ] `Reports` Find a way to handle those extra data points on the charts
+
+- [ ] `README`
+
+  - [ ] Steps for adding models, fields, and their data table functionality
   - [ ] Notes on repo name in `vite.config.ts`
   - [ ] Notes on adding es2020 support (`tsconfig.vitest.json`, `tsconfig.vite-config.json`,
         `tsconfig.app.json`)
   - [ ] Notes on change App Title in `~/index.html`
   - [ ] Notes on `Imports` and `Exports`
-- [ ] `STRETCH` Update `hygen class new`
+  - [ ] How to work with the `manifest.json`
 
-## Next steps
+- [ ] `HYGEN`
 
-- [ ] `Examples`
-
-  - [ ] `Rounds` Similar to Exercise sets (multiple data points)
-  - [ ] `Reports` Find a way to handle those extra data points on the charts
+  - [ ] Update `hygen class new`
+  - [ ] Update any Hygen docs you have
 
 ```bash
 ###############################################################################
