@@ -286,7 +286,7 @@ async function onDelete(id: string): Promise<void> {
   <!-- Fullscreen Dialog -->
   <PageDialog
     :dialog="pageDialog"
-    :action="selectedOperation"
+    :operation="selectedOperation"
     :label="selectedLabel"
     @update:dialog="updateDialog($event)"
   >

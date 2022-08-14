@@ -6,10 +6,17 @@ have a better understanding of how this project is setup.
 ## Todos
 
 - [ ] `APP` Add comments and descriptions throughout codebase (check file-by-file)
+  - [ ] `POSITION` left off at `~/src/components/page` ---------------------------------------------
   - [ ] Add new `log` calls where it would make sense (info and up)
 - [ ] `TESTS` Clean up and build out your tests
+- [ ] `App Manifest` splash page
 - [ ] `README` steps for adding models, fields, and their data table functionality
 - [ ] `README` notes on important changes
+  - [ ] Notes on repo name in `vite.config.ts`
+  - [ ] Notes on adding es2020 support (`tsconfig.vitest.json`, `tsconfig.vite-config.json`,
+        `tsconfig.app.json`)
+  - [ ] Notes on change App Title in `~/index.html`
+  - [ ] Notes on `Imports` and `Exports`
 - [ ] `STRETCH` Update `hygen class new`
 
 ## Next steps

@@ -1,5 +1,5 @@
 export enum NotifyColor {
-  LOG = 'grey',
+  LOG = 'blue-grey',
   DEBUG = 'deep-purple',
   INFO = 'primary',
   WARN = 'orange-9',

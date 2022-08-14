@@ -13,17 +13,17 @@ const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
 
 /**
- * Confirm if you what to load defaults for your data tables.
+ * Confirm if you want to load defaults into your tables.
  */
 function onDefaults(): void {
   confirmDialog(
-    'Load All Defaults',
+    'Load Defaults',
     'Load default entires into appropriate tables in the database?',
     Icon.INFO,
     NotifyColor.INFO,
     async (): Promise<void> => {
       try {
-        await createExampleDefaults() // TEMP
+        await createExampleDefaults() // TEMP FUNCTION
       } catch (error) {
         log.error('onDefaults', error)
       }
@@ -33,7 +33,7 @@ function onDefaults(): void {
 
 /**
  * @deprecate
- * Temp function to create example records for viewing.
+ * Temporary function that creates example records for viewing.
  */
 async function createExampleDefaults(): Promise<void> {
   let date = new Date('2022/01/01')
@@ -79,5 +79,5 @@ async function createExampleDefaults(): Promise<void> {
 </script>
 
 <template>
-  <QBtn label="Load All Defaults" color="primary" @click="onDefaults()" />
+  <QBtn label="Load Defaults" color="primary" @click="onDefaults()" />
 </template>

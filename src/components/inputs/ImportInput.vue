@@ -14,6 +14,10 @@ const { confirmDialog } = useSimpleDialogs()
 const file: Ref<any> = ref(null)
 const tenMegabytes = 10485760
 
+/**
+ *
+ * @param entries
+ */
 function onRejectedImport(entries: any): void {
   const fileName = entries[0]?.file?.name || undefined
   const size = entries[0]?.file?.size || undefined
@@ -29,35 +33,49 @@ function onRejectedImport(entries: any): void {
   })
 }
 
+/**
+ * Confirm if you want to import your data from a JSON file.
+ */
 function onImport(): void {
-  consoleDebug(file.value)
-
   confirmDialog(
     'Import',
-    `Import data from file "${file.value.name}"`,
+    `Import file "${file.value.name}" and attempt to load data from it?`,
     Icon.INFO,
     NotifyColor.INFO,
     async (): Promise<void> => {
       try {
-        const fileData = await file.value.text()
-        const parsedFileData = JSON.parse(fileData)
-
-        const appData = new AppData({
-          examples: parsedFileData?.examples,
-          logs: parsedFileData?.logs, // Logs are included but not added to the database
-        })
-
-        consoleDebug(appData)
-
-        await Promise.all([
-          DB.bulkAdd(DexieTable.EXAMPLES, appData?.examples),
-          DB.bulkAdd(DexieTable.LOGS, appData?.logs), // @todo - TEMP REMOVE!
-        ])
+        await confirmedFileImport()
       } catch (error) {
         log.error('onImport', error)
       }
     }
   )
+}
+
+/**
+ * Imports data properties it can parse using the AppData class that are defined in this function.
+ */
+async function confirmedFileImport(): Promise<void> {
+  const fileData = await file.value.text()
+  const parsedFileData = JSON.parse(fileData)
+
+  /**
+   * @see
+   * ONLY TABLES DEFINED BELOW GET IMPORTED
+   */
+  const appData = new AppData({
+    examples: parsedFileData?.examples,
+    exampleRecords: parsedFileData?.exampleRecords,
+    logs: parsedFileData?.logs, // Logs can be included to view in the console
+  })
+
+  consoleDebug(appData)
+
+  await Promise.all([
+    DB.bulkAdd(DexieTable.EXAMPLES, appData?.examples),
+    DB.bulkAdd(DexieTable.EXAMPLE_RECORDS, appData?.examples),
+    // Logs don't get imported
+  ])
 }
 </script>
 
@@ -76,6 +94,7 @@ function onImport(): void {
     <template v-slot:before>
       <QBtn :disable="!file" label="Import" color="primary" class="q-mr-xs" @click="onImport()" />
     </template>
+
     <template v-slot:after>
       <QIcon :name="Icon.CLOSE" @click.stop="file = null" class="cursor-pointer" />
     </template>

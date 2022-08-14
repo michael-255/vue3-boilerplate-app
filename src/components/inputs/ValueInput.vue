@@ -4,10 +4,6 @@ import { Field } from '@/constants/data-enums'
 import { useFields } from '@/use/useFields'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
-/**
- * @todo
- */
-
 const { getFieldValidator } = useFields()
 const { valueModel, valueInputRef } = useInjectTableInputs()
 </script>

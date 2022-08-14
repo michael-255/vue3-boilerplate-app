@@ -27,7 +27,7 @@ export function useSimpleDialogs() {
       .dialog({
         component: SimpleDialog,
         componentProps: {
-          type: 'confirm',
+          type: 'Confirm',
           icon,
           title,
           message,
@@ -56,7 +56,7 @@ export function useSimpleDialogs() {
     $quasar.dialog({
       component: SimpleDialog,
       componentProps: {
-        type: 'dismiss',
+        type: 'Dismiss',
         icon,
         title,
         message,

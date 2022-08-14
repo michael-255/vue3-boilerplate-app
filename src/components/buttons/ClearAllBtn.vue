@@ -11,6 +11,9 @@ const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
 const settings = useSettingsStore()
 
+/**
+ * Removes all data from all databases defined in the DexieTable enum.
+ */
 async function onClearAll(): Promise<void> {
   confirmDialog(
     'Clear All',

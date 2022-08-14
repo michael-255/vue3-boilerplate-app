@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Icon } from '@/constants/ui-enums'
+import type { Icon, NotifyColor } from '@/constants/ui-enums'
 import { QDialog, QCard, QCardSection, QCardActions, QIcon, QBtn } from 'quasar'
 import { useDialogPluginComponent } from 'quasar'
 
@@ -21,20 +21,17 @@ import { useDialogPluginComponent } from 'quasar'
  *     console.log('Called on OK or Cancel')
  *   })
  */
-
 const props = defineProps<{
-  type: 'confirm' | 'dismiss'
+  type: 'Confirm' | 'Dismiss'
   icon: Icon
   title: string
   message: string
-  color: 'primary' | 'orange' | 'negative'
-  persistent: boolean
+  color: NotifyColor
+  persistent: boolean // If it can be dismissed by clicking outside it
 }>()
-
 defineEmits([...useDialogPluginComponent.emits])
 
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
-const okLabel = props.type === 'confirm' ? 'Confirm' : 'Dismiss'
 
 function onOKClick() {
   onDialogOK()
@@ -52,8 +49,8 @@ function onOKClick() {
       <QCardSection class="q-py-none">{{ message }}</QCardSection>
 
       <QCardActions align="right">
-        <QBtn v-if="type === 'confirm'" flat label="Cancel" @click="onDialogCancel" />
-        <QBtn flat :label="okLabel" :color="props.color" @click="onOKClick" />
+        <QBtn v-if="type === 'Confirm'" flat label="Cancel" @click="onDialogCancel" />
+        <QBtn flat :label="type" :color="props.color" @click="onOKClick" />
       </QCardActions>
     </QCard>
   </QDialog>

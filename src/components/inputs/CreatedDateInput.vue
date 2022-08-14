@@ -7,17 +7,13 @@ import { Icon } from '@/constants/ui-enums'
 import { useFields } from '@/use/useFields'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
-/**
- * @todo
- */
-
 const { getFieldValidator } = useFields()
 const { createdDateModel, createdDateInputRef, updateModel } = useInjectTableInputs()
 const userDisplayedDate: Ref<string> = ref('')
 const dateTimePicker: Ref<string> = ref('')
 
 /**
- * @todo
+ * Sets the display date based on the model ref, or defaults it to the current date.
  */
 onMounted(() => {
   if (createdDateModel.value) {
@@ -28,7 +24,7 @@ onMounted(() => {
 })
 
 /**
- * @todo
+ * Sets display date and model ref to the current date.
  */
 function onNowDate(): void {
   const now = new Date().toISOString()
@@ -37,7 +33,7 @@ function onNowDate(): void {
 }
 
 /**
- * @todo
+ * If a picker time exists, sets display date and model ref to the picker time.
  */
 function onPickerDateTime(): void {
   if (dateTimePicker.value) {

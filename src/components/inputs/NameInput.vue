@@ -5,15 +5,11 @@ import { Field } from '@/constants/data-enums'
 import { useFields } from '@/use/useFields'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
-/**
- * @todo
- */
-
 const { getFieldValidator } = useFields()
 const { nameModel, nameInputRef, updateModel } = useInjectTableInputs()
 
 /**
- * @todo
+ * Sets the model ref with a default if no value is provided.
  */
 onMounted(() => {
   if (!nameModel.value) {

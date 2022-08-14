@@ -13,42 +13,58 @@ const { confirmDialog } = useSimpleDialogs()
 
 const exportText: Ref<string> = ref('')
 
+/**
+ * Confirm if you want to export your data as a JSON file.
+ */
 function onExport(): void {
   let filename = `export-${new Date().toISOString().split('T')[0]}`
-  if (exportText.value && exportText.value.length > 0) {
+  if (exportText.value && exportText.value.length) {
     filename = exportText.value
   }
   filename += '.json'
 
   confirmDialog(
     'Export',
-    `Export data as file "${filename}"`,
+    `Export the file "${filename}" with your data?`,
     Icon.INFO,
     NotifyColor.INFO,
     async (): Promise<void> => {
       try {
-        const appData = new AppData({
-          examples: await DB.getAll(DexieTable.EXAMPLES),
-          logs: await DB.getAll(DexieTable.LOGS),
-        })
-
-        consoleDebug(appData)
-
-        const fileStatus = exportFile(filename, JSON.stringify(appData), {
-          encoding: 'UTF-8',
-          mimeType: 'application/json',
-        })
-
-        if (fileStatus === true) {
-          consoleDebug('File downloaded succesfully!')
-        } else {
-          throw new Error('Browser denied file download')
-        }
+        await confirmedFileExport(filename)
       } catch (error) {
         log.error('onExport', error)
       }
     }
   )
+}
+
+/**
+ * Exports the tables listed in the function as a JSON file.
+ * @param filename
+ */
+async function confirmedFileExport(filename: string): Promise<void> {
+  /**
+   * @see
+   * ONLY TABLES DEFINED BELOW GET EXPORTED
+   */
+  const appData = new AppData({
+    examples: await DB.getAll(DexieTable.EXAMPLES),
+    exampleRecords: await DB.getAll(DexieTable.EXAMPLE_RECORDS),
+    logs: await DB.getAll(DexieTable.LOGS),
+  })
+
+  consoleDebug(appData)
+
+  const fileStatus = exportFile(filename, JSON.stringify(appData), {
+    encoding: 'UTF-8',
+    mimeType: 'application/json',
+  })
+
+  if (fileStatus === true) {
+    consoleDebug('File downloaded succesfully!')
+  } else {
+    throw new Error('Browser denied file download')
+  }
 }
 </script>
 
@@ -57,6 +73,7 @@ function onExport(): void {
     <template v-slot:before>
       <QBtn label="Export" color="primary" class="q-mr-xs" @click="onExport()" />
     </template>
+
     <template v-slot:after>
       <QIcon :name="Icon.CLOSE" @click.stop="exportText = ''" class="cursor-pointer" />
     </template>

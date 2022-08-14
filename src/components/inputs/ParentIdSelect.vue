@@ -9,9 +9,9 @@ import { useTable } from '@/use/useTable'
 import { useFields } from '@/use/useFields'
 
 /**
- * @todo
+ * Uses the table prop to get access to getRelatedTable.
+ * @param table
  */
-
 const props = defineProps<{ table: DexieTable }>()
 
 const { getFieldValidator } = useFields()
@@ -20,21 +20,21 @@ const { parentIdModel, parentIdInputRef } = useInjectTableInputs()
 const options: Ref<any[]> = ref([])
 
 /**
- * @todo
+ * Sets the select box options with the parent items from the database.
  */
 onMounted(async () => {
   const relatedTable = getRelatedTable(props.table)
 
   if (relatedTable) {
     const relatedTableData = await DB.getAll(relatedTable)
-
+    // Sorts items
     const alphaSortedData = relatedTableData.sort((a: any, b: any) => {
       return a.name.localeCompare(b.name)
     })
-
+    // Builds options with value and label
     options.value = alphaSortedData.map((a: any) => ({
       value: a.id,
-      label: `${a.name} (${truncateString(a.id, 4, '*')})`,
+      label: `${a.name} (${truncateString(a.id, 4, '*')})`, // Truncate id for readability
     }))
   }
 })
