@@ -1,44 +1,44 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { Views, Layouts } from '@/constants/ui-enums'
+import { View, Layout } from '@/constants/ui-enums'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: Views.DASHBOARD,
-      meta: { layout: Layouts.MENU },
-      component: () => import(`../views/${Views.DASHBOARD}.vue`),
+      name: View.DASHBOARD,
+      meta: { layout: Layout.MENU },
+      component: () => import(`../views/${View.DASHBOARD}.vue`),
     },
     {
       path: '/example',
-      name: Views.EXAMPLE,
-      meta: { layout: Layouts.MENU },
-      component: () => import(`../views/${Views.EXAMPLE}.vue`),
+      name: View.EXAMPLE,
+      meta: { layout: Layout.MENU },
+      component: () => import(`../views/${View.EXAMPLE}.vue`),
     },
     {
       path: '/logs',
-      name: Views.LOGS,
-      meta: { layout: Layouts.MENU },
-      component: () => import(`../views/${Views.LOGS}.vue`),
+      name: View.LOGS,
+      meta: { layout: Layout.MENU },
+      component: () => import(`../views/${View.LOGS}.vue`),
     },
     {
       path: '/settings',
-      name: Views.SETTINGS,
-      meta: { layout: Layouts.MENU },
-      component: () => import(`../views/${Views.SETTINGS}.vue`),
+      name: View.SETTINGS,
+      meta: { layout: Layout.MENU },
+      component: () => import(`../views/${View.SETTINGS}.vue`),
     },
     {
       path: '/about',
-      name: Views.ABOUT,
-      meta: { layout: Layouts.MENU },
-      component: () => import(`../views/${Views.ABOUT}.vue`),
+      name: View.ABOUT,
+      meta: { layout: Layout.MENU },
+      component: () => import(`../views/${View.ABOUT}.vue`),
     },
     {
       path: '/:pathMatch(.*)*', // 404 Not Found
-      name: Views.NOT_FOUND,
-      meta: { layout: Layouts.MENU },
-      component: () => import(`../views/${Views.NOT_FOUND}.vue`),
+      name: View.NOT_FOUND,
+      meta: { layout: Layout.MENU },
+      component: () => import(`../views/${View.NOT_FOUND}.vue`),
     },
   ],
 })

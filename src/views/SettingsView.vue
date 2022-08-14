@@ -2,7 +2,7 @@
 import { QPage, QCard, QCardSection, QSeparator, QBtn, QToggle } from 'quasar'
 import { useSettingsStore } from '@/stores/settings'
 import { computed } from 'vue'
-import { Views } from '@/constants/ui-enums'
+import { View } from '@/constants/ui-enums'
 import DefaultsBtn from '@/components/buttons/DefaultsBtn.vue'
 import ImportInput from '@/components/inputs/ImportInput.vue'
 import ExportInput from '@/components/inputs/ExportInput.vue'
@@ -81,7 +81,7 @@ const NOTIFY = computed({
 
             <div class="q-mb-md">View your app logs to troubleshoot errors.</div>
 
-            <QBtn label="View Logs" color="primary" :to="{ name: Views.LOGS }" />
+            <QBtn label="View Logs" color="primary" :to="{ name: View.LOGS }" />
           </div>
         </QCardSection>
 

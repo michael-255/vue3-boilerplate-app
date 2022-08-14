@@ -6,14 +6,9 @@ have a better understanding of how this project is setup.
 ## Todos
 
 - [ ] `Improvements` -> Work from `bp-improvements-refactor` branch
-
-  - [ ] `BaseComponents` mini base components to cleanup larger components
-  - [ ] Convert Luxon date function to normal JS Date function
-    - [ ] Validate that yours works the same!
-
-- [ ] `PORTING` File-by-file transfer from fit-v14 (may not need anything)
+- [ ] `APP` Add comments and descriptions throughout codebase (check file-by-file)
+  - [ ] Add new `log` calls where it would make sense (info and up)
 - [ ] `TESTS` Clean up and build out your tests
-- [ ] `APP` Add comments and description throughout codebase
 - [ ] `README` steps for adding models, fields, and their data table functionality
 - [ ] `README` notes on important changes
 - [ ] `STRETCH` Update `hygen class new`

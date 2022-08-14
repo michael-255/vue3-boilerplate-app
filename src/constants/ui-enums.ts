@@ -46,7 +46,7 @@ export enum Icon {
   HOME = 'home',
 }
 
-export enum Views {
+export enum View {
   DASHBOARD = 'DashboardView',
   ACTIVE = 'ActiveView',
   EXAMPLE = 'ExampleView',
@@ -56,7 +56,7 @@ export enum Views {
   NOT_FOUND = 'NotFoundView',
 }
 
-export enum Layouts {
+export enum Layout {
   DEFAULT = 'DefaultLayout',
   ACTIVE = 'ActiveLayout',
   MENU = 'MenuLayout',

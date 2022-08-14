@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { QBtn, QLayout, QHeader, QToolbar, QToolbarTitle, QPageContainer } from 'quasar'
 import { useRouter } from 'vue-router'
-import { Icon, Views } from '@/constants/ui-enums'
+import { Icon, View } from '@/constants/ui-enums'
 
 const router = useRouter()
 </script>
@@ -10,7 +10,7 @@ const router = useRouter()
   <QLayout elevated view="hHh LpR lff">
     <QHeader bordered class="bg-primary text-white">
       <QToolbar>
-        <QBtn dense flat round :icon="Icon.HOME" @click="router.push({ name: Views.DASHBOARD })" />
+        <QBtn dense flat round :icon="Icon.HOME" @click="router.push({ name: View.DASHBOARD })" />
 
         <QToolbarTitle>Back to Dashboard</QToolbarTitle>
       </QToolbar>

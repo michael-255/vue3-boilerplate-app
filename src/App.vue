@@ -1,28 +1,41 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
-import { defineAsyncComponent, computed, onMounted } from 'vue'
-import { Layouts } from '@/constants/ui-enums'
+import { onMounted, type Ref, ref, watch, markRaw } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
+import { useLogger } from './use/useLogger'
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
 
 const settings = useSettingsStore()
+const { log } = useLogger()
+const route = useRoute()
+
+const layout: Ref<any> = ref(null)
 
 onMounted(async () => {
   await settings.initSettings()
 })
 
-// Get Layout for View based on router meta property
-const route = useRoute()
-const routeLayout = computed(() => route?.meta?.layout)
-// Use route layout, or the default layout
-const layoutComponent = computed(() => {
-  return routeLayout.value
-    ? defineAsyncComponent(() => import(`./layouts/${routeLayout.value}.vue`))
-    : defineAsyncComponent(() => import(`./layouts/${Layouts.DEFAULT}.vue`))
-})
+watch(
+  () => route.meta?.layout as string | undefined,
+  async (metaLayout) => {
+    try {
+      // metaLayout must exist && the imported component
+      const component = metaLayout && (await import(`./layouts/${metaLayout}.vue`))
+      // markRaw to avoid reactivity on component definition
+      // default is the component
+      // Use the default layout if the component is missing
+      layout.value = markRaw(component?.default || DefaultLayout)
+    } catch (error) {
+      layout.value = markRaw(DefaultLayout)
+      log.critical('Route layout watcher', error)
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <template>
-  <component :is="layoutComponent">
+  <component :is="layout">
     <RouterView />
   </component>
 </template>
