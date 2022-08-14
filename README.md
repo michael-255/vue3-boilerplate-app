@@ -5,13 +5,19 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `Improvements` -> Work from `bp-improvements-refactor` branch
 - [ ] `APP` Add comments and descriptions throughout codebase (check file-by-file)
   - [ ] Add new `log` calls where it would make sense (info and up)
 - [ ] `TESTS` Clean up and build out your tests
 - [ ] `README` steps for adding models, fields, and their data table functionality
 - [ ] `README` notes on important changes
 - [ ] `STRETCH` Update `hygen class new`
+
+## Next steps
+
+- [ ] `Examples`
+
+  - [ ] `Rounds` Similar to Exercise sets (multiple data points)
+  - [ ] `Reports` Find a way to handle those extra data points on the charts
 
 ```bash
 ###############################################################################
