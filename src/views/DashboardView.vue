@@ -1,41 +1,6 @@
 <script setup lang="ts">
-import { QBtn } from 'quasar'
-import { useLogger } from '@/use/useLogger'
-import DefaultsBtn from '@/components/buttons/DefaultsBtn.vue'
-
-const { log } = useLogger()
-
-/**
- * @deprecate
- * Temp function for generating test logs in the database.
- */
-function generateTestLogs(): void {
-  log.debug('This is a Debug Log', {
-    name: 'generateTestLogs:Debug',
-    message: 'Debug message',
-    stack: 'Debug stack',
-  })
-  log.info('This is a Info Log', {
-    name: 'generateTestLogs:Info',
-    message: 'Info message',
-    stack: 'Info stack',
-  })
-  log.warn('This is a Warning Log', {
-    name: 'generateTestLogs:Warning',
-    message: 'Warning message',
-    stack: 'Warning stack',
-  })
-  log.error('This is a Error Log', {
-    name: 'generateTestLogs:Error',
-    message: 'Error message',
-    stack: 'Error stack',
-  })
-  log.critical('This is a Critical Log', {
-    name: 'generateTestLogs:Critical',
-    message: 'Critical message',
-    stack: 'Critical stack',
-  })
-}
+import DefaultsBtn from '@/components/settings/DefaultsBtn.vue'
+import TestLogsBtn from '@/components/settings/TestLogsBtn.vue'
 </script>
 
 <template>
@@ -61,7 +26,7 @@ function generateTestLogs(): void {
         </QCardSection>
 
         <QCardActions align="left">
-          <QBtn class="q-my-sm" color="primary" label="Generate Logs" @click="generateTestLogs()" />
+          <TestLogsBtn />
           <DefaultsBtn />
         </QCardActions>
       </QCard>

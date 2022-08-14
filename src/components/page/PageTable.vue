@@ -14,6 +14,9 @@ import PageCreate from '@/components/page/PageCreate.vue'
 import PageUpdate from '@/components/page/PageUpdate.vue'
 import PageReport from '@/components/page/PageReport.vue'
 
+/**
+ * @todo
+ */
 const props = defineProps<{ table: DexieTable }>()
 
 const { log } = useLogger()
@@ -40,6 +43,9 @@ const selectedItem: Ref<{ [x: string]: any }> = ref({})
 const selectedOperation: Ref<Operation> = ref(Operation.NO_OP)
 const selectedLabel: Ref<string> = ref('')
 
+/**
+ * @todo
+ */
 onMounted(async () => {
   await updateRows()
   columns.value = getColumns(props.table)
@@ -47,6 +53,9 @@ onMounted(async () => {
   visibleColumns.value = getVisibleColumns(props.table)
 })
 
+/**
+ * @todo
+ */
 function updateSelectedRefs({
   operation = Operation.NO_OP,
   item = {},
@@ -63,6 +72,9 @@ function updateSelectedRefs({
   }
 }
 
+/**
+ * @todo
+ */
 async function updateRows(): Promise<void> {
   const { getRows } = getActions(props.table)
   if (getRows) {
@@ -72,15 +84,24 @@ async function updateRows(): Promise<void> {
   }
 }
 
+/**
+ * @todo
+ */
 async function updateDialog(event: any): Promise<void> {
   await updateRows()
   updateSelectedRefs({ dialog: !!event })
 }
 
+/**
+ * @todo
+ */
 async function onCreate(): Promise<void> {
   updateSelectedRefs({ operation: Operation.CREATE, label: getSingularLabel(props.table) })
 }
 
+/**
+ * @todo
+ */
 async function onEdit(id: string): Promise<void> {
   updateSelectedRefs({
     operation: Operation.UPDATE,
@@ -89,6 +110,9 @@ async function onEdit(id: string): Promise<void> {
   })
 }
 
+/**
+ * @todo
+ */
 async function onReport(id: string): Promise<void> {
   updateSelectedRefs({
     operation: Operation.REPORT,
@@ -97,6 +121,9 @@ async function onReport(id: string): Promise<void> {
   })
 }
 
+/**
+ * @todo
+ */
 async function onInspect(id: string): Promise<void> {
   updateSelectedRefs({
     operation: Operation.INSPECT,
@@ -105,6 +132,9 @@ async function onInspect(id: string): Promise<void> {
   })
 }
 
+/**
+ * @todo
+ */
 async function onClear(): Promise<void> {
   if (isSupported(props.table, Operation.CLEAR)) {
     confirmDialog(
@@ -126,6 +156,9 @@ async function onClear(): Promise<void> {
   }
 }
 
+/**
+ * @todo
+ */
 async function onDelete(id: string): Promise<void> {
   if (isSupported(props.table, Operation.DELETE)) {
     confirmDialog(

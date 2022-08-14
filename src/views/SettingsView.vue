@@ -1,32 +1,12 @@
 <script setup lang="ts">
-import { QPage, QCard, QCardSection, QSeparator, QBtn, QToggle } from 'quasar'
-import { useSettingsStore } from '@/stores/settings'
-import { computed } from 'vue'
+import { QPage, QCard, QCardSection, QSeparator, QBtn } from 'quasar'
 import { View } from '@/constants/ui-enums'
-import DefaultsBtn from '@/components/buttons/DefaultsBtn.vue'
-import ImportInput from '@/components/inputs/ImportInput.vue'
-import ExportInput from '@/components/inputs/ExportInput.vue'
-import ClearAllBtn from '@/components/buttons/ClearAllBtn.vue'
-
-const settings = useSettingsStore()
-
-const DEBUG = computed({
-  get() {
-    return settings.DEBUG
-  },
-  async set(bool: boolean) {
-    await settings.setDEBUG(bool)
-  },
-})
-
-const NOTIFY = computed({
-  get() {
-    return settings.NOTIFY
-  },
-  async set(bool: boolean) {
-    await settings.setNOTIFY(bool)
-  },
-})
+import SettingToggles from '@/components/settings/SettingToggles.vue'
+import TestLogsBtn from '@/components/settings/TestLogsBtn.vue'
+import DefaultsBtn from '@/components/settings/DefaultsBtn.vue'
+import ImportInput from '@/components/settings/ImportInput.vue'
+import ExportInput from '@/components/settings/ExportInput.vue'
+import ClearAllBtn from '@/components/settings/ClearAllBtn.vue'
 </script>
 
 <template>
@@ -45,8 +25,9 @@ const NOTIFY = computed({
             allow you to see low priority notifications on screen.
           </div>
 
-          <div><QToggle v-model="DEBUG" />Debug</div>
-          <div><QToggle v-model="NOTIFY" />Notify</div>
+          <SettingToggles />
+
+          <TestLogsBtn class="q-mt-sm" />
         </QCardSection>
 
         <QSeparator />

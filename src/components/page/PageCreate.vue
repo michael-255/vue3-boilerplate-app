@@ -8,9 +8,9 @@ import { useTable } from '@/use/useTable'
 import { useFields } from '@/use/useFields'
 
 /**
- * Component for handling table item Creates
+ * Component for handling table item Creates using Provide/Inject for the inputs.
+ * @param table
  */
-
 const props = defineProps<{ table: DexieTable }>()
 const emits = defineEmits<{ (eventName: 'on-create'): void }>()
 
@@ -30,8 +30,15 @@ const {
   areExampleRecordInputsValid,
 } = useProvideTableInputs()
 
+/**
+ * Determines how the create operation will proceed based on validation results.
+ */
 function onCreate() {
   try {
+    /**
+     * @see
+     * MUST DEFINE TABLES BELOW
+     */
     const areInputsValid = {
       [DexieTable.EXAMPLES]: areExampleInputsValid(),
       [DexieTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
@@ -49,15 +56,21 @@ function onCreate() {
   }
 }
 
+/**
+ * Dismiss dialog due to validation failure.
+ */
 function createDismissDialog(): void {
   dismissDialog(
     'Validation Failed',
-    'One or more inputs have invalid entries.',
+    'Unable to create item. Ensure all of the inputs have valid entries.',
     Icon.WARN,
     NotifyColor.WARN
   )
 }
 
+/**
+ * Confirm that you want to create the item with the current values entered into the input models.
+ */
 function createConfirmDialog(): void {
   confirmDialog(
     'Create',
@@ -67,6 +80,10 @@ function createConfirmDialog(): void {
     async () => {
       const { createRow } = getActions(props.table)
       if (createRow) {
+        /**
+         * @see
+         * MUST ADD NEW INPUT MODELS HERE (Provide/Inject)
+         */
         await createRow({
           id: idModel.value,
           createdDate: createdDateModel.value,
@@ -77,7 +94,7 @@ function createConfirmDialog(): void {
         })
         emits('on-create')
       } else {
-        log.critical('Missing createRow action', { name: 'PageCreate:createConfirmDialog' })
+        log.error('Missing createRow action', { name: 'PageCreate:createConfirmDialog' })
       }
     }
   )
@@ -85,6 +102,7 @@ function createConfirmDialog(): void {
 </script>
 
 <template>
+  <!-- Dynamically load components for each input -->
   <div v-for="(field, i) in getFields(table)" :key="i">
     <component v-if="field === Field.PARENT_ID" :is="getFieldComponent(field)" :table="table" />
     <component v-else :is="getFieldComponent(field)" />

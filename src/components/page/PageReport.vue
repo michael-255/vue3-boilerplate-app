@@ -8,8 +8,9 @@ import { useTable } from '@/use/useTable'
 
 /**
  * Component for handling reports for each supported table.
+ * @param table
+ * @param selectedItem Needed for the name and id
  */
-
 const props = defineProps<{
   table: DexieTable
   selectedItem: { [x: string]: any }
@@ -18,7 +19,7 @@ const props = defineProps<{
 const { log } = useLogger()
 const { getActions } = useTable()
 
-// Report
+// REPORT
 Chart.register(...registerables)
 
 const firstDate: Ref<string> = ref('')
@@ -27,6 +28,7 @@ const lastDate: Ref<string> = ref('')
 const datasetLabels: Ref<string[]> = ref([])
 const datasetData: Ref<number[]> = ref([])
 
+// REPORT OPTIONS
 const chartOptions: { [x: string]: any } = {
   responsive: true,
   fill: true,
@@ -42,6 +44,7 @@ const chartOptions: { [x: string]: any } = {
   },
 }
 
+// REPORT DATA
 const chartData = computed<any>(() => ({
   labels: datasetLabels.value,
   datasets: [
@@ -53,21 +56,32 @@ const chartData = computed<any>(() => ({
   ],
 }))
 
+/**
+ * Report action called on mount to generate the datasets.
+ * @todo
+ * Will likely need a table selection object here in the future for different table reports.
+ */
 onMounted(async () => {
   try {
-    const dataset = await getActions(props.table).generateReport(props.selectedItem.id)
-    datasetLabels.value = dataset.labels
-    datasetData.value = dataset.data
-    firstDate.value = dataset.firstDate
-    lastDate.value = dataset.lastDate
+    const { generateReport } = getActions(props.table)
+    if (generateReport) {
+      const dataset = await generateReport(props.selectedItem.id)
+      datasetLabels.value = dataset.labels
+      datasetData.value = dataset.data
+      firstDate.value = dataset.firstDate
+      lastDate.value = dataset.lastDate
+    } else {
+      log.error('Missing generateReport action', { name: 'PageReport:onMounted' })
+    }
   } catch (error) {
-    log.critical('PageReport:onMounted', error)
+    log.error('PageReport:onMounted', error)
   }
 })
 </script>
 
 <template>
   <LineChart :options="chartOptions" :chartData="chartData" />
+  <!-- Dates below report -->
   <div class="q-mb-sm">
     <div class="text-subtitle1 text-weight-bold">First Record Date</div>
     <div>{{ firstDate || '-' }}</div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DexieTable } from '@/constants/data-enums.js'
+import { DexieTable, Field } from '@/constants/data-enums.js'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { onMounted } from 'vue'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
@@ -9,9 +9,10 @@ import { useTable } from '@/use/useTable'
 import { useFields } from '@/use/useFields'
 
 /**
- * Component for handling table item Updates
+ * Component for handling table item Updates using Provide/Inject for the inputs.
+ * @param table
+ * @param selectedItem Row selected in the table
  */
-
 const props = defineProps<{
   table: DexieTable
   selectedItem: { [x: string]: any }
@@ -34,6 +35,9 @@ const {
   areExampleRecordInputsValid,
 } = useProvideTableInputs()
 
+/**
+ * Sets the inputs models with the current values from the selected row in the table.
+ */
 onMounted(async () => {
   const { id, createdDate, name, description, parentId, value } = props.selectedItem
   idModel.value = id
@@ -44,8 +48,15 @@ onMounted(async () => {
   valueModel.value = value
 })
 
+/**
+ * Determines how the update operation will proceed based on validation results.
+ */
 function onUpdate() {
   try {
+    /**
+     * @see
+     * MUST DEFINE TABLES BELOW
+     */
     const areInputsValid = {
       [DexieTable.EXAMPLES]: areExampleInputsValid(),
       [DexieTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
@@ -59,19 +70,25 @@ function onUpdate() {
       updateConfirmDialog()
     }
   } catch (error) {
-    log.error('onUpdate', error)
+    log.error('PageUpdate:onUpdate', error)
   }
 }
 
+/**
+ * Dismiss dialog due to validation failure.
+ */
 function updateDismissDialog(): void {
   dismissDialog(
     'Validation Failed',
-    'One or more inputs have invalid entries.',
+    'Unable to update item. Ensure all of the inputs have valid entries.',
     Icon.WARN,
     NotifyColor.WARN
   )
 }
 
+/**
+ * Confirm that you want to update the item with the current values entered into the input models.
+ */
 function updateConfirmDialog(): void {
   confirmDialog(
     'Update',
@@ -81,6 +98,10 @@ function updateConfirmDialog(): void {
     async () => {
       const { updateRow } = getActions(props.table)
       if (updateRow) {
+        /**
+         * @see
+         * MUST ADD NEW INPUT MODELS HERE (Provide/Inject)
+         */
         await updateRow({
           originalId: props.selectedItem.id,
           id: idModel.value,
@@ -92,7 +113,7 @@ function updateConfirmDialog(): void {
         })
         emits('on-update')
       } else {
-        log.critical('Missing updateRow action', { name: 'PageUpdate:updateConfirmDialog' })
+        log.error('Missing updateRow action', { name: 'PageUpdate:updateConfirmDialog' })
       }
     }
   )
@@ -100,8 +121,10 @@ function updateConfirmDialog(): void {
 </script>
 
 <template>
+  <!-- Dynamically load components for each input -->
   <div v-for="(field, i) in getFields(table)" :key="i">
-    <component :is="getFieldComponent(field)" :table="table" />
+    <component v-if="field === Field.PARENT_ID" :is="getFieldComponent(field)" :table="table" />
+    <component v-else :is="getFieldComponent(field)" />
   </div>
 
   <QBtn

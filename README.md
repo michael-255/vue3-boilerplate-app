@@ -6,7 +6,7 @@ have a better understanding of how this project is setup.
 ## Todos
 
 - [ ] `APP` Add comments and descriptions throughout codebase (check file-by-file)
-  - [ ] `POSITION` left off at `~/src/components/page` ---------------------------------------------
+  - [ ] `POSITION` === `PageTable`
   - [ ] Add new `log` calls where it would make sense (info and up)
 - [ ] `TESTS` Clean up and build out your tests
 - [ ] `App Manifest` splash page

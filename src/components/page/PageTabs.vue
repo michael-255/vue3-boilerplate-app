@@ -3,6 +3,13 @@ import { QSeparator, QTabs, QTab, QTabPanels, QTabPanel } from 'quasar'
 import type { Icon } from '@/constants/ui-enums'
 import { ref } from 'vue'
 
+/**
+ * Two simple tabs with slots for tab content.
+ * @param primaryName First tab name
+ * @param primaryIcon First tab icon
+ * @param secondaryName Second tab name
+ * @param secondaryIcon Second tab icon
+ */
 const props = defineProps<{
   primaryName: string
   primaryIcon: Icon

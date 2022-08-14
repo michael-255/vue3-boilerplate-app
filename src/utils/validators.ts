@@ -29,7 +29,7 @@ export function isValidNumber(num: number): boolean {
 }
 
 export function isRequiredNumber(num: number): boolean {
-  return isRequired(num) && isValidNumber(num)
+  return isValidNumber(num)
 }
 
 export function isOptionalNumber(num: number | undefined): boolean {
