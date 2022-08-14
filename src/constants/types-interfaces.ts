@@ -10,11 +10,11 @@ export type ColumnProps = {
   format: (val: any) => any
 }
 
-export type ActionData = { [x: string]: any }
+export type DataObject = { [x: string]: any }
 
 export type TableActions = {
   getRows?: () => Promise<any[]>
-  createRow?: (x: ActionData) => any
-  updateRow?: (x: ActionData) => any
+  createRow?: (x: DataObject) => any
+  updateRow?: (x: DataObject) => any
   generateReport?: (id: string) => any
 }

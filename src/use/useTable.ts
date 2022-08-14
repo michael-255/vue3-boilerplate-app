@@ -1,4 +1,4 @@
-import type { ColumnProps, ActionData, TableActions } from '@/constants/types-interfaces'
+import type { ColumnProps, DataObject, TableActions } from '@/constants/types-interfaces'
 import { DexieTable, Field, Operation } from '@/constants/data-enums'
 import { Example } from '@/models/Example'
 import { ExampleRecord } from '@/models/ExampleRecord'
@@ -88,7 +88,7 @@ export function useTable() {
     return {
       [DexieTable.EXAMPLES]: {
         getRows: async () => await DB.getAll(table),
-        createRow: async (data: ActionData) => {
+        createRow: async (data: DataObject) => {
           await DB.add(
             DexieTable.EXAMPLES,
             new Example({
@@ -99,7 +99,7 @@ export function useTable() {
             })
           )
         },
-        updateRow: async (data: ActionData) => {
+        updateRow: async (data: DataObject) => {
           await DB.updateById(DexieTable.EXAMPLES, data.originalId, {
             id: data.id,
             createdDate: data.createdDate,
@@ -121,7 +121,7 @@ export function useTable() {
       },
       [DexieTable.EXAMPLE_RECORDS]: {
         getRows: async () => await DB.getAll(table),
-        createRow: async (data: ActionData) => {
+        createRow: async (data: DataObject) => {
           await DB.add(
             DexieTable.EXAMPLE_RECORDS,
             new ExampleRecord({
@@ -132,7 +132,7 @@ export function useTable() {
             })
           )
         },
-        updateRow: async (data: ActionData) => {
+        updateRow: async (data: DataObject) => {
           await DB.updateById(DexieTable.EXAMPLE_RECORDS, data.originalId, {
             id: data.id,
             createdDate: data.createdDate,

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { DexieTable } from '@/constants/data-enums.js'
+import type { DataObject } from '@/constants/types-interfaces'
 import { onMounted, computed, ref, type Ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
 import { LineChart } from 'vue-chart-3'
@@ -9,11 +10,11 @@ import { useTable } from '@/use/useTable'
 /**
  * Component for handling reports for each supported table.
  * @param table
- * @param selectedItem Needed for the name and id
+ * @param item Needed for the name and id
  */
 const props = defineProps<{
   table: DexieTable
-  selectedItem: { [x: string]: any }
+  item: DataObject | undefined
 }>()
 
 const { log } = useLogger()
@@ -39,7 +40,7 @@ const chartOptions: { [x: string]: any } = {
     },
     title: {
       display: true,
-      text: props.selectedItem.name,
+      text: props.item?.name,
     },
   },
 }
@@ -65,7 +66,7 @@ onMounted(async () => {
   try {
     const { generateReport } = getActions(props.table)
     if (generateReport) {
-      const dataset = await generateReport(props.selectedItem.id)
+      const dataset = await generateReport(props.item?.id)
       datasetLabels.value = dataset.labels
       datasetData.value = dataset.data
       firstDate.value = dataset.firstDate

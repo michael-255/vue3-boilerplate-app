@@ -3,7 +3,7 @@ import { QSelect, QInput, QIcon } from 'quasar'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { type DexieTable, Operation, Field } from '@/constants/data-enums'
 import { type Ref, ref, onMounted } from 'vue'
-import type { ActionData } from '@/constants/types-interfaces'
+import type { DataObject } from '@/constants/types-interfaces'
 import { DB } from '@/services/LocalDatabase'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
@@ -15,7 +15,8 @@ import PageUpdate from '@/components/page/PageUpdate.vue'
 import PageReport from '@/components/page/PageReport.vue'
 
 /**
- * @todo
+ * Component allows viewing of table data and actions on that data.
+ * @param table
  */
 const props = defineProps<{ table: DexieTable }>()
 
@@ -31,49 +32,32 @@ const {
   isSupported,
 } = useTable()
 
+// Page Refs
 const searchFilter: Ref<string> = ref('')
-// Table Entity Refs
-const rows: Ref<ActionData[]> = ref([])
+// Table Refs
+const rows: Ref<DataObject[]> = ref([])
 const columns: Ref<any[]> = ref([])
 const columnOptions: Ref<any[]> = ref([])
 const visibleColumns: Ref<Field[]> = ref([])
-// Selected Row (Page Dialog)
+// Dialog Refs
 const pageDialog: Ref<boolean> = ref(false)
-const selectedItem: Ref<{ [x: string]: any }> = ref({})
-const selectedOperation: Ref<Operation> = ref(Operation.NO_OP)
-const selectedLabel: Ref<string> = ref('')
+const dialogItem: Ref<DataObject | undefined> = ref({})
+const dialogOperation: Ref<Operation> = ref(Operation.NO_OP)
+const dialogLabel: Ref<string> = ref('')
 
 /**
- * @todo
+ * Sets table properties and gets the latest data.
  */
 onMounted(async () => {
-  await updateRows()
   columns.value = getColumns(props.table)
   columnOptions.value = getColumnOptions(props.table)
   visibleColumns.value = getVisibleColumns(props.table)
+  dialogLabel.value = getSingularLabel(props.table)
+  await updateRows()
 })
 
 /**
- * @todo
- */
-function updateSelectedRefs({
-  operation = Operation.NO_OP,
-  item = {},
-  label = '',
-  dialog = true, // Open the page dialog by default
-} = {}): void {
-  if (isSupported(props.table, operation) || operation === Operation.NO_OP) {
-    selectedItem.value = item
-    selectedOperation.value = operation
-    selectedLabel.value = label
-    pageDialog.value = dialog
-  } else {
-    log.warn(`${operation} not supported for ${getPluralLabel(props.table)} table`)
-  }
-}
-
-/**
- * @todo
+ * Loads the latest data into the data table rows.
  */
 async function updateRows(): Promise<void> {
   const { getRows } = getActions(props.table)
@@ -85,55 +69,55 @@ async function updateRows(): Promise<void> {
 }
 
 /**
- * @todo
+ * Update dialog event resets page dialog refs and sets dialog to casted boolean of event result.
+ * @param event
  */
 async function updateDialog(event: any): Promise<void> {
   await updateRows()
-  updateSelectedRefs({ dialog: !!event })
+  dialogItem.value = {}
+  dialogOperation.value = Operation.NO_OP
+  dialogLabel.value = ''
+  pageDialog.value = !!event // Always last so everything else is updated before dialog changes
 }
 
 /**
- * @todo
+ * Create row action opens the dialog with the settings below.
  */
 async function onCreate(): Promise<void> {
-  updateSelectedRefs({ operation: Operation.CREATE, label: getSingularLabel(props.table) })
+  dialogItem.value = {}
+  dialogOperation.value = Operation.CREATE
+  pageDialog.value = true
 }
 
 /**
- * @todo
+ * Update row action opens the dialog with the settings below.
  */
-async function onEdit(id: string): Promise<void> {
-  updateSelectedRefs({
-    operation: Operation.UPDATE,
-    item: await DB.getById(props.table, id),
-    label: getSingularLabel(props.table),
-  })
+async function onUpdate(id: string): Promise<void> {
+  dialogItem.value = await DB.getById(props.table, id)
+  dialogOperation.value = Operation.UPDATE
+  pageDialog.value = true
 }
 
 /**
- * @todo
+ * Report row action opens the dialog with the settings below.
  */
 async function onReport(id: string): Promise<void> {
-  updateSelectedRefs({
-    operation: Operation.REPORT,
-    item: await DB.getById(props.table, id),
-    label: getSingularLabel(props.table),
-  })
+  dialogItem.value = await DB.getById(props.table, id)
+  dialogOperation.value = Operation.REPORT
+  pageDialog.value = true
 }
 
 /**
- * @todo
+ * Inspect row action opens the dialog with the settings below.
  */
 async function onInspect(id: string): Promise<void> {
-  updateSelectedRefs({
-    operation: Operation.INSPECT,
-    item: await DB.getById(props.table, id),
-    label: getSingularLabel(props.table),
-  })
+  dialogItem.value = await DB.getById(props.table, id)
+  dialogOperation.value = Operation.INSPECT
+  pageDialog.value = true
 }
 
 /**
- * @todo
+ * Confirm clearing all data in this table.
  */
 async function onClear(): Promise<void> {
   if (isSupported(props.table, Operation.CLEAR)) {
@@ -157,7 +141,7 @@ async function onClear(): Promise<void> {
 }
 
 /**
- * @todo
+ * Confirm deleting the clicked item.
  */
 async function onDelete(id: string): Promise<void> {
   if (isSupported(props.table, Operation.DELETE)) {
@@ -297,7 +281,7 @@ async function onDelete(id: string): Promise<void> {
             dense
             class="q-ml-xs"
             color="orange-9"
-            @click="onEdit(props.cols[0].value)"
+            @click="onUpdate(props.cols[0].value)"
             :icon="Icon.EDIT"
           />
           <!-- Delete Btn -->
@@ -319,30 +303,31 @@ async function onDelete(id: string): Promise<void> {
   <!-- Fullscreen Dialog -->
   <PageDialog
     :dialog="pageDialog"
-    :operation="selectedOperation"
-    :label="selectedLabel"
+    :operation="dialogOperation"
+    :label="dialogLabel"
     @update:dialog="updateDialog($event)"
   >
     <PageInspect
-      v-if="selectedOperation === Operation.INSPECT"
-      :selectedItem="selectedItem"
+      v-if="dialogOperation === Operation.INSPECT"
+      :item="dialogItem"
       :columns="columns"
     />
     <PageCreate
-      v-if="selectedOperation === Operation.CREATE"
+      v-else-if="dialogOperation === Operation.CREATE"
       :table="table"
       @on-create="updateDialog(false)"
     />
     <PageUpdate
-      v-if="selectedOperation === Operation.UPDATE"
+      v-else-if="dialogOperation === Operation.UPDATE"
       :table="table"
-      :selectedItem="selectedItem"
+      :item="dialogItem"
       @on-update="updateDialog(false)"
     />
     <PageReport
-      v-if="selectedOperation === Operation.REPORT"
+      v-else-if="dialogOperation === Operation.REPORT"
       :table="table"
-      :selectedItem="selectedItem"
+      :item="dialogItem"
     />
+    <div v-else>Selected operation is not supported</div>
   </PageDialog>
 </template>

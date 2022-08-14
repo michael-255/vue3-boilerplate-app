@@ -1,17 +1,18 @@
 <script setup lang="ts">
+import type { DataObject } from '@/constants/types-interfaces'
 import { onMounted, type Ref, ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
 
 /**
  * Component displays each data field and value.
- * @param selectedItem Row selected from table
+ * @param item Row selected from table
  * @param columns Needed to get each field name and label
  */
 const props = defineProps<{
-  selectedItem: any
+  item: DataObject | undefined
   columns: any[]
 }>()
-const inspectedItem: Ref<{ label: string; value: any }[]> = ref([])
+const inspectedItem: Ref<DataObject[]> = ref([])
 
 const { log } = useLogger()
 
@@ -20,12 +21,16 @@ const { log } = useLogger()
  */
 onMounted(async () => {
   try {
-    inspectedItem.value = Object.keys(props.selectedItem).map((key) => {
-      return {
-        label: props.columns.find((i) => i.name === key).label,
-        value: props.selectedItem[key] || '-',
-      }
-    })
+    if (props.item) {
+      inspectedItem.value = Object.keys(props.item).map((key) => {
+        return {
+          label: props.columns.find((i) => i.name === key).label,
+          value: props.item?.[key] || '-',
+        }
+      })
+    } else {
+      log.error('Item is undefined', { name: 'PageInspect:onMounted' })
+    }
   } catch (error) {
     log.error('PageInspect:onMounted', error)
   }

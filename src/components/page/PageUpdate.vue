@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { DexieTable, Field } from '@/constants/data-enums.js'
+import type { DataObject } from '@/constants/types-interfaces'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { onMounted } from 'vue'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
@@ -11,11 +12,11 @@ import { useFields } from '@/use/useFields'
 /**
  * Component for handling table item Updates using Provide/Inject for the inputs.
  * @param table
- * @param selectedItem Row selected in the table
+ * @param item Row selected in the table
  */
 const props = defineProps<{
   table: DexieTable
-  selectedItem: { [x: string]: any }
+  item: DataObject | undefined
 }>()
 const emits = defineEmits<{ (eventName: 'on-update'): void }>()
 
@@ -39,13 +40,17 @@ const {
  * Sets the inputs models with the current values from the selected row in the table.
  */
 onMounted(async () => {
-  const { id, createdDate, name, description, parentId, value } = props.selectedItem
-  idModel.value = id
-  createdDateModel.value = createdDate
-  nameModel.value = name
-  descriptionModel.value = description
-  parentIdModel.value = parentId
-  valueModel.value = value
+  if (props.item) {
+    const { id, createdDate, name, description, parentId, value } = props.item
+    idModel.value = id
+    createdDateModel.value = createdDate
+    nameModel.value = name
+    descriptionModel.value = description
+    parentIdModel.value = parentId
+    valueModel.value = value
+  } else {
+    log.error('Item is undefined', { name: 'PageUpdate:onMounted' })
+  }
 })
 
 /**
@@ -103,7 +108,7 @@ function updateConfirmDialog(): void {
          * MUST ADD NEW INPUT MODELS HERE (Provide/Inject)
          */
         await updateRow({
-          originalId: props.selectedItem.id,
+          originalId: props.item?.id,
           id: idModel.value,
           createdDate: createdDateModel.value,
           name: nameModel.value,
