@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import * as datetime from '../date-time'
+import * as datetime from '@/utils/date-time'
 
 describe('getOrdinalString', () => {
   test('should throw an error for a non-integar parameter', () => {

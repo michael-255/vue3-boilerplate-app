@@ -14,7 +14,6 @@ export enum Field {
   NAME = 'name',
   DESCRIPTION = 'description',
   PARENT_ID = 'parentId',
-  NOTES = 'notes',
   VALUE = 'value',
   SEVERITY = 'severity',
   DETAILS = 'details',

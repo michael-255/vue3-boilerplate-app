@@ -1,5 +1,5 @@
 import { describe, test, expect, spyOn, vi } from 'vitest'
-import * as common from '../common'
+import * as common from '@/utils/common'
 
 describe('downloadFile', () => {
   test('should be a function', () => {
@@ -48,5 +48,15 @@ describe('isDataInArray', () => {
     expect(common.isDataInArray([{}])).toBe(true)
     expect(common.isDataInArray([[]])).toBe(true)
     expect(common.isDataInArray(['test'])).toBe(true)
+  })
+})
+
+describe('truncateString', () => {
+  test('should return a correctly truncated string', () => {
+    const string = 'abcdefghijklmnopqrstuvwxyz'
+    expect(common.truncateString(string)).toBe(string)
+    expect(common.truncateString(string, 3, '...')).toBe('abc...')
+    expect(common.truncateString(string, 5, '*')).toBe('abcde*')
+    expect(common.truncateString(null)).toBe('-')
   })
 })

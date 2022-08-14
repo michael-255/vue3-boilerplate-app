@@ -4,9 +4,9 @@ import {
   isIdValid,
   isRequiredDateValid,
   isShortTextValid,
-  isTextValid,
-  isRequiredNumber,
-  isRequired,
+  isLongTextValid,
+  isValidNumber,
+  isDefined,
 } from '@/utils/validators'
 
 /**
@@ -26,11 +26,10 @@ export function useFields(): { [x: string]: any } {
       [Field.NAME]: (val: string) =>
         isShortTextValid(val) || 'Name must be between 1 and 40 characters',
       [Field.DESCRIPTION]: (val: string) =>
-        isTextValid(val) || 'Description is limited to 500 characters',
-      [Field.PARENT_ID]: (val: string) => isRequired(val) || '* Required',
+        isLongTextValid(val) || 'Description is limited to 500 characters',
+      [Field.PARENT_ID]: (val: string) => isDefined(val) || '* Required',
       [Field.VALUE]: (val: number) =>
-        isRequiredNumber(val) || 'Positive number not exceeding 999,999,999 is required',
-      [Field.NOTES]: isTextValid,
+        isValidNumber(val) || 'Positive number not exceeding 999,999,999 is required',
     }[field as string] // As string so fields without a value will return undefined
   }
 
@@ -53,7 +52,6 @@ export function useFields(): { [x: string]: any } {
         () => import('@/components/inputs/ParentIdSelect.vue')
       ),
       [Field.VALUE]: defineAsyncComponent(() => import('@/components/inputs/ValueInput.vue')),
-      [Field.NOTES]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
     }[field as string] // As string so fields without a value will return undefined
   }
 

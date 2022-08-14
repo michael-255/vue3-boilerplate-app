@@ -12,40 +12,31 @@ export function isBoolean(bool: any): boolean {
   return bool === true || bool === false
 }
 
-export function isRequired(value: any): boolean {
-  if (Array.isArray(value)) {
+export function isDefined(value: any): boolean {
+  if (value !== null && value !== undefined && value !== '') {
     return true
-  } else if (isObject(value)) {
-    return true
-  } else if (isBoolean(value)) {
-    return true
-  } else {
-    return !!value // Other primitives
   }
+  return false
 }
 
 export function isValidNumber(num: number): boolean {
   return num >= 0 && num <= 999999999 && typeof num === 'number' && isFinite(num)
 }
 
-export function isRequiredNumber(num: number): boolean {
-  return isValidNumber(num)
-}
-
 export function isOptionalNumber(num: number | undefined): boolean {
   return num === undefined || isValidNumber(num)
 }
 
-export function isBlank(value: any): boolean {
+export function isBlank(value: string): boolean {
   return value === ''
 }
 
 export function isIdValid(id: string): boolean {
-  return isRequired(id) && ValidationRegex.ShortText.test(id)
+  return isDefined(id) && ValidationRegex.ShortText.test(id)
 }
 
 export function isRequiredDateValid(date: string): boolean {
-  return isRequired(date) && ValidationRegex.Date.test(date)
+  return isDefined(date) && ValidationRegex.Date.test(date)
 }
 
 export function isOptionalDateValid(date: string): boolean {
@@ -53,9 +44,9 @@ export function isOptionalDateValid(date: string): boolean {
 }
 
 export function isShortTextValid(name: string): boolean {
-  return isRequired(name) && ValidationRegex.ShortText.test(name)
+  return isDefined(name) && ValidationRegex.ShortText.test(name)
 }
 
-export function isTextValid(text: string): boolean {
+export function isLongTextValid(text: string): boolean {
   return isBlank(text) || ValidationRegex.LongText.test(text)
 }

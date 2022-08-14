@@ -10,10 +10,8 @@ have a better understanding of how this project is setup.
   - [x] `Models`
   - [x] `Helpers`
   - [x] `Stores`
-  - [ ] `Utils`
+  - [x] `Utils`
   - [ ] `Use`
-  - [ ] `Components???`
-  - [ ] `Router???`
 - [ ] `App Manifest` splash page
 - [ ] `README` steps for adding models, fields, and their data table functionality
 - [ ] `README` notes on important changes
