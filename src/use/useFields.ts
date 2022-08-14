@@ -28,6 +28,7 @@ export function useFields(): { [x: string]: any } {
       [Field.DESCRIPTION]: defineAsyncComponent(
         () => import('@/components/inputs/DescriptionInput.vue')
       ),
+      [Field.ROUNDS]: defineAsyncComponent(() => import('@/components/inputs/RoundsInput.vue')),
       [Field.PARENT_ID]: defineAsyncComponent(
         () => import('@/components/inputs/ParentIdSelect.vue')
       ),
@@ -49,6 +50,7 @@ export function useFields(): { [x: string]: any } {
         isShortTextValid(val) || 'Name must be between 1 and 40 characters',
       [Field.DESCRIPTION]: (val: string) =>
         isLongTextValid(val) || 'Description is limited to 500 characters',
+      [Field.ROUNDS]: (val: string) => isDefined(val) || 'Not Implemented <--------------------',
       [Field.PARENT_ID]: (val: string) => isDefined(val) || '* Required',
       [Field.VALUE]: (val: number) =>
         isValidNumber(val) || 'Positive number not exceeding 999,999,999 is required',

@@ -3,9 +3,15 @@ import { AppTable, Field, Operation } from '@/constants/data-enums'
 import { getFieldColumnProps } from '@/helpers/field-column-props'
 import { _Entity, type IEntity } from '@/models/_Entity'
 
+export type Round = {
+  primary?: number
+  secondary?: number
+}
+
 export interface IExampleRecord extends IEntity {
   parentId: string
   value: number
+  rounds: Round[]
 }
 
 /**
@@ -15,15 +21,17 @@ export interface IExampleRecord extends IEntity {
 export class ExampleRecord extends _Entity {
   parentId: string
   value: number
+  rounds: Round[]
 
   constructor(params: IExampleRecord) {
     super({ id: params.id, createdDate: params.createdDate })
     this.parentId = params.parentId
     this.value = params.value
+    this.rounds = params.rounds
   }
 
   static getFields(): Field[] {
-    return [..._Entity.getFields(), Field.PARENT_ID, Field.VALUE]
+    return [..._Entity.getFields(), Field.PARENT_ID, Field.VALUE, Field.ROUNDS]
   }
 
   static getColumns(): ColumnProps[] {

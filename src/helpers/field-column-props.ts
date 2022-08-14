@@ -50,6 +50,15 @@ export function getFieldColumnProps(field: Field): ColumnProps {
       field: (row: any) => row.description,
       format: (val: string) => truncateString(val),
     },
+    [Field.ROUNDS]: {
+      name: Field.ROUNDS,
+      label: 'Rounds',
+      align: 'left',
+      sortable: true,
+      required: false,
+      field: (row: any) => row.rounds,
+      format: (val: string) => truncateString(val),
+    },
     [Field.PARENT_ID]: {
       name: Field.PARENT_ID,
       label: 'Parent',
@@ -58,15 +67,6 @@ export function getFieldColumnProps(field: Field): ColumnProps {
       required: false,
       field: (row: any) => row.parentId,
       format: (val: string) => val,
-    },
-    [Field.NOTES]: {
-      name: Field.NOTES,
-      label: 'Notes',
-      align: 'left',
-      sortable: true,
-      required: false,
-      field: (row: any) => row.id,
-      format: (val: string) => truncateString(val),
     },
     [Field.VALUE]: {
       name: Field.VALUE,

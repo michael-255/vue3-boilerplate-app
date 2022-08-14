@@ -15,6 +15,11 @@ describe('Log', () => {
     error: testError,
   }
 
+  test('Log should have correct number of properties', () => {
+    const log = new Log(testParams)
+    expect(Object.keys(log).length).toBe(7)
+  })
+
   test('create Log with Error object', () => {
     const log = new Log(testParams)
     expect(log.id).toEqual(expect.any(String))

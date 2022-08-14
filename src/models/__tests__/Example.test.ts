@@ -8,6 +8,17 @@ describe('Example', () => {
   const testName = 'test-name'
   const testDesc = 'test-desc'
 
+  test('Example should have correct number of properties', () => {
+    const params = {
+      id: testId,
+      createdDate: testDate,
+      name: testName,
+      description: testDesc,
+    }
+    const example = new Example(params)
+    expect(Object.keys(example).length).toBe(4)
+  })
+
   test('create Example with params', () => {
     const params = {
       id: testId,

@@ -13,6 +13,7 @@ export enum Field {
   CREATED_DATE = 'createdDate',
   NAME = 'name',
   DESCRIPTION = 'description',
+  ROUNDS = 'rounds',
   PARENT_ID = 'parentId',
   VALUE = 'value',
   SEVERITY = 'severity',

@@ -6,6 +6,11 @@ describe('AppData', () => {
   const testExampleRecords: any[] = [{ test: 3 }]
   const testLogs: any[] = [{ test: 1 }]
 
+  test('AppData should have correct number of properties', () => {
+    const appData = new AppData()
+    expect(Object.keys(appData).length).toBe(3)
+  })
+
   test('create AppData with all params', () => {
     const appData = new AppData({
       examples: testExamples,

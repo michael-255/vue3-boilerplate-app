@@ -7,6 +7,22 @@ describe('ExampleRecord', () => {
   const testDate = '2022-01-01T00:00:00.000Z'
   const testParentId = 'test-parent-id'
   const testValue = 42
+  const testRounds = [
+    { primary: 1, secondary: 2 },
+    { primary: 2, secondary: 4 },
+  ]
+
+  test('ExampleRecord should have correct number of properties', () => {
+    const params = {
+      id: testId,
+      createdDate: testDate,
+      parentId: testParentId,
+      value: testValue,
+      rounds: testRounds,
+    }
+    const record = new ExampleRecord(params)
+    expect(Object.keys(record).length).toBe(5)
+  })
 
   test('create ExampleRecord with params', () => {
     const params = {
@@ -14,12 +30,14 @@ describe('ExampleRecord', () => {
       createdDate: testDate,
       parentId: testParentId,
       value: testValue,
+      rounds: testRounds,
     }
-    const example = new ExampleRecord(params)
-    expect(example.id).toBe(testId)
-    expect(example.createdDate).toBe(testDate)
-    expect(example.parentId).toBe(testParentId)
-    expect(example.value).toBe(testValue)
+    const record = new ExampleRecord(params)
+    expect(record.id).toBe(testId)
+    expect(record.createdDate).toBe(testDate)
+    expect(record.parentId).toBe(testParentId)
+    expect(record.value).toBe(testValue)
+    expect(record.rounds).toBe(testRounds)
   })
 
   test('ExampleRecord static getFields returns correct fields', () => {
@@ -28,6 +46,7 @@ describe('ExampleRecord', () => {
       Field.CREATED_DATE,
       Field.PARENT_ID,
       Field.VALUE,
+      Field.ROUNDS,
     ])
   })
 
