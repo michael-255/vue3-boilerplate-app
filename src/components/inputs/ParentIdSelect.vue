@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { QSelect } from 'quasar'
 import { onMounted, ref, type Ref } from 'vue'
-import { DexieTable, Field } from '@/constants/data-enums'
+import { AppTable, Field } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { truncateString } from '@/utils/common'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
@@ -12,7 +12,7 @@ import { useFields } from '@/use/useFields'
  * Uses the table prop to get access to getRelatedTable.
  * @param table
  */
-const props = defineProps<{ table: DexieTable }>()
+const props = defineProps<{ table: AppTable }>()
 
 const { getFieldValidator } = useFields()
 const { getRelatedTable } = useTable()

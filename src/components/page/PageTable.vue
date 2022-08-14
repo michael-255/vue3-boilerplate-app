@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { QSelect, QInput, QIcon } from 'quasar'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { type DexieTable, Operation, Field } from '@/constants/data-enums'
+import { type AppTable, Operation, Field } from '@/constants/data-enums'
 import { type Ref, ref, onMounted } from 'vue'
 import type { DataObject } from '@/constants/types-interfaces'
 import { DB } from '@/services/LocalDatabase'
@@ -18,7 +18,7 @@ import PageReport from '@/components/page/PageReport.vue'
  * Component allows viewing of table data and actions on that data.
  * @param table
  */
-const props = defineProps<{ table: DexieTable }>()
+const props = defineProps<{ table: AppTable }>()
 
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()

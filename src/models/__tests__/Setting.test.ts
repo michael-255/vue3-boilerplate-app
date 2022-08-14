@@ -4,8 +4,8 @@ import { Setting } from '@/models/Setting'
 
 describe('Setting', () => {
   test('create Setting with a SettingKey', () => {
-    const setting = new Setting({ id: SettingKey.DEBUG, value: true })
-    expect(setting.id).toBe(SettingKey.DEBUG)
+    const setting = new Setting({ key: SettingKey.DEBUG, value: true })
+    expect(setting.key).toBe(SettingKey.DEBUG)
     expect(setting.value).toBe(true)
   })
 })

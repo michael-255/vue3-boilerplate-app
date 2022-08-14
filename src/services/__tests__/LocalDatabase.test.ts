@@ -1,5 +1,6 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 import { LocalDatabase } from '@/services/LocalDatabase'
+import { SettingKey, SettingsTable } from '@/constants/data-enums'
 
 const tableMock = vi.fn().mockReturnValue({
   toArray: vi.fn(),
@@ -75,7 +76,7 @@ describe('LocalDatabase', () => {
     expect(database.table).toHaveBeenCalledWith(testTable)
     expect(database.table().where).toHaveBeenCalledWith('parentId')
     expect(database.table().where().equalsIgnoreCase).toHaveBeenCalledWith(testId)
-    expect(database.table().where().equalsIgnoreCase().sortBy).toHaveBeenCalledWith('createdAt')
+    expect(database.table().where().equalsIgnoreCase().sortBy).toHaveBeenCalledWith('createdDate')
     expect(result).toBe(testDatas)
   })
 
@@ -88,7 +89,7 @@ describe('LocalDatabase', () => {
     expect(database.table).toHaveBeenCalledWith(testTable)
     expect(database.table().where).toHaveBeenCalledWith('parentId')
     expect(database.table().where().equalsIgnoreCase).toHaveBeenCalledWith(testId)
-    expect(database.table().where().equalsIgnoreCase().sortBy).toHaveBeenCalledWith('createdAt')
+    expect(database.table().where().equalsIgnoreCase().sortBy).toHaveBeenCalledWith('createdDate')
     expect(database.table().where().equalsIgnoreCase().sortBy().reverse).toHaveBeenCalledWith()
     expect(result).toMatchObject(testDatas[0]) // only returns the first element
   })
@@ -158,6 +159,47 @@ describe('LocalDatabase', () => {
     const result = await database.updateById(testTable, testId, properties)
     expect(database.table).toHaveBeenCalledWith(testTable)
     expect(database.table().update).toHaveBeenCalledWith(testId, properties)
+    expect(result).toBe(1)
+  })
+
+  test('initSettings adds no settings when they are all defined', async () => {
+    const settings = [
+      { key: SettingKey.DEBUG, value: true },
+      { key: SettingKey.NOTIFY, value: true },
+      { key: SettingKey.INFO, value: true },
+    ]
+    database.table().toArray = vi.fn().mockReturnValue(settings)
+
+    await database.initSettings()
+    expect(database.table).toHaveBeenCalledWith(SettingsTable.NAME)
+  })
+
+  test('initSettings adds missing settings', async () => {
+    const settings: any[] = []
+    database.table().toArray = vi.fn().mockReturnValue(settings)
+
+    await database.initSettings()
+    expect(database.table).toHaveBeenCalledWith(SettingsTable.NAME)
+    expect(database.table().add).toHaveBeenCalledTimes(3) // Once for each missing setting
+  })
+
+  test('getSetting returns the setting by key', async () => {
+    database.table().where().equalsIgnoreCase().first = vi.fn().mockReturnValue(true)
+
+    const result = await database.getSetting(SettingKey.DEBUG)
+    expect(database.table).toHaveBeenCalledWith(SettingsTable.NAME)
+    expect(database.table().where).toHaveBeenCalledWith('key')
+    expect(database.table().where().equalsIgnoreCase).toHaveBeenCalledWith(SettingKey.DEBUG)
+    expect(database.table().where().equalsIgnoreCase().first).toHaveBeenCalled()
+    expect(result).toBe(true)
+  })
+
+  test('updateSetting updates the setting by key and returns a 1 on success', async () => {
+    database.table().update = vi.fn().mockReturnValue(1)
+
+    const result = await database.updateSetting(SettingKey.DEBUG, true)
+    expect(database.table).toHaveBeenCalledWith(SettingsTable.NAME)
+    expect(database.table().update).toHaveBeenCalledWith(SettingKey.DEBUG, { value: true })
     expect(result).toBe(1)
   })
 })

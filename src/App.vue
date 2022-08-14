@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import { onMounted, type Ref, ref, watch, markRaw } from 'vue'
-import { useSettingsStore } from '@/stores/settings'
 import { useLogger } from './use/useLogger'
+import { useSettingsStore } from './stores/settings'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 
 const settings = useSettingsStore()

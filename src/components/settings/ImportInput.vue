@@ -3,7 +3,7 @@ import { QFile, QBtn } from 'quasar'
 import { type Ref, ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { DexieTable } from '@/constants/data-enums'
+import { AppTable } from '@/constants/data-enums'
 import { AppData } from '@/models/AppData'
 import { DB } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
@@ -72,8 +72,8 @@ async function confirmedFileImport(): Promise<void> {
   consoleDebug(appData)
 
   await Promise.all([
-    DB.bulkAdd(DexieTable.EXAMPLES, appData?.examples),
-    DB.bulkAdd(DexieTable.EXAMPLE_RECORDS, appData?.examples),
+    DB.bulkAdd(AppTable.EXAMPLES, appData?.examples),
+    DB.bulkAdd(AppTable.EXAMPLE_RECORDS, appData?.examples),
     // Logs don't get imported
   ])
 }

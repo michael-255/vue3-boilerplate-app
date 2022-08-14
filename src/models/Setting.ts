@@ -1,21 +1,21 @@
 import type { SettingKey } from '@/constants/data-enums'
+import type { SettingValue } from '@/constants/types-interfaces'
 
 export interface ISetting {
-  id: SettingKey
-  value: boolean | string | number
+  key: SettingKey
+  value: SettingValue
 }
 
 /**
  * Setting Class
- * @param params.id Key
- * @param params.value Value
+ * @param params ISetting
  */
 export class Setting {
-  id: string // id instead of key so a new DB get method isn't needed
-  value: boolean | string | number
+  key: SettingKey
+  value: SettingValue
 
   constructor(params: ISetting) {
-    this.id = params.id as string // ids are strings in the database
+    this.key = params.key
     this.value = params.value
   }
 }

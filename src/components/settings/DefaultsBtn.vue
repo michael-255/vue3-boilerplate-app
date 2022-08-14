@@ -6,7 +6,7 @@ import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { Example } from '@/models/Example'
 import { DB } from '@/services/LocalDatabase'
-import { DexieTable } from '@/constants/data-enums'
+import { AppTable } from '@/constants/data-enums'
 import { ExampleRecord } from '@/models/ExampleRecord'
 
 const { log } = useLogger()
@@ -73,8 +73,8 @@ async function createExampleDefaults(): Promise<void> {
     }
   }
 
-  await DB.bulkAdd(DexieTable.EXAMPLES, defaultExamples)
-  await DB.bulkAdd(DexieTable.EXAMPLE_RECORDS, defaultExampleRecords)
+  await DB.bulkAdd(AppTable.EXAMPLES, defaultExamples)
+  await DB.bulkAdd(AppTable.EXAMPLE_RECORDS, defaultExampleRecords)
 }
 </script>
 

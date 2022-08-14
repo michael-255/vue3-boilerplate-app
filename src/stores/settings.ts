@@ -1,5 +1,4 @@
-import { DexieTable, SettingKey } from '@/constants/data-enums'
-import type { ISetting } from '@/models/Setting'
+import { SettingKey } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { defineStore, type StoreDefinition } from 'pinia'
 
@@ -14,50 +13,27 @@ export const useSettingsStore: StoreDefinition = defineStore({
 
   actions: {
     /**
-     * This must be called suring app startup and after clearing the Settings table.
+     * This must be called during app startup so the store is properly initialized.
      */
     async initSettings(): Promise<void> {
-      const debug: ISetting | undefined = await DB.getById(DexieTable.SETTINGS, SettingKey.DEBUG)
-      const notify: ISetting | undefined = await DB.getById(DexieTable.SETTINGS, SettingKey.NOTIFY)
-      const info: ISetting | undefined = await DB.getById(DexieTable.SETTINGS, SettingKey.INFO)
-
-      const addSetting = async (id: SettingKey, value: boolean | string | number) => {
-        return await DB.add(DexieTable.SETTINGS, { id, value })
-      }
-
-      /**
-       * @see
-       * MUST ADD EACH SETTING BELOW
-       */
-      if (!debug) {
-        await addSetting(SettingKey.DEBUG, false)
-      } else {
-        this.DEBUG = debug.value as boolean
-      }
-      if (!notify) {
-        await addSetting(SettingKey.NOTIFY, false)
-      } else {
-        this.NOTIFY = notify.value as boolean
-      }
-      if (!info) {
-        await addSetting(SettingKey.INFO, false)
-      } else {
-        this.INFO = info.value as boolean
-      }
+      await DB.initSettings()
+      this.DEBUG = (await DB.getSetting(SettingKey.DEBUG))?.value as boolean
+      this.NOTIFY = (await DB.getSetting(SettingKey.NOTIFY))?.value as boolean
+      this.INFO = (await DB.getSetting(SettingKey.INFO))?.value as boolean
     },
 
     async setDEBUG(bool: boolean): Promise<void> {
-      await DB.updateById(DexieTable.SETTINGS, SettingKey.DEBUG, { value: !!bool })
+      await DB.updateSetting(SettingKey.DEBUG, !!bool)
       this.DEBUG = !!bool
     },
 
     async setNOTIFY(bool: boolean): Promise<void> {
-      await DB.updateById(DexieTable.SETTINGS, SettingKey.NOTIFY, { value: !!bool })
+      await DB.updateSetting(SettingKey.NOTIFY, !!bool)
       this.NOTIFY = !!bool
     },
 
     async setINFO(bool: boolean): Promise<void> {
-      await DB.updateById(DexieTable.SETTINGS, SettingKey.INFO, { value: !!bool })
+      await DB.updateSetting(SettingKey.INFO, !!bool)
       this.INFO = !!bool
     },
   },

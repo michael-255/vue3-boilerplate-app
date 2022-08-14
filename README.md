@@ -8,10 +8,10 @@ have a better understanding of how this project is setup.
 - [ ] `TESTS` Clean up and build out your tests
   - [x] `Services`
   - [x] `Models`
-  - [ ] `Helpers`
+  - [x] `Helpers`
+  - [x] `Stores`
   - [ ] `Utils`
   - [ ] `Use`
-  - [ ] `Stores`
   - [ ] `Components???`
   - [ ] `Router???`
 - [ ] `App Manifest` splash page

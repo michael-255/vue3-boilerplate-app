@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { QBtn } from 'quasar'
 import { useLogger } from '@/use/useLogger'
-import { DexieTable } from '@/constants/data-enums'
+import { AppTable } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { useSettingsStore } from '@/stores/settings'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
-const settings = useSettingsStore()
 
 /**
- * Removes all data from all databases defined in the DexieTable enum.
+ * Removes all data from all databases defined in the AppTable enum.
  */
 async function onClearAll(): Promise<void> {
   confirmDialog(
@@ -22,15 +20,11 @@ async function onClearAll(): Promise<void> {
     NotifyColor.ERROR,
     async (): Promise<void> => {
       try {
-        await Promise.all(Object.values(DexieTable).map((table) => DB.clear(table as DexieTable)))
+        await Promise.all(Object.values(AppTable).map((table) => DB.clear(table as AppTable)))
         /**
          * @see
-         * DEFAULT SETTINGS BELOW
+         * COULD DEFAULT SETTINGS HERE IF DESIRED
          */
-        await settings.initSettings()
-        await settings.setDEBUG(false)
-        await settings.setNOTIFY(false)
-        await settings.setINFO(false)
       } catch (error) {
         log.error('onClearAll', error)
       }

@@ -1,8 +1,11 @@
-export enum DexieTable {
+export enum AppTable {
   EXAMPLES = 'examples',
   EXAMPLE_RECORDS = 'exampleRecords',
-  SETTINGS = 'settings',
   LOGS = 'logs',
+}
+
+export enum SettingsTable {
+  NAME = 'settings',
 }
 
 export enum Field {

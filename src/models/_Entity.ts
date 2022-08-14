@@ -30,7 +30,7 @@ export class _Entity {
   // static getFields(): Field[]
   // static getColumns(): ColumnProps[]
   // static getColumnOptions(): ColumnProps[]
-  // static getRelatedTable(): DexieTable | null
+  // static getRelatedTable(): AppTable | null
   // static getSingularLabel(): string
   // static getPluralLabel(): string
   // static getSupportedOperations(): Operation[]

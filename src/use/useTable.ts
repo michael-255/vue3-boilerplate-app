@@ -1,5 +1,5 @@
 import type { ColumnProps, DataObject, TableActions } from '@/constants/types-interfaces'
-import { DexieTable, Field, Operation } from '@/constants/data-enums'
+import { AppTable, Field, Operation } from '@/constants/data-enums'
 import { Example } from '@/models/Example'
 import { ExampleRecord } from '@/models/ExampleRecord'
 import { Log } from '@/models/Log'
@@ -14,12 +14,11 @@ export function useTable(): { [x: string]: any } {
    * Gets an array of the fields used by the table.
    * @param table
    */
-  function getFields(table: DexieTable): Field[] {
+  function getFields(table: AppTable): Field[] {
     return {
-      [DexieTable.EXAMPLES]: Example.getFields(),
-      [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getFields(),
-      [DexieTable.LOGS]: Log.getFields(),
-      [DexieTable.SETTINGS]: [],
+      [AppTable.EXAMPLES]: Example.getFields(),
+      [AppTable.EXAMPLE_RECORDS]: ExampleRecord.getFields(),
+      [AppTable.LOGS]: Log.getFields(),
     }[table]
   }
 
@@ -27,12 +26,11 @@ export function useTable(): { [x: string]: any } {
    * Gets the table that is related to the current table (Examples -> Example Records)
    * @param table
    */
-  function getRelatedTable(table: DexieTable): DexieTable | null {
+  function getRelatedTable(table: AppTable): AppTable | null {
     return {
-      [DexieTable.EXAMPLES]: Example.getRelatedTable(),
-      [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getRelatedTable(),
-      [DexieTable.LOGS]: Log.getRelatedTable(),
-      [DexieTable.SETTINGS]: null,
+      [AppTable.EXAMPLES]: Example.getRelatedTable(),
+      [AppTable.EXAMPLE_RECORDS]: ExampleRecord.getRelatedTable(),
+      [AppTable.LOGS]: Log.getRelatedTable(),
     }[table]
   }
 
@@ -40,12 +38,11 @@ export function useTable(): { [x: string]: any } {
    * Gets the singular label for the table (Example).
    * @param table
    */
-  function getSingularLabel(table: DexieTable): string {
+  function getSingularLabel(table: AppTable): string {
     return {
-      [DexieTable.EXAMPLES]: Example.getSingularLabel(),
-      [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getSingularLabel(),
-      [DexieTable.LOGS]: Log.getSingularLabel(),
-      [DexieTable.SETTINGS]: '',
+      [AppTable.EXAMPLES]: Example.getSingularLabel(),
+      [AppTable.EXAMPLE_RECORDS]: ExampleRecord.getSingularLabel(),
+      [AppTable.LOGS]: Log.getSingularLabel(),
     }[table]
   }
 
@@ -53,12 +50,11 @@ export function useTable(): { [x: string]: any } {
    * Gets the plural label for the table (Examples).
    * @param table
    */
-  function getPluralLabel(table: DexieTable): string {
+  function getPluralLabel(table: AppTable): string {
     return {
-      [DexieTable.EXAMPLES]: Example.getPluralLabel(),
-      [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getPluralLabel(),
-      [DexieTable.LOGS]: Log.getPluralLabel(),
-      [DexieTable.SETTINGS]: '',
+      [AppTable.EXAMPLES]: Example.getPluralLabel(),
+      [AppTable.EXAMPLE_RECORDS]: ExampleRecord.getPluralLabel(),
+      [AppTable.LOGS]: Log.getPluralLabel(),
     }[table]
   }
 
@@ -66,12 +62,11 @@ export function useTable(): { [x: string]: any } {
    * Gets an array of Operations that are supported by this table.
    * @param table
    */
-  function getSupportedOperations(table: DexieTable): Operation[] {
+  function getSupportedOperations(table: AppTable): Operation[] {
     return {
-      [DexieTable.EXAMPLES]: Example.getSupportedOperations(),
-      [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getSupportedOperations(),
-      [DexieTable.LOGS]: Log.getSupportedOperations(),
-      [DexieTable.SETTINGS]: [],
+      [AppTable.EXAMPLES]: Example.getSupportedOperations(),
+      [AppTable.EXAMPLE_RECORDS]: ExampleRecord.getSupportedOperations(),
+      [AppTable.LOGS]: Log.getSupportedOperations(),
     }[table]
   }
 
@@ -79,12 +74,11 @@ export function useTable(): { [x: string]: any } {
    * Gets an array of columns that are visible by default for the select box for this table.
    * @param table
    */
-  function getVisibleColumns(table: DexieTable): Field[] {
+  function getVisibleColumns(table: AppTable): Field[] {
     return {
-      [DexieTable.EXAMPLES]: Example.getVisibleColumns(),
-      [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getVisibleColumns(),
-      [DexieTable.LOGS]: Log.getVisibleColumns(),
-      [DexieTable.SETTINGS]: [],
+      [AppTable.EXAMPLES]: Example.getVisibleColumns(),
+      [AppTable.EXAMPLE_RECORDS]: ExampleRecord.getVisibleColumns(),
+      [AppTable.LOGS]: Log.getVisibleColumns(),
     }[table]
   }
 
@@ -92,12 +86,11 @@ export function useTable(): { [x: string]: any } {
    * Gets an array of the column properties needed for QTables for this table.
    * @param table
    */
-  function getColumns(table: DexieTable): ColumnProps[] {
+  function getColumns(table: AppTable): ColumnProps[] {
     return {
-      [DexieTable.EXAMPLES]: Example.getColumns(),
-      [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getColumns(),
-      [DexieTable.LOGS]: Log.getColumns(),
-      [DexieTable.SETTINGS]: [],
+      [AppTable.EXAMPLES]: Example.getColumns(),
+      [AppTable.EXAMPLE_RECORDS]: ExampleRecord.getColumns(),
+      [AppTable.LOGS]: Log.getColumns(),
     }[table]
   }
 
@@ -105,12 +98,11 @@ export function useTable(): { [x: string]: any } {
    * Gets an array of the column option properties needed for QTables for this table.
    * @param table
    */
-  function getColumnOptions(table: DexieTable): ColumnProps[] {
+  function getColumnOptions(table: AppTable): ColumnProps[] {
     return {
-      [DexieTable.EXAMPLES]: Example.getColumnOptions(),
-      [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getColumnOptions(),
-      [DexieTable.LOGS]: Log.getColumnOptions(),
-      [DexieTable.SETTINGS]: [],
+      [AppTable.EXAMPLES]: Example.getColumnOptions(),
+      [AppTable.EXAMPLE_RECORDS]: ExampleRecord.getColumnOptions(),
+      [AppTable.LOGS]: Log.getColumnOptions(),
     }[table]
   }
 
@@ -119,13 +111,13 @@ export function useTable(): { [x: string]: any } {
    * @param table
    * @returns
    */
-  function getActions(table: DexieTable): TableActions {
+  function getActions(table: AppTable): TableActions {
     return {
-      [DexieTable.EXAMPLES]: {
+      [AppTable.EXAMPLES]: {
         getRows: async () => await DB.getAll(table),
         createRow: async (data: DataObject) => {
           await DB.add(
-            DexieTable.EXAMPLES,
+            AppTable.EXAMPLES,
             new Example({
               id: data.id,
               createdDate: data.createdDate,
@@ -135,7 +127,7 @@ export function useTable(): { [x: string]: any } {
           )
         },
         updateRow: async (data: DataObject) => {
-          await DB.updateById(DexieTable.EXAMPLES, data.originalId, {
+          await DB.updateById(AppTable.EXAMPLES, data.originalId, {
             id: data.id,
             createdDate: data.createdDate,
             name: data.name,
@@ -143,10 +135,7 @@ export function useTable(): { [x: string]: any } {
           })
         },
         generateReport: async (id: string) => {
-          const records: ExampleRecord[] = await DB.getRecordsByParentId(
-            DexieTable.EXAMPLE_RECORDS,
-            id
-          )
+          const records: ExampleRecord[] = await DB.getByParentId(AppTable.EXAMPLE_RECORDS, id)
           const labels = records.map(() => '')
           const data = records.map((r: ExampleRecord) => r.value)
           const firstDate = isoToDisplayDate(records[0]?.createdDate)
@@ -154,11 +143,11 @@ export function useTable(): { [x: string]: any } {
           return { firstDate, lastDate, labels, data }
         },
       },
-      [DexieTable.EXAMPLE_RECORDS]: {
+      [AppTable.EXAMPLE_RECORDS]: {
         getRows: async () => await DB.getAll(table),
         createRow: async (data: DataObject) => {
           await DB.add(
-            DexieTable.EXAMPLE_RECORDS,
+            AppTable.EXAMPLE_RECORDS,
             new ExampleRecord({
               id: data.id,
               createdDate: data.createdDate,
@@ -168,7 +157,7 @@ export function useTable(): { [x: string]: any } {
           )
         },
         updateRow: async (data: DataObject) => {
-          await DB.updateById(DexieTable.EXAMPLE_RECORDS, data.originalId, {
+          await DB.updateById(AppTable.EXAMPLE_RECORDS, data.originalId, {
             id: data.id,
             createdDate: data.createdDate,
             parentId: data.parentId,
@@ -176,10 +165,9 @@ export function useTable(): { [x: string]: any } {
           })
         },
       },
-      [DexieTable.LOGS]: {
+      [AppTable.LOGS]: {
         getRows: async () => await DB.getAll(table),
       },
-      [DexieTable.SETTINGS]: {},
     }[table]
   }
 
@@ -189,12 +177,11 @@ export function useTable(): { [x: string]: any } {
    * @param operation
    * @returns boolean
    */
-  function isSupported(table: DexieTable, operation: Operation): boolean {
+  function isSupported(table: AppTable, operation: Operation): boolean {
     return {
-      [DexieTable.EXAMPLES]: Example.getSupportedOperations()?.includes(operation),
-      [DexieTable.EXAMPLE_RECORDS]: ExampleRecord.getSupportedOperations()?.includes(operation),
-      [DexieTable.LOGS]: Log.getSupportedOperations()?.includes(operation),
-      [DexieTable.SETTINGS]: false,
+      [AppTable.EXAMPLES]: Example.getSupportedOperations()?.includes(operation),
+      [AppTable.EXAMPLE_RECORDS]: ExampleRecord.getSupportedOperations()?.includes(operation),
+      [AppTable.LOGS]: Log.getSupportedOperations()?.includes(operation),
     }[table]
   }
 

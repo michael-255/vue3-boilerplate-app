@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DexieTable, Field } from '@/constants/data-enums'
+import { AppTable, Field } from '@/constants/data-enums'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { useProvideTableInputs } from '@/use/useProvideTableInputs'
@@ -11,7 +11,7 @@ import { useFields } from '@/use/useFields'
  * Component for handling table item Creates using Provide/Inject for the inputs.
  * @param table
  */
-const props = defineProps<{ table: DexieTable }>()
+const props = defineProps<{ table: AppTable }>()
 const emits = defineEmits<{ (eventName: 'on-create'): void }>()
 
 const { log } = useLogger()
@@ -40,10 +40,9 @@ function onCreate() {
      * MUST DEFINE TABLES BELOW
      */
     const areInputsValid = {
-      [DexieTable.EXAMPLES]: areExampleInputsValid(),
-      [DexieTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
-      [DexieTable.LOGS]: false,
-      [DexieTable.SETTINGS]: false,
+      [AppTable.EXAMPLES]: areExampleInputsValid(),
+      [AppTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
+      [AppTable.LOGS]: false,
     }[props.table]
 
     if (!areInputsValid) {

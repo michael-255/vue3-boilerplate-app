@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DexieTable, Field } from '@/constants/data-enums.js'
+import { AppTable, Field } from '@/constants/data-enums.js'
 import type { DataObject } from '@/constants/types-interfaces'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { onMounted } from 'vue'
@@ -15,7 +15,7 @@ import { useFields } from '@/use/useFields'
  * @param item Row selected in the table
  */
 const props = defineProps<{
-  table: DexieTable
+  table: AppTable
   item: DataObject | undefined
 }>()
 const emits = defineEmits<{ (eventName: 'on-update'): void }>()
@@ -63,10 +63,9 @@ function onUpdate() {
      * MUST DEFINE TABLES BELOW
      */
     const areInputsValid = {
-      [DexieTable.EXAMPLES]: areExampleInputsValid(),
-      [DexieTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
-      [DexieTable.LOGS]: false,
-      [DexieTable.SETTINGS]: false,
+      [AppTable.EXAMPLES]: areExampleInputsValid(),
+      [AppTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
+      [AppTable.LOGS]: false,
     }[props.table]
 
     if (!areInputsValid) {

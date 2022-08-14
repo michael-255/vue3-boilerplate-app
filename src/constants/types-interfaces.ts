@@ -18,3 +18,5 @@ export type TableActions = {
   updateRow?: (x: DataObject) => any
   generateReport?: (id: string) => any
 }
+
+export type SettingValue = boolean | string | number

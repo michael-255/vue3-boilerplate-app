@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DexieTable } from '@/constants/data-enums.js'
+import type { AppTable } from '@/constants/data-enums.js'
 import type { DataObject } from '@/constants/types-interfaces'
 import { onMounted, computed, ref, type Ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
@@ -13,7 +13,7 @@ import { useTable } from '@/use/useTable'
  * @param item Needed for the name and id
  */
 const props = defineProps<{
-  table: DexieTable
+  table: AppTable
   item: DataObject | undefined
 }>()
 

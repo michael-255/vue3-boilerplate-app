@@ -3,7 +3,7 @@ import { exportFile, QInput, QBtn } from 'quasar'
 import { type Ref, ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { DexieTable } from '@/constants/data-enums'
+import { AppTable } from '@/constants/data-enums'
 import { AppData } from '@/models/AppData'
 import { DB } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
@@ -48,9 +48,9 @@ async function confirmedFileExport(filename: string): Promise<void> {
    * ONLY TABLES DEFINED BELOW GET EXPORTED
    */
   const appData = new AppData({
-    examples: await DB.getAll(DexieTable.EXAMPLES),
-    exampleRecords: await DB.getAll(DexieTable.EXAMPLE_RECORDS),
-    logs: await DB.getAll(DexieTable.LOGS),
+    examples: await DB.getAll(AppTable.EXAMPLES),
+    exampleRecords: await DB.getAll(AppTable.EXAMPLE_RECORDS),
+    logs: await DB.getAll(AppTable.LOGS),
   })
 
   consoleDebug(appData)

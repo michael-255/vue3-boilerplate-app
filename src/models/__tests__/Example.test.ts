@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest'
 import { Example } from '@/models/Example'
-import { DexieTable, Field, Operation } from '@/constants/data-enums'
+import { AppTable, Field, Operation } from '@/constants/data-enums'
 
 describe('Example', () => {
   const testId = 'test-id'
@@ -56,7 +56,7 @@ describe('Example', () => {
   })
 
   test('Example static getRelatedTable returns correct related table', () => {
-    expect(Example.getRelatedTable()).toBe(DexieTable.EXAMPLE_RECORDS)
+    expect(Example.getRelatedTable()).toBe(AppTable.EXAMPLE_RECORDS)
   })
 
   test('Example static getSingularLabel returns the singular label', () => {

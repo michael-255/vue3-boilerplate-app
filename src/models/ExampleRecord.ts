@@ -1,5 +1,5 @@
 import type { ColumnProps } from '@/constants/types-interfaces'
-import { DexieTable, Field, Operation } from '@/constants/data-enums'
+import { AppTable, Field, Operation } from '@/constants/data-enums'
 import { getFieldColumnProps } from '@/helpers/field-column-props'
 import { _Entity, type IEntity } from '@/models/_Entity'
 
@@ -8,6 +8,10 @@ export interface IExampleRecord extends IEntity {
   value: number
 }
 
+/**
+ * Example Record Class
+ * @param params IExampleRecord
+ */
 export class ExampleRecord extends _Entity {
   parentId: string
   value: number
@@ -30,8 +34,8 @@ export class ExampleRecord extends _Entity {
     return this.getColumns().filter((col: ColumnProps) => !col.required)
   }
 
-  static getRelatedTable(): DexieTable {
-    return DexieTable.EXAMPLES
+  static getRelatedTable(): AppTable {
+    return AppTable.EXAMPLES
   }
 
   static getSingularLabel(): 'Example Record' {
