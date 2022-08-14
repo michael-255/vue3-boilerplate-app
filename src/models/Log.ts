@@ -1,32 +1,34 @@
-import { DexieTable, TableField, TableOperation } from '@/constants/data-enums'
-import { Entity } from '@/models/Entity'
+import type { ColumnProps } from '@/constants/types-interfaces'
+import { Field, Operation } from '@/constants/data-enums'
+import { getFieldColumnProps } from '@/helpers/field-column-props'
+import { _Entity } from '@/models/_Entity'
 import type { Severity } from '@/constants/data-enums'
 import { v4 as createId } from 'uuid'
 
 export interface ILog {
   severity: Severity
-  callerDetails: string
-  errorName?: string
+  details: string
+  name?: string
   message?: string
   stack?: string
 }
 
 export interface LogParams {
   severity: Severity
-  callerDetails: string
+  details: string
   error?: Error | any
 }
 
 /**
  * Log Class
  * @param params.error Error or any if unknown
- * @param params.severity Severity severity
- * @param params.callerDetails Name of caller, data causing the issue, etc.
+ * @param params.severity Severity
+ * @param params.details Information about the error
  */
-export class Log extends Entity {
+export class Log extends _Entity {
   severity: Severity
-  callerDetails: string
-  errorName?: string
+  details: string
+  name?: string
   message?: string
   stack?: string
 
@@ -34,38 +36,48 @@ export class Log extends Entity {
     super({ id: createId(), createdDate: new Date().toISOString() })
 
     this.severity = params?.severity
-    this.callerDetails = params?.callerDetails
-    this.errorName = params?.error?.name
+    this.details = params?.details
+    this.name = params?.error?.name
     this.message = params?.error?.message
     this.stack = params?.error?.stack
   }
 
-  static getTableProperties(): { [x: string]: any } {
-    return {
-      name: DexieTable.LOGS,
-      relatedTable: null,
-      labelSingular: 'Log',
-      labelPlural: 'Logs',
-      actions: {},
-      supportedOperations: [TableOperation.DELETE, TableOperation.CLEAR, TableOperation.INSPECT],
-      fields: [
-        TableField.ID,
-        TableField.CREATED_DATE,
-        TableField.SEVERITY,
-        TableField.CALLER_DETAILS,
-        TableField.ERROR_NAME,
-        TableField.MESSAGE,
-        TableField.STACK,
-      ],
-      rows: [],
-      columns: [],
-      columnOptions: [],
-      visibleColumns: [
-        TableField.CREATED_DATE,
-        TableField.SEVERITY,
-        TableField.CALLER_DETAILS,
-        TableField.ERROR_NAME,
-      ],
-    }
+  static getFields(): Field[] {
+    return [
+      ..._Entity.getFields(),
+      Field.SEVERITY,
+      Field.DETAILS,
+      Field.NAME,
+      Field.MESSAGE,
+      Field.STACK,
+    ]
+  }
+
+  static getColumns(): ColumnProps[] {
+    return this.getFields().map((field: Field) => getFieldColumnProps(field))
+  }
+
+  static getColumnOptions(): ColumnProps[] {
+    return this.getColumns().filter((col: ColumnProps) => !col.required)
+  }
+
+  static getRelatedTable(): null {
+    return null
+  }
+
+  static getSingularLabel(): 'Log' {
+    return 'Log'
+  }
+
+  static getPluralLabel(): 'Logs' {
+    return 'Logs'
+  }
+
+  static getSupportedOperations(): Operation[] {
+    return [Operation.DELETE, Operation.CLEAR, Operation.INSPECT]
+  }
+
+  static getVisibleColumns(): Field[] {
+    return [Field.CREATED_DATE, Field.SEVERITY, Field.DETAILS, Field.NAME]
   }
 }

@@ -18,12 +18,12 @@ function onRejectedImport(entries: any): void {
   const fileName = entries[0]?.file?.name || undefined
   const size = entries[0]?.file?.size || undefined
   const type = entries[0]?.file?.type || undefined
-  const errorName = entries[0]?.failedPropValidation || undefined
+  const name = entries[0]?.failedPropValidation || undefined
 
   consoleDebug(entries)
 
   log.warn(`Cannot import ${fileName}`, {
-    name: errorName,
+    name: name,
     message: `NAME: ${fileName}, SIZE: ${size}, TYPE: ${type}`,
     stack: 'onRejectedImport',
   })

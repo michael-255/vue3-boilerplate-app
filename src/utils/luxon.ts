@@ -6,5 +6,9 @@ import { DateTime } from 'luxon'
  * @returns Example: Sun Jun 6 2022 1:30:45 PM EDT
  */
 export function isoToDisplayDate(date: string): string {
-  return DateTime.fromISO(date).toFormat('ccc LLL d yyyy ttt')
+  const luxonDate = DateTime.fromISO(date).toFormat('ccc LLL d yyyy ttt')
+  if (!luxonDate || luxonDate === 'Invalid DateTime') {
+    return '-'
+  }
+  return luxonDate
 }

@@ -5,7 +5,7 @@ export enum DexieTable {
   LOGS = 'logs',
 }
 
-export enum TableField {
+export enum Field {
   ID = 'id',
   CREATED_DATE = 'createdDate',
   NAME = 'name',
@@ -14,13 +14,12 @@ export enum TableField {
   NOTES = 'notes',
   VALUE = 'value',
   SEVERITY = 'severity',
-  CALLER_DETAILS = 'callerDetails',
-  ERROR_NAME = 'errorName',
+  DETAILS = 'details',
   MESSAGE = 'message',
   STACK = 'stack',
 }
 
-export enum TableOperation {
+export enum Operation {
   NO_OP = 'No Operation',
   CREATE = 'Create',
   UPDATE = 'Update',

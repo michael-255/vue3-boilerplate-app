@@ -2,9 +2,9 @@
 import type { DexieTable } from '@/constants/data-enums.js'
 import { onMounted, computed, ref, type Ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
-import { useTableManager } from '@/use/useTableManager'
 import { LineChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
+import { useTable } from '@/use/useTable'
 
 /**
  * Component for handling reports for each supported table.
@@ -16,7 +16,7 @@ const props = defineProps<{
 }>()
 
 const { log } = useLogger()
-const { TM } = useTableManager(props.table)
+const { getActions } = useTable()
 
 // Report
 Chart.register(...registerables)
@@ -55,7 +55,7 @@ const chartData = computed<any>(() => ({
 
 onMounted(async () => {
   try {
-    const dataset = await TM.actions.report(props.selectedItem.id)
+    const dataset = await getActions(props.table).generateReport(props.selectedItem.id)
     datasetLabels.value = dataset.labels
     datasetData.value = dataset.data
     firstDate.value = dataset.firstDate

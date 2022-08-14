@@ -3,7 +3,7 @@ import { onMounted, type Ref, ref } from 'vue'
 
 const props = defineProps<{
   selectedItem: any
-  tableColumns: any[]
+  columns: any[]
 }>()
 
 const inspectedItem: Ref<{ label: string; value: any }[]> = ref([])
@@ -11,7 +11,7 @@ const inspectedItem: Ref<{ label: string; value: any }[]> = ref([])
 onMounted(async () => {
   inspectedItem.value = Object.keys(props.selectedItem).map((key) => {
     return {
-      label: props.tableColumns.find((i) => i.name === key).label,
+      label: props.columns.find((i) => i.name === key).label,
       value: props.selectedItem[key] || '-',
     }
   })

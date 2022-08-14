@@ -2,11 +2,11 @@
 import { QPage, QCard, QCardSection, QSeparator, QBtn, QToggle } from 'quasar'
 import { useSettingsStore } from '@/stores/settings'
 import { computed } from 'vue'
-import { Views } from '@/constants/ui-enums'
-import DefaultsButton from '@/components/buttons/DefaultsButton.vue'
+import { View } from '@/constants/ui-enums'
+import DefaultsBtn from '@/components/buttons/DefaultsBtn.vue'
 import ImportInput from '@/components/inputs/ImportInput.vue'
 import ExportInput from '@/components/inputs/ExportInput.vue'
-import ClearButton from '@/components/buttons/ClearButton.vue'
+import ClearAllBtn from '@/components/buttons/ClearAllBtn.vue'
 
 const settings = useSettingsStore()
 
@@ -58,7 +58,7 @@ const NOTIFY = computed({
             Load default data into the database that you can begin using right away.
           </div>
 
-          <DefaultsButton />
+          <DefaultsBtn />
         </QCardSection>
 
         <QSeparator />
@@ -81,7 +81,7 @@ const NOTIFY = computed({
 
             <div class="q-mb-md">View your app logs to troubleshoot errors.</div>
 
-            <QBtn label="View Logs" color="primary" :to="{ name: Views.LOGS }" />
+            <QBtn label="View Logs" color="primary" :to="{ name: View.LOGS }" />
           </div>
         </QCardSection>
 
@@ -96,7 +96,7 @@ const NOTIFY = computed({
               if you intend to use it later.
             </div>
 
-            <ClearButton table="ALL" label="Clear All App Data" />
+            <ClearAllBtn />
           </div>
         </QCardSection>
       </QCard>

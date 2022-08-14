@@ -1,5 +1,7 @@
-import { DexieTable, TableField, TableOperation } from '@/constants/data-enums'
-import { Entity, type IEntity } from '@/models/Entity'
+import type { ColumnProps } from '@/constants/types-interfaces'
+import { DexieTable, Field, Operation } from '@/constants/data-enums'
+import { getFieldColumnProps } from '@/helpers/field-column-props'
+import { _Entity, type IEntity } from '@/models/_Entity'
 
 export interface IExample extends IEntity {
   name: string
@@ -7,7 +9,7 @@ export interface IExample extends IEntity {
   // rounds: any[]
 }
 
-export class Example extends Entity {
+export class Example extends _Entity {
   name: string
   description: string
   // rounds: any[]
@@ -19,26 +21,42 @@ export class Example extends Entity {
     // this.rounds = params.rounds
   }
 
-  static getTableProperties(): { [x: string]: any } {
-    return {
-      name: DexieTable.EXAMPLES,
-      relatedTable: DexieTable.EXAMPLE_RECORDS,
-      labelSingular: 'Example',
-      labelPlural: 'Examples',
-      actions: {},
-      supportedOperations: [
-        TableOperation.CREATE,
-        TableOperation.UPDATE,
-        TableOperation.DELETE,
-        TableOperation.CLEAR,
-        TableOperation.INSPECT,
-        TableOperation.REPORT,
-      ],
-      fields: [TableField.ID, TableField.CREATED_DATE, TableField.NAME, TableField.DESCRIPTION],
-      rows: [],
-      columns: [],
-      columnOptions: [],
-      visibleColumns: [TableField.CREATED_DATE],
-    }
+  static getFields(): Field[] {
+    return [..._Entity.getFields(), Field.NAME, Field.DESCRIPTION]
+  }
+
+  static getColumns(): ColumnProps[] {
+    return this.getFields().map((field: Field) => getFieldColumnProps(field))
+  }
+
+  static getColumnOptions(): ColumnProps[] {
+    return this.getColumns().filter((col: ColumnProps) => !col.required)
+  }
+
+  static getRelatedTable(): DexieTable {
+    return DexieTable.EXAMPLE_RECORDS
+  }
+
+  static getSingularLabel(): 'Example' {
+    return 'Example'
+  }
+
+  static getPluralLabel(): 'Examples' {
+    return 'Examples'
+  }
+
+  static getSupportedOperations(): Operation[] {
+    return [
+      Operation.CREATE,
+      Operation.UPDATE,
+      Operation.DELETE,
+      Operation.CLEAR,
+      Operation.INSPECT,
+      Operation.REPORT,
+    ]
+  }
+
+  static getVisibleColumns(): Field[] {
+    return [Field.CREATED_DATE]
   }
 }

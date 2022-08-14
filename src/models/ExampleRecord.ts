@@ -1,12 +1,14 @@
-import { DexieTable, TableField, TableOperation } from '@/constants/data-enums'
-import { Entity, type IEntity } from '@/models/Entity'
+import type { ColumnProps } from '@/constants/types-interfaces'
+import { DexieTable, Field, Operation } from '@/constants/data-enums'
+import { getFieldColumnProps } from '@/helpers/field-column-props'
+import { _Entity, type IEntity } from '@/models/_Entity'
 
 export interface IExampleRecord extends IEntity {
   parentId: string
   value: number
 }
 
-export class ExampleRecord extends Entity {
+export class ExampleRecord extends _Entity {
   parentId: string
   value: number
 
@@ -16,25 +18,41 @@ export class ExampleRecord extends Entity {
     this.value = params.value
   }
 
-  static getTableProperties(): { [x: string]: any } {
-    return {
-      name: DexieTable.EXAMPLE_RECORDS,
-      relatedTable: DexieTable.EXAMPLES,
-      labelSingular: 'Example Record',
-      labelPlural: 'Example Records',
-      actions: {},
-      supportedOperations: [
-        TableOperation.CREATE,
-        TableOperation.UPDATE,
-        TableOperation.DELETE,
-        TableOperation.CLEAR,
-        TableOperation.INSPECT,
-      ],
-      fields: [TableField.ID, TableField.CREATED_DATE, TableField.PARENT_ID, TableField.VALUE],
-      rows: [],
-      columns: [],
-      columnOptions: [],
-      visibleColumns: [TableField.CREATED_DATE],
-    }
+  static getFields(): Field[] {
+    return [..._Entity.getFields(), Field.PARENT_ID, Field.VALUE]
+  }
+
+  static getColumns(): ColumnProps[] {
+    return this.getFields().map((field: Field) => getFieldColumnProps(field))
+  }
+
+  static getColumnOptions(): ColumnProps[] {
+    return this.getColumns().filter((col: ColumnProps) => !col.required)
+  }
+
+  static getRelatedTable(): DexieTable {
+    return DexieTable.EXAMPLES
+  }
+
+  static getSingularLabel(): 'Example Record' {
+    return 'Example Record'
+  }
+
+  static getPluralLabel(): 'Example Records' {
+    return 'Example Records'
+  }
+
+  static getSupportedOperations(): Operation[] {
+    return [
+      Operation.CREATE,
+      Operation.UPDATE,
+      Operation.DELETE,
+      Operation.CLEAR,
+      Operation.INSPECT,
+    ]
+  }
+
+  static getVisibleColumns(): Field[] {
+    return [Field.CREATED_DATE]
   }
 }
