@@ -5,9 +5,15 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `APP` Add comments and descriptions throughout codebase (check file-by-file)
-  - [ ] Add new `log` calls where it would make sense (info and up)
 - [ ] `TESTS` Clean up and build out your tests
+  - [x] `Services`
+  - [ ] `Models`
+  - [ ] `Helpers`
+  - [ ] `Utils`
+  - [ ] `Use`
+  - [ ] `Stores`
+  - [ ] `Components???`
+  - [ ] `Router???`
 - [ ] `App Manifest` splash page
 - [ ] `README` steps for adding models, fields, and their data table functionality
 - [ ] `README` notes on important changes

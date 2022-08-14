@@ -1,73 +1,163 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
-import { LocalDatabase } from '../LocalDatabase'
+import { LocalDatabase } from '@/services/LocalDatabase'
+
+const tableMock = vi.fn().mockReturnValue({
+  toArray: vi.fn(),
+  where: vi.fn().mockReturnValue({
+    equalsIgnoreCase: vi.fn().mockReturnValue({
+      first: vi.fn(),
+      toArray: vi.fn(),
+      sortBy: vi.fn().mockReturnValue({
+        reverse: vi.fn(),
+      }),
+    }),
+  }),
+  bulkGet: vi.fn().mockReturnValue({
+    filter: vi.fn(),
+  }),
+  add: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn(),
+  clear: vi.fn(),
+  bulkAdd: vi.fn(),
+})
 
 describe('LocalDatabase', () => {
-  let db: any
-  const toArrayMock = vi.fn()
-  const firstMock = vi.fn()
-  const lastMock = vi.fn()
-  const tableMock = vi.fn(() => ({ toArray: toArrayMock }))
-  const equalsIgnoreCaseMock = vi.fn(() => ({ first: firstMock }))
-  const whereMock = vi.fn(() => ({ equalsIgnoreCase: equalsIgnoreCaseMock }))
-  const orderByMock = vi.fn(() => ({ first: firstMock, last: lastMock }))
+  let database: any
+  const testTable = 'testTable'
+  const testId = 'test-id-123'
+  const testIds = ['id-1', 'id-2', 'id-3']
+  const testName = 'Test Name'
+  const testData = { id: 'test1' }
+  const testDatas = [{ id: 'test1' }, { id: 'test2' }]
 
   beforeEach(() => {
-    DB = new LocalDatabase('TestDatabase')
-    DB.users = {
-      add: vi.fn(),
-      where: whereMock,
-    }
-    DB.examples = {
-      add: vi.fn(),
-      orderBy: orderByMock,
-    }
-    DB.table = tableMock
+    database = new LocalDatabase('TestDatabase')
+    database.table = tableMock
     vi.clearAllMocks()
   })
 
-  test('should call Dexie methods from addUser with provided parameter', () => {
-    const mockUser = {
-      attributes: { attrs: 123 },
-      createdDate: '2022-01-01T05:00:00.000Z',
-      id: 'USER-1234',
-      name: 'Test User',
-    }
-    DB.addUser(mockUser)
-    expect(DB.users.add).toHaveBeenCalledWith(mockUser)
+  test('getAll calls correct Dexie methods', async () => {
+    database.table().toArray = vi.fn().mockReturnValue(testDatas)
+
+    const result = await database.getAll(testTable)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().toArray).toHaveBeenCalled()
+    expect(result).toEqual(expect.arrayContaining(testDatas))
   })
 
-  test('should call Dexie methods from addExample with provided parameter', () => {
-    const mockExample = {
-      data: { datas: 123 },
-      createdDate: '2022-02-02T05:00:00.000Z',
-      id: 'EXAMPLE-1234',
-    }
-    DB.addExample(mockExample)
-    expect(DB.examples.add).toHaveBeenCalledWith(mockExample)
+  test('getById returns item by id', async () => {
+    database.table().where().equalsIgnoreCase().first = vi.fn().mockReturnValue(testData)
+
+    const result = await database.getById(testTable, testId)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().where).toHaveBeenCalledWith('id')
+    expect(database.table().where().equalsIgnoreCase).toHaveBeenCalledWith(testId)
+    expect(database.table().where().equalsIgnoreCase().first).toHaveBeenCalled()
+    expect(result).toBe(testData)
   })
 
-  test('should call Dexie methods from getAllFromStore with provided parameter', () => {
-    DB.getAllFromStore('test')
-    expect(DB.table).toHaveBeenCalledWith('test')
-    expect(toArrayMock).toHaveBeenCalled()
+  test('getByName returns an array of items with that macthing name', async () => {
+    database.table().where().equalsIgnoreCase().toArray = vi.fn().mockReturnValue(testDatas)
+
+    const result = await database.getByName(testTable, testName)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().where).toHaveBeenCalledWith('name')
+    expect(database.table().where().equalsIgnoreCase).toHaveBeenCalledWith(testName)
+    expect(database.table().where().equalsIgnoreCase().toArray).toHaveBeenCalled()
+    expect(result).toEqual(expect.arrayContaining(testDatas))
   })
 
-  test('should call Dexie methods from getUserByName with provided parameter', () => {
-    DB.getUserByName('Test User')
-    expect(DB.users.where).toHaveBeenCalledWith('name')
-    expect(equalsIgnoreCaseMock).toHaveBeenCalledWith('Test User')
-    expect(firstMock).toHaveBeenCalled()
+  test('getByParentId calls correct Dexie methods', async () => {
+    database.table().where().equalsIgnoreCase().sortBy = vi.fn().mockReturnValue(testDatas)
+
+    const result = await database.getByParentId(testTable, testId)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().where).toHaveBeenCalledWith('parentId')
+    expect(database.table().where().equalsIgnoreCase).toHaveBeenCalledWith(testId)
+    expect(database.table().where().equalsIgnoreCase().sortBy).toHaveBeenCalledWith('createdAt')
+    expect(result).toBe(testDatas)
   })
 
-  test('should call Dexie methods from getNewestExample with provided parameter', () => {
-    DB.getNewestExample()
-    expect(DB.examples.orderBy).toHaveBeenCalledWith('createdDate')
-    expect(lastMock).toHaveBeenCalled()
+  test('getNewestByParentId returns the newest item by the parentId', async () => {
+    database.table().where().equalsIgnoreCase().sortBy().reverse = vi
+      .fn()
+      .mockReturnValue(testDatas)
+
+    const result = await database.getNewestByParentId(testTable, testId)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().where).toHaveBeenCalledWith('parentId')
+    expect(database.table().where().equalsIgnoreCase).toHaveBeenCalledWith(testId)
+    expect(database.table().where().equalsIgnoreCase().sortBy).toHaveBeenCalledWith('createdAt')
+    expect(database.table().where().equalsIgnoreCase().sortBy().reverse).toHaveBeenCalledWith()
+    expect(result).toMatchObject(testDatas[0]) // only returns the first element
   })
 
-  test('should call Dexie methods from getOldestExample with provided parameter', () => {
-    DB.getOldestExample()
-    expect(DB.examples.orderBy).toHaveBeenCalledWith('createdDate')
-    expect(firstMock).toHaveBeenCalled()
+  test('bulkGetByIds returns items from the table by the provided ids', async () => {
+    database.table().bulkGet = vi.fn().mockReturnValue(testDatas)
+
+    const result = await database.bulkGetByIds(testTable, testIds)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().bulkGet).toHaveBeenCalledWith(testIds)
+    expect(result).toEqual(expect.arrayContaining(testDatas))
+  })
+
+  test('deleteById returns undefined when nothing is deleted', async () => {
+    database.table().where().equalsIgnoreCase().first = vi.fn().mockReturnValue(undefined)
+
+    const result = await database.deleteById(testTable, testId)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().where).toHaveBeenCalledWith('id')
+    expect(database.table().where().equalsIgnoreCase).toHaveBeenCalledWith(testId)
+    expect(database.table().where().equalsIgnoreCase().first).toHaveBeenCalled()
+    expect(result).toBe(undefined)
+  })
+
+  test('deleteById returns the item that was deleted', async () => {
+    database.table().where().equalsIgnoreCase().first = vi.fn().mockReturnValue(testData)
+
+    const result = await database.deleteById(testTable, testId)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().where).toHaveBeenCalledWith('id')
+    expect(database.table().where().equalsIgnoreCase).toHaveBeenCalledWith(testId)
+    expect(database.table().where().equalsIgnoreCase().first).toHaveBeenCalled()
+    expect(result).toBe(testData)
+  })
+
+  test('clear removes all table data and returns undefined', async () => {
+    database.table().clear = vi.fn().mockReturnValue(undefined)
+
+    const result = await database.clear(testTable)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().clear).toHaveBeenCalled()
+    expect(result).toBe(undefined)
+  })
+
+  test('add inserts the new item into the table and returns the id', async () => {
+    database.table().add = vi.fn().mockReturnValue(testId)
+
+    const result = await database.add(testTable, testData)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().add).toHaveBeenCalledWith(testData)
+    expect(result).toBe(testId)
+  })
+
+  test('bulkAdd inserts the new items in the table and returns the ids', async () => {
+    database.table().bulkAdd = vi.fn().mockReturnValue(testIds)
+
+    const result = await database.bulkAdd(testTable, testDatas)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().bulkAdd).toHaveBeenCalledWith(testDatas, { allKeys: true })
+    expect(result).toBe(testIds)
+  })
+
+  test('updateById updates the item by id and returns a 1 on success', async () => {
+    database.table().update = vi.fn().mockReturnValue(1)
+
+    const properties = { name: testName }
+    const result = await database.updateById(testTable, testId, properties)
+    expect(database.table).toHaveBeenCalledWith(testTable)
+    expect(database.table().update).toHaveBeenCalledWith(testId, properties)
+    expect(result).toBe(1)
   })
 })

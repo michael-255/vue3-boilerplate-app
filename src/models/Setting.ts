@@ -1,5 +1,7 @@
+import type { SettingKey } from '@/constants/data-enums'
+
 export interface ISetting {
-  id: string
+  id: SettingKey
   value: boolean | string | number
 }
 
@@ -13,7 +15,7 @@ export class Setting {
   value: boolean | string | number
 
   constructor(params: ISetting) {
-    this.id = params.id
+    this.id = params.id as string // ids are strings in the database
     this.value = params.value
   }
 }

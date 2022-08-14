@@ -56,42 +56,22 @@ export class LocalDatabase extends Dexie {
   }
 
   /**
-   * Get Activities from table by name.
+   * Get items from table by name.
    * @param table
    * @param name
-   * @returns Array of Activities
+   * @returns Array of items
    */
-  // async getActivitiesByName<T>(table: DexieTable, name: string): Promise<T[]> {
-  //   return await this.table(table).where('name').equalsIgnoreCase(name).toArray()
-  // }
+  async getByName<T>(table: DexieTable, name: string): Promise<T[]> {
+    return await this.table(table).where('name').equalsIgnoreCase(name).toArray()
+  }
 
   /**
-   * Get Activities from table by status.
-   * @param table
-   * @param status
-   * @returns Array of Activities
-   */
-  // async getActivitiesByStatus<T>(table: DexieTable, status: ActivityStatus): Promise<T[]> {
-  //   return await this.table(table).where('status').equalsIgnoreCase(status).toArray()
-  // }
-
-  /**
-   * Get Records from table by status.
-   * @param table
-   * @param status
-   * @returns Array of Records
-   */
-  // async getRecordsByStatus<T>(table: DexieTable, status: RecordStatus): Promise<T[]> {
-  //   return await this.table(table).where('status').equalsIgnoreCase(status).toArray()
-  // }
-
-  /**
-   * Get Records from table by parentId.
+   * Get items from table by parentId.
    * @param table
    * @param parentId
-   * @returns Array of Records
+   * @returns Array of items
    */
-  async getRecordsByParentId<T>(table: DexieTable, parentId: string): Promise<T[]> {
+  async getByParentId<T>(table: DexieTable, parentId: string): Promise<T[]> {
     return await this.table(table)
       .where('parentId')
       .equalsIgnoreCase(parentId)
@@ -99,12 +79,12 @@ export class LocalDatabase extends Dexie {
   }
 
   /**
-   * Get newest Records from table by parentId.
+   * Get newest item from table by parentId.
    * @param table
    * @param parentId
-   * @returns Newest Record or undefined
+   * @returns Newest item or undefined
    */
-  async getNewestRecordByParentId<T>(table: DexieTable, parentId: string): Promise<T | undefined> {
+  async getNewestByParentId<T>(table: DexieTable, parentId: string): Promise<T | undefined> {
     return (
       await this.table(table).where('parentId').equalsIgnoreCase(parentId).sortBy('createdDate')
     ).reverse()[0]
