@@ -14,6 +14,7 @@ export function useInjectTableInputs(): { [x: string]: any } {
     descriptionModel,
     parentIdModel,
     valueModel,
+    roundsModel,
     // InputRefs
     idInputRef,
     createdDateInputRef,
@@ -21,6 +22,7 @@ export function useInjectTableInputs(): { [x: string]: any } {
     descriptionInputRef,
     parentIdInputRef,
     valueInputRef,
+    // Misc
     updateModel,
   } = inject(InjectionKey.TABLE_INPUTS) as any
 
@@ -32,6 +34,7 @@ export function useInjectTableInputs(): { [x: string]: any } {
     descriptionModel,
     parentIdModel,
     valueModel,
+    roundsModel,
     // InputRefs
     idInputRef,
     createdDateInputRef,
@@ -39,6 +42,7 @@ export function useInjectTableInputs(): { [x: string]: any } {
     descriptionInputRef,
     parentIdInputRef,
     valueInputRef,
+    // Misc
     updateModel,
   }
 }

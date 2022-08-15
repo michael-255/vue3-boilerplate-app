@@ -3,16 +3,27 @@ import { useFields } from '@/use/useFields'
 import { Field } from '@/constants/data-enums'
 
 /**
- * Some fields are ignored because they are internal.
- * @param field
- * @returns Boolean if it is an ignored field
+ * Some fields are ignored since they do not have a component.
  */
-function isIgnoredField(field: Field): boolean {
+function isIgnoredComponentField(field: Field): boolean {
   return (
     field === Field.SEVERITY ||
     field === Field.DETAILS ||
     field === Field.MESSAGE ||
     field === Field.STACK
+  )
+}
+
+/**
+ * Some fields are ignored since they do not have a validator.
+ */
+function isIgnoredValidatorField(field: Field): boolean {
+  return (
+    field === Field.SEVERITY ||
+    field === Field.DETAILS ||
+    field === Field.MESSAGE ||
+    field === Field.STACK ||
+    field === Field.ROUNDS
   )
 }
 
@@ -23,7 +34,7 @@ describe('useFields', () => {
     const asyncNameObj = { name: 'AsyncComponentWrapper' }
     const fields = Object.values(Field) as Field[]
     fields.forEach((field) => {
-      if (!isIgnoredField(field)) {
+      if (!isIgnoredComponentField(field)) {
         expect(getFieldComponent(field)).toEqual(expect.objectContaining(asyncNameObj))
       }
     })
@@ -32,7 +43,7 @@ describe('useFields', () => {
   test('getFieldValidator returns a validator for each checked field', () => {
     const fields = Object.values(Field) as Field[]
     fields.forEach((field) => {
-      if (!isIgnoredField(field)) {
+      if (!isIgnoredValidatorField(field)) {
         expect(typeof getFieldValidator(field)).toBe('function')
       }
     })
