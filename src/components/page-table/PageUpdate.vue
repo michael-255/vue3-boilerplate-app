@@ -3,11 +3,11 @@ import { AppTable, Field } from '@/constants/data-enums.js'
 import type { DataObject } from '@/constants/types-interfaces'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { onMounted } from 'vue'
+import { getFieldComponent } from '@/helpers/field-components'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { useProvideTableInputs } from '@/use/useProvideTableInputs'
 import { useLogger } from '@/use/useLogger'
 import { useTable } from '@/use/useTable'
-import { useFields } from '@/use/useFields'
 
 /**
  * Component for handling table item Updates using Provide/Inject for the inputs.
@@ -22,7 +22,6 @@ const emits = defineEmits<{ (eventName: 'on-update'): void }>()
 
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
-const { getFieldComponent } = useFields()
 const { getFields, getActions, getSingularLabel } = useTable()
 const {
   // Models
@@ -32,7 +31,7 @@ const {
   descriptionModel,
   parentIdModel,
   valueModel,
-  roundsModel,
+  // roundsModel,
   areExampleInputsValid,
   areExampleRecordInputsValid,
 } = useProvideTableInputs()
@@ -49,7 +48,7 @@ onMounted(async () => {
     descriptionModel.value = description
     parentIdModel.value = parentId
     valueModel.value = value
-    roundsModel.value = rounds
+    // roundsModel.value = rounds
   } else {
     log.error('Item is undefined', { name: 'PageUpdate:onMounted' })
   }
@@ -116,7 +115,7 @@ function updateConfirmDialog(): void {
           description: descriptionModel.value,
           parentId: parentIdModel.value,
           value: valueModel.value,
-          rounds: roundsModel.value,
+          // rounds: roundsModel.value,
         })
         emits('on-update')
       } else {

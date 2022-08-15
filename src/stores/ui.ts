@@ -1,8 +1,5 @@
 import { defineStore, type StoreDefinition } from 'pinia'
 
-/**
- * @todo Typescript for the state?
- */
 export const useUIStore: StoreDefinition = defineStore({
   id: 'ui',
 

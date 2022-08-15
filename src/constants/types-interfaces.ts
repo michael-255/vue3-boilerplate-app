@@ -17,6 +17,7 @@ export type TableActions = {
   createRow?: (x: DataObject) => any
   updateRow?: (x: DataObject) => any
   generateReport?: (id: string) => any
+  generateTempItem?: (item?: DataObject) => any
 }
 
 export type SettingValue = boolean | string | number

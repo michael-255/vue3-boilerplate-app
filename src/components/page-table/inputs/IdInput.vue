@@ -3,11 +3,9 @@ import { QInput } from 'quasar'
 import { onMounted } from 'vue'
 import { v4 as createId } from 'uuid'
 import { Icon } from '@/constants/ui-enums'
-import { Field } from '@/constants/data-enums'
-import { useFields } from '@/use/useFields'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
+import { isId } from '@/utils/validators'
 
-const { getFieldValidator } = useFields()
 const { idModel, idInputRef, updateModel } = useInjectTableInputs()
 
 /**
@@ -32,7 +30,7 @@ function randomId(): void {
     v-model="idModel"
     ref="idInputRef"
     label="Id"
-    :rules="[getFieldValidator(Field.ID)]"
+    :rules="[(val: string) => isId(val) || 'Id must be between 1 and 40 characters']"
     :maxlength="40"
     dense
     outlined

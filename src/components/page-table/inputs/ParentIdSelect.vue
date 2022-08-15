@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { QSelect } from 'quasar'
 import { onMounted, ref, type Ref } from 'vue'
-import { AppTable, Field } from '@/constants/data-enums'
+import type { AppTable } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { truncateString } from '@/utils/common'
+import { isDefined } from '@/utils/validators'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 import { useTable } from '@/use/useTable'
-import { useFields } from '@/use/useFields'
 
 /**
  * Uses the table prop to get access to getRelatedTable.
@@ -14,7 +14,6 @@ import { useFields } from '@/use/useFields'
  */
 const props = defineProps<{ table: AppTable }>()
 
-const { getFieldValidator } = useFields()
 const { getRelatedTable } = useTable()
 const { parentIdModel, parentIdInputRef } = useInjectTableInputs()
 const options: Ref<any[]> = ref([])
@@ -46,7 +45,7 @@ onMounted(async () => {
     v-model="parentIdModel"
     label="Parent"
     :options="options"
-    :rules="[getFieldValidator(Field.PARENT_ID)]"
+    :rules="[(val: string) => isDefined(val) || '* Required']"
     emit-value
     map-options
     options-dense

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Icon } from '@/constants/ui-enums'
 import { AppTable } from '@/constants/data-enums'
-import PageTabs from '@/components/data-table/PageTabs.vue'
-import PageTable from '@/components/data-table/PageTable.vue'
+import PageTabs from '@/components/page-table/PageTabs.vue'
+import PageTable from '@/components/page-table/PageTable.vue'
 </script>
 
 <template>

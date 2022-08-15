@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { QInput } from 'quasar'
-import { Field } from '@/constants/data-enums'
-import { useFields } from '@/use/useFields'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
+import { isOptionalLongText } from '@/utils/validators'
 
-const { getFieldValidator } = useFields()
 const { descriptionModel, descriptionInputRef } = useInjectTableInputs()
 const maxLength = 500
 </script>
@@ -14,7 +12,7 @@ const maxLength = 500
     v-model="descriptionModel"
     ref="descriptionInputRef"
     label="Description"
-    :rules="[getFieldValidator(Field.DESCRIPTION)]"
+    :rules="[(val: string) => isOptionalLongText(val) || 'Description is limited to 500 characters']"
     :maxlength="maxLength"
     :hint="`${descriptionModel?.length || '0'}/${maxLength}`"
     dense

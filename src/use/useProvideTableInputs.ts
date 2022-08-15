@@ -15,7 +15,7 @@ export function useProvideTableInputs(): { [x: string]: any } {
   const descriptionModel: Ref<any> = ref(null)
   const parentIdModel: Ref<any> = ref(null)
   const valueModel: Ref<any> = ref(null)
-  const roundsModel: Ref<Round[]> = ref([])
+  // const roundsModel: Ref<Round[]> = ref([])
   // Field InputRefs
   const idInputRef: Ref<any> = ref(null)
   const createdDateInputRef: Ref<any> = ref(null)
@@ -70,7 +70,7 @@ export function useProvideTableInputs(): { [x: string]: any } {
     descriptionModel,
     parentIdModel,
     valueModel,
-    roundsModel,
+    // roundsModel,
     // InputRefs
     idInputRef,
     createdDateInputRef,
@@ -90,7 +90,7 @@ export function useProvideTableInputs(): { [x: string]: any } {
     descriptionModel,
     parentIdModel,
     valueModel,
-    roundsModel,
+    // roundsModel,
     // InputRefs
     idInputRef,
     createdDateInputRef,

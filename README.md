@@ -5,6 +5,10 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
+- [ ] `Refactor`
+
+  - [ ] `TEST - Components` build out DB using components (Start with Create, NO provide/inject)
+
 - [ ] `Examples`
 
   - [ ] `Rounds` Similar to Exercise sets (multiple data points)

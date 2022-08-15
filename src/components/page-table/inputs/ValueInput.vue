@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { QInput } from 'quasar'
-import { Field } from '@/constants/data-enums'
-import { useFields } from '@/use/useFields'
+import { isPositiveNumber } from '@/utils/validators'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 
-const { getFieldValidator } = useFields()
 const { valueModel, valueInputRef } = useInjectTableInputs()
 </script>
 
@@ -13,7 +11,7 @@ const { valueModel, valueInputRef } = useInjectTableInputs()
     v-model.number="valueModel"
     ref="valueInputRef"
     label="Value"
-    :rules="[getFieldValidator(Field.VALUE)]"
+    :rules="[(val: number) => isPositiveNumber(val) || 'Positive number not exceeding 1,000,000,000 is required']"
     dense
     outlined
     type="number"

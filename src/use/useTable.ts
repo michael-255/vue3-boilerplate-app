@@ -1,5 +1,5 @@
 import type { ColumnProps, DataObject, TableActions } from '@/constants/types-interfaces'
-import { AppTable, Field, Operation } from '@/constants/data-enums'
+import { Action, AppTable, Field, Operation } from '@/constants/data-enums'
 import { Example } from '@/models/Example'
 import { ExampleRecord } from '@/models/ExampleRecord'
 import { Log } from '@/models/Log'
@@ -115,6 +115,7 @@ export function useTable(): { [x: string]: any } {
     return {
       [AppTable.EXAMPLES]: {
         getRows: async () => await DB.getAll(table),
+        generateTempItem: () => true, // #todo
         createRow: async (data: DataObject) => {
           await DB.add(
             AppTable.EXAMPLES,
@@ -153,7 +154,7 @@ export function useTable(): { [x: string]: any } {
               createdDate: data.createdDate,
               parentId: data.parentId,
               value: data.value,
-              rounds: JSON.parse(JSON.stringify(data.rounds)), // JSON to fix Dexie cloning error
+              // rounds: JSON.parse(JSON.stringify(data.rounds)), // JSON to fix Dexie cloning error
             })
           )
         },
@@ -163,7 +164,7 @@ export function useTable(): { [x: string]: any } {
             createdDate: data.createdDate,
             parentId: data.parentId,
             value: data.value,
-            rounds: data.rounds,
+            // rounds: data.rounds,
           })
         },
       },

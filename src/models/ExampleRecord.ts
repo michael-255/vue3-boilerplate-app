@@ -11,7 +11,7 @@ export type Round = {
 export interface IExampleRecord extends IEntity {
   parentId: string
   value: number
-  rounds: Round[]
+  // rounds: Round[]
 }
 
 /**
@@ -21,17 +21,22 @@ export interface IExampleRecord extends IEntity {
 export class ExampleRecord extends _Entity {
   parentId: string
   value: number
-  rounds: Round[]
+  // rounds: Round[]
 
   constructor(params: IExampleRecord) {
     super({ id: params.id, createdDate: params.createdDate })
     this.parentId = params.parentId
     this.value = params.value
-    this.rounds = params.rounds
+    // this.rounds = params.rounds
   }
 
   static getFields(): Field[] {
-    return [..._Entity.getFields(), Field.PARENT_ID, Field.VALUE, Field.ROUNDS]
+    return [
+      ..._Entity.getFields(),
+      Field.PARENT_ID,
+      Field.VALUE,
+      // Field.ROUNDS,
+    ]
   }
 
   static getColumns(): ColumnProps[] {

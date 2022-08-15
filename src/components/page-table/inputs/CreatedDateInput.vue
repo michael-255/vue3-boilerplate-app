@@ -2,12 +2,10 @@
 import { QInput, QDate, QBtn, QTime, QPopupProxy } from 'quasar'
 import { type Ref, ref, onMounted } from 'vue'
 import { isoToDisplayDate } from '@/utils/luxon'
-import { Field } from '@/constants/data-enums'
 import { Icon } from '@/constants/ui-enums'
-import { useFields } from '@/use/useFields'
 import { useInjectTableInputs } from '@/use/useInjectTableInputs'
+import { isDate } from '@/utils/validators'
 
-const { getFieldValidator } = useFields()
 const { createdDateModel, createdDateInputRef, updateModel } = useInjectTableInputs()
 const userDisplayedDate: Ref<string> = ref('')
 const dateTimePicker: Ref<string> = ref('')
@@ -48,7 +46,7 @@ function onPickerDateTime(): void {
     v-model="userDisplayedDate"
     ref="createdDateInputRef"
     label="Created Date"
-    :rules="[getFieldValidator(Field.CREATED_DATE)]"
+    :rules="[(val: string) => isDate(val) || 'Date must be of format YYYY-MM-DDTHH:MM:SS.###Z']"
     dense
     outlined
     disable
