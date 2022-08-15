@@ -6,7 +6,6 @@ import {
   isShortTextValid,
   isLongTextValid,
   isValidNumber,
-  isOptionalNumber,
   isDefined,
 } from '@/utils/validators'
 

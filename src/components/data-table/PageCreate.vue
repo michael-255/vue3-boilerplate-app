@@ -26,6 +26,7 @@ const {
   descriptionModel,
   parentIdModel,
   valueModel,
+  roundsModel,
   areExampleInputsValid,
   areExampleRecordInputsValid,
 } = useProvideTableInputs()
@@ -90,6 +91,7 @@ function createConfirmDialog(): void {
           description: descriptionModel.value,
           parentId: parentIdModel.value,
           value: valueModel.value,
+          rounds: roundsModel.value,
         })
         emits('on-create')
       } else {

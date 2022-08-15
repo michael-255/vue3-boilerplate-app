@@ -153,6 +153,7 @@ export function useTable(): { [x: string]: any } {
               createdDate: data.createdDate,
               parentId: data.parentId,
               value: data.value,
+              rounds: JSON.parse(JSON.stringify(data.rounds)), // JSON to fix Dexie cloning error
             })
           )
         },
@@ -162,6 +163,7 @@ export function useTable(): { [x: string]: any } {
             createdDate: data.createdDate,
             parentId: data.parentId,
             value: data.value,
+            rounds: data.rounds,
           })
         },
       },

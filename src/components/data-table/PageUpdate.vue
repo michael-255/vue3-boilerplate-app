@@ -32,6 +32,7 @@ const {
   descriptionModel,
   parentIdModel,
   valueModel,
+  roundsModel,
   areExampleInputsValid,
   areExampleRecordInputsValid,
 } = useProvideTableInputs()
@@ -41,13 +42,14 @@ const {
  */
 onMounted(async () => {
   if (props.item) {
-    const { id, createdDate, name, description, parentId, value } = props.item
+    const { id, createdDate, name, description, parentId, value, rounds } = props.item
     idModel.value = id
     createdDateModel.value = createdDate
     nameModel.value = name
     descriptionModel.value = description
     parentIdModel.value = parentId
     valueModel.value = value
+    roundsModel.value = rounds
   } else {
     log.error('Item is undefined', { name: 'PageUpdate:onMounted' })
   }
@@ -114,6 +116,7 @@ function updateConfirmDialog(): void {
           description: descriptionModel.value,
           parentId: parentIdModel.value,
           value: valueModel.value,
+          rounds: roundsModel.value,
         })
         emits('on-update')
       } else {
