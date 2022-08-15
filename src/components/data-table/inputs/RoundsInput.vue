@@ -10,13 +10,14 @@ import { ref, type Ref } from 'vue'
  * - Going to use a data table to ADD and REMOVE buttons for the rounds
  * - Will need to determine what the ROWS and COLUMNS need to be for the table
  * - Add ROUNDS to ingored fields in your tests
+ * - Don't worry about reusing this component for the Active Page (that will be a different component)
  * - What do I do when multiple components need the same ref (sets)???
  */
 
 const { roundsModel } = useInjectTableInputs()
 
-const primary: Ref<number | undefined> = ref(13)
-const secondary: Ref<number | undefined> = ref(42)
+const primary: Ref<number> = ref(0)
+const secondary: Ref<number> = ref(0)
 
 const rows = ref([])
 const columns = ref([])

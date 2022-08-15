@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AppTable } from '@/constants/data-enums'
-import PageTable from '@/components/page/PageTable.vue'
+import PageTable from '@/components/data-table/PageTable.vue'
 </script>
 
 <template>

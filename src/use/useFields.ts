@@ -21,19 +21,25 @@ export function useFields(): { [x: string]: any } {
    */
   function getFieldComponent(field: Field): any | undefined {
     return {
-      [Field.ID]: defineAsyncComponent(() => import('@/components/inputs/IdInput.vue')),
+      [Field.ID]: defineAsyncComponent(() => import('@/components/data-table/inputs/IdInput.vue')),
       [Field.CREATED_DATE]: defineAsyncComponent(
-        () => import('@/components/inputs/CreatedDateInput.vue')
+        () => import('@/components/data-table/inputs/CreatedDateInput.vue')
       ),
-      [Field.NAME]: defineAsyncComponent(() => import('@/components/inputs/NameInput.vue')),
+      [Field.NAME]: defineAsyncComponent(
+        () => import('@/components/data-table/inputs/NameInput.vue')
+      ),
       [Field.DESCRIPTION]: defineAsyncComponent(
-        () => import('@/components/inputs/DescriptionInput.vue')
+        () => import('@/components/data-table/inputs/DescriptionInput.vue')
       ),
-      [Field.ROUNDS]: defineAsyncComponent(() => import('@/components/inputs/RoundsInput.vue')),
+      [Field.ROUNDS]: defineAsyncComponent(
+        () => import('@/components/data-table/inputs/RoundsInput.vue')
+      ),
       [Field.PARENT_ID]: defineAsyncComponent(
-        () => import('@/components/inputs/ParentIdSelect.vue')
+        () => import('@/components/data-table/inputs/ParentIdSelect.vue')
       ),
-      [Field.VALUE]: defineAsyncComponent(() => import('@/components/inputs/ValueInput.vue')),
+      [Field.VALUE]: defineAsyncComponent(
+        () => import('@/components/data-table/inputs/ValueInput.vue')
+      ),
     }[field as string] // As string so fields without a value will return undefined
   }
 

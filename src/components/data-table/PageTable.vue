@@ -9,10 +9,10 @@ import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { useTable } from '@/use/useTable'
 import PageDialog from '@/components/dialogs/PageDialog.vue'
-import PageInspect from '@/components/page/PageInspect.vue'
-import PageCreate from '@/components/page/PageCreate.vue'
-import PageUpdate from '@/components/page/PageUpdate.vue'
-import PageReport from '@/components/page/PageReport.vue'
+import PageInspect from '@/components/data-table/PageInspect.vue'
+import PageCreate from '@/components/data-table/PageCreate.vue'
+import PageUpdate from '@/components/data-table/PageUpdate.vue'
+import PageReport from '@/components/data-table/PageReport.vue'
 
 /**
  * Component allows viewing of table data and actions on that data.
