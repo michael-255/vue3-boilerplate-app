@@ -12,12 +12,15 @@ const temporary = useTemporaryItemStore()
 const descriptionInputRef: Ref<any> = ref(null)
 const maxLength = 500
 
+// Setup
+temporary.item.description = selected.item?.description ? selected.item.description : ''
+
 onMounted(() => {
-  temporary.item.description = selected.item?.description ? selected.item.description : ''
+  validateInput()
 })
 
 function validateInput(): void {
-  validate.description = !!descriptionInputRef?.value?.validate()
+  validate.item.description = !!descriptionInputRef?.value?.validate()
 }
 </script>
 

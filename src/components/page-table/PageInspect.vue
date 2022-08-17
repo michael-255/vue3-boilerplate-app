@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DataObject } from '@/constants/types-interfaces'
-import { onMounted, type Ref, ref } from 'vue'
+import { type Ref, ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
 import { useSelectedItemStore } from '@/stores/selected'
 
@@ -12,26 +12,20 @@ const selected = useSelectedItemStore()
  */
 const props = defineProps<{ columns: any[] }>()
 const inspectionValues: Ref<DataObject[]> = ref([])
-
 const { log } = useLogger()
 
-/**
- * Builds the displayable properties for the template loop.
- */
-onMounted(async () => {
-  try {
-    inspectionValues.value = Object.keys(selected.item).map((key) => {
-      console.log(JSON.parse(JSON.stringify(selected.item)))
-      console.log(inspectionValues)
-      return {
-        label: props.columns.find((i) => i.name === key).label,
-        value: selected.item?.[key] || '-',
-      }
-    })
-  } catch (error) {
-    log.error('PageInspect:onMounted', error)
-  }
-})
+try {
+  Object.entries(selected.item).forEach((entry) => {
+    if (entry[1]) {
+      inspectionValues.value.push({
+        label: props.columns.find((i) => i?.name === entry[0])?.label,
+        value: entry[1] || '-',
+      })
+    }
+  })
+} catch (error) {
+  log.error('PageInspect:Setup', error)
+}
 </script>
 
 <template>

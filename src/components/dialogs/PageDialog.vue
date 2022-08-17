@@ -4,14 +4,17 @@ import { Icon } from '@/constants/ui-enums'
 import { useUIStore } from '@/stores/ui'
 import { useTemporaryItemStore } from '@/stores/temporary'
 import { useSelectedItemStore } from '@/stores/selected'
+import { useValidateItemStore } from '@/stores/validate'
 
 const ui = useUIStore()
 const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
+const validate = useValidateItemStore()
 
 async function deleteTemporaryItem(): Promise<void> {
   selected.$reset()
   temporary.$reset()
+  validate.$reset()
   ui.pageTable.dialog = false
 }
 </script>

@@ -15,15 +15,18 @@ const createdDateInputRef: Ref<any> = ref(null)
 const displayedDate: Ref<string> = ref('')
 const dateTimePicker: Ref<string> = ref('')
 
+// Setup
+if (selected.item?.createdDate) {
+  updateDates(selected.item.createdDate)
+} else {
+  updateDates()
+}
+
 /**
  * Sets the display date based on the model ref, or defaults it to the current date.
  */
 onMounted(() => {
-  if (selected.item?.createdDate) {
-    updateDates(selected.item.createdDate)
-  } else {
-    updateDates()
-  }
+  validateInput()
 })
 
 function updateDates(date: string = new Date().toISOString()): void {
@@ -42,7 +45,7 @@ function onPickerDateTime(): void {
 }
 
 function validateInput(): void {
-  validate.createdDate = !!createdDateInputRef?.value?.validate()
+  validate.item.createdDate = !!createdDateInputRef?.value?.validate()
 }
 </script>
 

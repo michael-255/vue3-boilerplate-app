@@ -11,15 +11,15 @@ const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
 const nameInputRef: Ref<any> = ref(null)
 
-/**
- * Sets the model ref with a default if no value is provided.
- */
+// Setup
+temporary.item.name = selected.item?.name ? selected.item.name : 'Example Name'
+
 onMounted(() => {
-  temporary.item.name = selected.item?.name ? selected.item.name : 'Example Name'
+  validateInput()
 })
 
 function validateInput(): void {
-  validate.name = !!nameInputRef?.value?.validate()
+  validate.item.name = !!nameInputRef?.value?.validate()
 }
 </script>
 

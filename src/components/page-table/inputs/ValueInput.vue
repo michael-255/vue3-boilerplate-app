@@ -11,12 +11,15 @@ const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
 const valueInputRef: Ref<any> = ref(null)
 
+// Setup
+temporary.item.value = selected.item?.value ? selected.item.value : 1
+
 onMounted(() => {
-  temporary.item.value = selected.item?.value ? selected.item.value : 1
+  validateInput()
 })
 
 function validateInput(): void {
-  validate.value = !!valueInputRef?.value?.validate()
+  validate.item.value = !!valueInputRef?.value?.validate()
 }
 </script>
 

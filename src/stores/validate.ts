@@ -9,13 +9,15 @@ export const useValidateItemStore: StoreDefinition = defineStore({
    * selected item values (Update) should always be valid.
    */
   state: () => ({
-    id: true,
-    createdDate: true,
-    name: true,
-    description: true,
-    parentId: true,
-    value: true,
-    rounds: true,
+    item: {
+      id: null,
+      createdDate: null,
+      name: null,
+      description: null,
+      parentId: true, // @todo - async setup with Suspense
+      value: null,
+      rounds: null,
+    },
   }),
 
   actions: {},
@@ -33,8 +35,8 @@ export const useValidateItemStore: StoreDefinition = defineStore({
         }[table]
       },
     isExampleValid: (state: any): boolean =>
-      state.id && state.createdDate && state.name && state.description,
+      state.item.id && state.item.createdDate && state.item.name && state.item.description,
     isExampleRecordValid: (state: any): boolean =>
-      state.id && state.createdDate && state.parentId && state.value,
+      state.item.id && state.item.createdDate && state.item.parentId && state.item.value,
   },
 })

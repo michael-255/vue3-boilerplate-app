@@ -16,10 +16,12 @@ import PageReport from '@/components/page-table/PageReport.vue'
 import { useSelectedItemStore } from '@/stores/selected'
 import { useUIStore } from '@/stores/ui'
 import { useValidateItemStore } from '@/stores/validate'
+import { useTemporaryItemStore } from '@/stores/temporary'
 
 const ui = useUIStore()
 const selected = useSelectedItemStore()
 const validate = useValidateItemStore()
+const temporary = useTemporaryItemStore()
 
 /**
  * Component allows viewing of table data and actions on that data.
@@ -78,6 +80,7 @@ async function updateDialog(bool: boolean): Promise<void> {
   await updateRows()
   selected.$reset()
   validate.$reset()
+  temporary.$reset()
   ui.pageTable.operation = Operation.NO_OP
   ui.pageTable.dialog = !!bool // Always last so everything else is updated before dialog changes
 }
@@ -88,6 +91,7 @@ async function updateDialog(bool: boolean): Promise<void> {
 async function onCreate(): Promise<void> {
   selected.$reset()
   validate.$reset()
+  temporary.$reset()
   ui.pageTable.operation = Operation.CREATE
   ui.pageTable.dialog = true
 }
@@ -96,7 +100,7 @@ async function onCreate(): Promise<void> {
  * Update row action opens the dialog with the settings below.
  */
 async function onUpdate(id: string): Promise<void> {
-  selected.item = await DB.getById(props.table, id)
+  selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
   ui.pageTable.operation = Operation.UPDATE
   ui.pageTable.dialog = true
 }
@@ -105,7 +109,7 @@ async function onUpdate(id: string): Promise<void> {
  * Report row action opens the dialog with the settings below.
  */
 async function onReport(id: string): Promise<void> {
-  selected.item = await DB.getById(props.table, id)
+  selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
   ui.pageTable.operation = Operation.REPORT
   ui.pageTable.dialog = true
 }
@@ -114,7 +118,7 @@ async function onReport(id: string): Promise<void> {
  * Inspect row action opens the dialog with the settings below.
  */
 async function onInspect(id: string): Promise<void> {
-  selected.item = await DB.getById(props.table, id)
+  selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
   ui.pageTable.operation = Operation.INSPECT
   ui.pageTable.dialog = true
 }

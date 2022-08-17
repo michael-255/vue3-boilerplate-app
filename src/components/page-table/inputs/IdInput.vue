@@ -13,17 +13,21 @@ const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
 const idInputRef: Ref<any> = ref(null)
 
+// Setup
+temporary.item.id = selected.item?.id ? selected.item.id : createId()
+
 onMounted(() => {
-  temporary.item.id = selected.item?.id ? selected.item.id : createId()
+  validateInput()
 })
 
 function generateId(): void {
   temporary.item.id = createId()
+  console.log(idInputRef.value.modelValue)
   validateInput()
 }
 
 function validateInput(): void {
-  validate.id = !!idInputRef?.value?.validate()
+  validate.item.id = !!idInputRef?.value?.validate()
 }
 </script>
 

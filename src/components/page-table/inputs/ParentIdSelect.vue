@@ -28,6 +28,8 @@ const options: Ref<any[]> = ref([])
 
 /**
  * Sets the select box options with the parent items from the database.
+ * @todo
+ * NEEDED: async setup and Suspense component
  */
 onMounted(async () => {
   const relatedTable = getRelatedTable(props.table)
@@ -55,7 +57,10 @@ onMounted(async () => {
       temporary.item.parentId = null
     }
 
-    validateInput()
+    /**
+     * @todo async setup and Suspense component
+     */
+    // validateInput()
   } else {
     log.error('No related table to make parent selection', { name: 'ParentIdSelect:onMounted' })
   }
@@ -72,8 +77,7 @@ const parentId = computed({
 })
 
 function validateInput(): void {
-  console.log('validate parentId')
-  validate.parentId = !!parentIdInputRef?.value?.validate()
+  validate.item.parentId = !!parentIdInputRef?.value?.validate()
 }
 </script>
 
