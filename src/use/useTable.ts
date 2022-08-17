@@ -1,5 +1,5 @@
 import type { ColumnProps, DataObject, TableActions } from '@/constants/types-interfaces'
-import { Action, AppTable, Field, Operation } from '@/constants/data-enums'
+import { AppTable, Field, Operation } from '@/constants/data-enums'
 import { Example } from '@/models/Example'
 import { ExampleRecord } from '@/models/ExampleRecord'
 import { Log } from '@/models/Log'

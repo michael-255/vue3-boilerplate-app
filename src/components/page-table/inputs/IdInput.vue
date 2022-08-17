@@ -1,33 +1,35 @@
 <script setup lang="ts">
 import { QInput } from 'quasar'
-import { onMounted } from 'vue'
+import { onMounted, ref, type Ref } from 'vue'
 import { v4 as createId } from 'uuid'
 import { Icon } from '@/constants/ui-enums'
-import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 import { isId } from '@/utils/validators'
+import { useTemporaryItemStore } from '@/stores/temporary'
+import { useSelectedItemStore } from '@/stores/selected'
+import { useValidateItemStore } from '@/stores/validate'
 
-const { idModel, idInputRef, updateModel } = useInjectTableInputs()
+const validate = useValidateItemStore()
+const selected = useSelectedItemStore()
+const temporary = useTemporaryItemStore()
+const idInputRef: Ref<any> = ref(null)
 
-/**
- * Sets the model ref with a random id if one was not provided.
- */
 onMounted(() => {
-  if (!idModel.value) {
-    updateModel(idModel, createId())
-  }
+  temporary.item.id = selected.item?.id ? selected.item.id : createId()
 })
 
-/**
- * Resets the model ref with a random id.
- */
-function randomId(): void {
-  updateModel(idModel, createId())
+function generateId(): void {
+  temporary.item.id = createId()
+  validateInput()
+}
+
+function validateInput(): void {
+  validate.id = !!idInputRef?.value?.validate()
 }
 </script>
 
 <template>
   <QInput
-    v-model="idModel"
+    v-model="temporary.item.id"
     ref="idInputRef"
     label="Id"
     :rules="[(val: string) => isId(val) || 'Id must be between 1 and 40 characters']"
@@ -36,9 +38,10 @@ function randomId(): void {
     outlined
     color="primary"
     class="q-mb-xs"
+    @blur="validateInput()"
   >
     <template v-slot:after>
-      <QBtn :icon="Icon.RENEW" color="primary" class="q-ml-xs q-px-sm" @click="randomId()" />
+      <QBtn :icon="Icon.RENEW" color="primary" class="q-ml-xs q-px-sm" @click="generateId()" />
     </template>
   </QInput>
 </template>

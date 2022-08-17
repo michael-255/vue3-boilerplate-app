@@ -6,16 +6,15 @@ import { useLogger } from '@/use/useLogger'
 import { LineChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 import { useTable } from '@/use/useTable'
+import { useSelectedItemStore } from '@/stores/selected'
+
+const selected = useSelectedItemStore()
 
 /**
  * Component for handling reports for each supported table.
  * @param table
- * @param item Needed for the name and id
  */
-const props = defineProps<{
-  table: AppTable
-  item: DataObject | undefined
-}>()
+const props = defineProps<{ table: AppTable }>()
 
 const { log } = useLogger()
 const { getActions } = useTable()
@@ -40,7 +39,7 @@ const chartOptions: { [x: string]: any } = {
     },
     title: {
       display: true,
-      text: props.item?.name,
+      text: selected.item?.name,
     },
   },
 }
@@ -66,7 +65,7 @@ onMounted(async () => {
   try {
     const { generateReport } = getActions(props.table)
     if (generateReport) {
-      const dataset = await generateReport(props.item?.id)
+      const dataset = await generateReport(selected.item?.id)
       datasetLabels.value = dataset.labels
       datasetData.value = dataset.data
       firstDate.value = dataset.firstDate

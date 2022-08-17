@@ -3,31 +3,33 @@ import { QInput, QDate, QBtn, QTime, QPopupProxy } from 'quasar'
 import { type Ref, ref, onMounted } from 'vue'
 import { isoToDisplayDate } from '@/utils/luxon'
 import { Icon } from '@/constants/ui-enums'
-import { useInjectTableInputs } from '@/use/useInjectTableInputs'
 import { isDate } from '@/utils/validators'
+import { useTemporaryItemStore } from '@/stores/temporary'
+import { useSelectedItemStore } from '@/stores/selected'
+import { useValidateItemStore } from '@/stores/validate'
 
-const { createdDateModel, createdDateInputRef, updateModel } = useInjectTableInputs()
-const userDisplayedDate: Ref<string> = ref('')
+const validate = useValidateItemStore()
+const selected = useSelectedItemStore()
+const temporary = useTemporaryItemStore()
+const createdDateInputRef: Ref<any> = ref(null)
+const displayedDate: Ref<string> = ref('')
 const dateTimePicker: Ref<string> = ref('')
 
 /**
  * Sets the display date based on the model ref, or defaults it to the current date.
  */
 onMounted(() => {
-  if (createdDateModel.value) {
-    userDisplayedDate.value = isoToDisplayDate(createdDateModel.value as string)
+  if (selected.item?.createdDate) {
+    updateDates(selected.item.createdDate)
   } else {
-    onNowDate()
+    updateDates()
   }
 })
 
-/**
- * Sets display date and model ref to the current date.
- */
-function onNowDate(): void {
-  const now = new Date().toISOString()
-  updateModel(createdDateModel, now)
-  userDisplayedDate.value = isoToDisplayDate(now)
+function updateDates(date: string = new Date().toISOString()): void {
+  temporary.item.createdDate = new Date(date).toISOString()
+  displayedDate.value = isoToDisplayDate(date as string)
+  validateInput()
 }
 
 /**
@@ -35,15 +37,18 @@ function onNowDate(): void {
  */
 function onPickerDateTime(): void {
   if (dateTimePicker.value) {
-    updateModel(createdDateModel, new Date(dateTimePicker.value).toISOString())
-    userDisplayedDate.value = isoToDisplayDate(dateTimePicker.value)
+    updateDates(dateTimePicker.value)
   }
+}
+
+function validateInput(): void {
+  validate.createdDate = !!createdDateInputRef?.value?.validate()
 }
 </script>
 
 <template>
   <QInput
-    v-model="userDisplayedDate"
+    v-model="displayedDate"
     ref="createdDateInputRef"
     label="Created Date"
     :rules="[(val: string) => isDate(val) || 'Date must be of format YYYY-MM-DDTHH:MM:SS.###Z']"
@@ -79,7 +84,7 @@ function onPickerDateTime(): void {
         :icon="Icon.CALENDAR_CHECK"
         color="positive"
         class="q-ml-sm q-px-sm"
-        @click="onNowDate()"
+        @click="updateDates()"
       />
     </template>
   </QInput>

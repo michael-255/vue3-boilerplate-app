@@ -21,7 +21,7 @@ const ui = useUIStore()
   <QLayout view="hHh LpR lff">
     <QHeader elevated class="bg-primary text-white">
       <QToolbar>
-        <QBtn dense flat round :icon="Icon.MENU" @click="ui.toggleDrawer()" />
+        <QBtn dense flat round :icon="Icon.MENU" @click="ui.toggleMainMenu()" />
 
         <QToolbarTitle>{{ Strings.APP_NAME }}</QToolbarTitle>
 
@@ -29,7 +29,7 @@ const ui = useUIStore()
       </QToolbar>
     </QHeader>
 
-    <QDrawer v-model="ui.drawer" :width="220" show-if-above side="left" bordered>
+    <QDrawer v-model="ui.mainMenu" :width="220" show-if-above side="left" bordered>
       <QList>
         <DrawerItem :to="{ name: View.DASHBOARD }" :icon="Icon.DASHBOARD" label="Dashboard" />
 

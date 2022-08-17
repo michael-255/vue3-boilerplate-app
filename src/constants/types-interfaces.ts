@@ -1,4 +1,4 @@
-import type { Field } from '@/constants/data-enums'
+import type { Field } from './data-enums'
 
 export type ColumnProps = {
   name: Field

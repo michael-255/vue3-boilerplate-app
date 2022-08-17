@@ -13,6 +13,13 @@ import PageInspect from '@/components/page-table/PageInspect.vue'
 import PageCreate from '@/components/page-table/PageCreate.vue'
 import PageUpdate from '@/components/page-table/PageUpdate.vue'
 import PageReport from '@/components/page-table/PageReport.vue'
+import { useSelectedItemStore } from '@/stores/selected'
+import { useUIStore } from '@/stores/ui'
+import { useValidateItemStore } from '@/stores/validate'
+
+const ui = useUIStore()
+const selected = useSelectedItemStore()
+const validate = useValidateItemStore()
 
 /**
  * Component allows viewing of table data and actions on that data.
@@ -39,11 +46,6 @@ const rows: Ref<DataObject[]> = ref([])
 const columns: Ref<any[]> = ref([])
 const columnOptions: Ref<any[]> = ref([])
 const visibleColumns: Ref<Field[]> = ref([])
-// Dialog Refs
-const pageDialog: Ref<boolean> = ref(false)
-const dialogItem: Ref<DataObject | undefined> = ref({})
-const dialogOperation: Ref<Operation> = ref(Operation.NO_OP)
-const dialogLabel: Ref<string> = ref('')
 
 /**
  * Sets table properties and gets the latest data.
@@ -52,7 +54,7 @@ onMounted(async () => {
   columns.value = getColumns(props.table)
   columnOptions.value = getColumnOptions(props.table)
   visibleColumns.value = getVisibleColumns(props.table)
-  dialogLabel.value = getSingularLabel(props.table)
+  ui.pageTable.itemLabel = getSingularLabel(props.table)
   await updateRows()
 })
 
@@ -70,50 +72,51 @@ async function updateRows(): Promise<void> {
 
 /**
  * Update dialog event resets page dialog refs and sets dialog to casted boolean of event result.
- * @param event
+ * @param bool
  */
-async function updateDialog(event: any): Promise<void> {
+async function updateDialog(bool: boolean): Promise<void> {
   await updateRows()
-  dialogItem.value = {}
-  dialogOperation.value = Operation.NO_OP
-  dialogLabel.value = ''
-  pageDialog.value = !!event // Always last so everything else is updated before dialog changes
+  selected.$reset()
+  validate.$reset()
+  ui.pageTable.operation = Operation.NO_OP
+  ui.pageTable.dialog = !!bool // Always last so everything else is updated before dialog changes
 }
 
 /**
  * Create row action opens the dialog with the settings below.
  */
 async function onCreate(): Promise<void> {
-  dialogItem.value = {}
-  dialogOperation.value = Operation.CREATE
-  pageDialog.value = true
+  selected.$reset()
+  validate.$reset()
+  ui.pageTable.operation = Operation.CREATE
+  ui.pageTable.dialog = true
 }
 
 /**
  * Update row action opens the dialog with the settings below.
  */
 async function onUpdate(id: string): Promise<void> {
-  dialogItem.value = await DB.getById(props.table, id)
-  dialogOperation.value = Operation.UPDATE
-  pageDialog.value = true
+  selected.item = await DB.getById(props.table, id)
+  ui.pageTable.operation = Operation.UPDATE
+  ui.pageTable.dialog = true
 }
 
 /**
  * Report row action opens the dialog with the settings below.
  */
 async function onReport(id: string): Promise<void> {
-  dialogItem.value = await DB.getById(props.table, id)
-  dialogOperation.value = Operation.REPORT
-  pageDialog.value = true
+  selected.item = await DB.getById(props.table, id)
+  ui.pageTable.operation = Operation.REPORT
+  ui.pageTable.dialog = true
 }
 
 /**
  * Inspect row action opens the dialog with the settings below.
  */
 async function onInspect(id: string): Promise<void> {
-  dialogItem.value = await DB.getById(props.table, id)
-  dialogOperation.value = Operation.INSPECT
-  pageDialog.value = true
+  selected.item = await DB.getById(props.table, id)
+  ui.pageTable.operation = Operation.INSPECT
+  ui.pageTable.dialog = true
 }
 
 /**
@@ -301,33 +304,19 @@ async function onDelete(id: string): Promise<void> {
   </QTable>
 
   <!-- Fullscreen Dialog -->
-  <PageDialog
-    :dialog="pageDialog"
-    :operation="dialogOperation"
-    :label="dialogLabel"
-    @update:dialog="updateDialog($event)"
-  >
-    <PageInspect
-      v-if="dialogOperation === Operation.INSPECT"
-      :item="dialogItem"
-      :columns="columns"
-    />
+  <PageDialog>
+    <PageInspect v-if="ui.pageTable.operation === Operation.INSPECT" :columns="columns" />
     <PageCreate
-      v-else-if="dialogOperation === Operation.CREATE"
+      v-else-if="ui.pageTable.operation === Operation.CREATE"
       :table="table"
       @on-create="updateDialog(false)"
     />
     <PageUpdate
-      v-else-if="dialogOperation === Operation.UPDATE"
+      v-else-if="ui.pageTable.operation === Operation.UPDATE"
       :table="table"
-      :item="dialogItem"
       @on-update="updateDialog(false)"
     />
-    <PageReport
-      v-else-if="dialogOperation === Operation.REPORT"
-      :table="table"
-      :item="dialogItem"
-    />
+    <PageReport v-else-if="ui.pageTable.operation === Operation.REPORT" :table="table" />
     <div v-else>Selected operation is not supported</div>
   </PageDialog>
 </template>

@@ -5,7 +5,7 @@ import { ref, type Ref } from 'vue'
 
 /**
  * @todo
- * - Not going to use an InputRef for validation (just too difficult to implement)
+ * - Not going to use an InputRef for validate (just too difficult to implement)
  * - Going to cast the value to undefined if it is not a positive number
  * - Going to use a data table to ADD and REMOVE buttons for the rounds
  * - Will need to determine what the ROWS and COLUMNS need to be for the table

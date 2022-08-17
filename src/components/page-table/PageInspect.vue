@@ -2,17 +2,16 @@
 import type { DataObject } from '@/constants/types-interfaces'
 import { onMounted, type Ref, ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
+import { useSelectedItemStore } from '@/stores/selected'
+
+const selected = useSelectedItemStore()
 
 /**
  * Component displays each data field and value.
- * @param item Row selected from table
  * @param columns Needed to get each field name and label
  */
-const props = defineProps<{
-  item: DataObject | undefined
-  columns: any[]
-}>()
-const inspectedItem: Ref<DataObject[]> = ref([])
+const props = defineProps<{ columns: any[] }>()
+const inspectionValues: Ref<DataObject[]> = ref([])
 
 const { log } = useLogger()
 
@@ -21,16 +20,14 @@ const { log } = useLogger()
  */
 onMounted(async () => {
   try {
-    if (props.item) {
-      inspectedItem.value = Object.keys(props.item).map((key) => {
-        return {
-          label: props.columns.find((i) => i.name === key).label,
-          value: props.item?.[key] || '-',
-        }
-      })
-    } else {
-      log.error('Item is undefined', { name: 'PageInspect:onMounted' })
-    }
+    inspectionValues.value = Object.keys(selected.item).map((key) => {
+      console.log(JSON.parse(JSON.stringify(selected.item)))
+      console.log(inspectionValues)
+      return {
+        label: props.columns.find((i) => i.name === key).label,
+        value: selected.item?.[key] || '-',
+      }
+    })
   } catch (error) {
     log.error('PageInspect:onMounted', error)
   }
@@ -38,7 +35,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-for="(item, i) in inspectedItem" :key="i">
+  <div v-for="(item, i) in inspectionValues" :key="i">
     <div class="q-mb-sm">
       <div class="text-subtitle1 text-weight-bold">{{ item.label }}</div>
       <div>{{ item.value }}</div>

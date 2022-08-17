@@ -1,23 +1,21 @@
+import { Operation } from '@/constants/data-enums'
 import { defineStore, type StoreDefinition } from 'pinia'
 
 export const useUIStore: StoreDefinition = defineStore({
   id: 'ui',
 
   state: () => ({
-    drawer: false,
+    mainMenu: false,
+    pageTable: {
+      dialog: false,
+      operation: Operation.NO_OP,
+      itemLabel: '',
+    },
   }),
 
   actions: {
-    toggleDrawer(): void {
-      this.drawer = !this.drawer
-    },
-
-    closeDrawer(): void {
-      this.drawer = false
-    },
-
-    openDrawer(): void {
-      this.drawer = true
+    toggleMainMenu(): void {
+      this.mainMenu = !this.mainMenu
     },
   },
 })

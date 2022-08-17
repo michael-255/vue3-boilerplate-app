@@ -3,9 +3,13 @@ import { AppTable, Field } from '@/constants/data-enums'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { getFieldComponent } from '@/helpers/field-components'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { useProvideTableInputs } from '@/use/useProvideTableInputs'
 import { useLogger } from '@/use/useLogger'
 import { useTable } from '@/use/useTable'
+import { useTemporaryItemStore } from '@/stores/temporary'
+import { useValidateItemStore } from '@/stores/validate'
+
+const validate = useValidateItemStore()
+const temporary = useTemporaryItemStore()
 
 /**
  * Component for handling table item Creates using Provide/Inject for the inputs.
@@ -17,35 +21,13 @@ const emits = defineEmits<{ (eventName: 'on-create'): void }>()
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
 const { getFields, getActions, getSingularLabel } = useTable()
-const {
-  // Models
-  idModel,
-  createdDateModel,
-  nameModel,
-  descriptionModel,
-  parentIdModel,
-  valueModel,
-  // roundsModel,
-  areExampleInputsValid,
-  areExampleRecordInputsValid,
-} = useProvideTableInputs()
 
 /**
- * Determines how the create operation will proceed based on validation results.
+ * Determines how the create operation will proceed based on validate results.
  */
 function onCreate() {
   try {
-    /**
-     * @see
-     * MUST DEFINE TABLES BELOW
-     */
-    const areInputsValid = {
-      [AppTable.EXAMPLES]: areExampleInputsValid(),
-      [AppTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
-      [AppTable.LOGS]: false,
-    }[props.table]
-
-    if (!areInputsValid) {
+    if (!validate.tableItem(props.table)) {
       createDismissDialog()
     } else {
       createConfirmDialog()
@@ -56,7 +38,7 @@ function onCreate() {
 }
 
 /**
- * Dismiss dialog due to validation failure.
+ * Dismiss dialog due to validate failure.
  */
 function createDismissDialog(): void {
   dismissDialog(
@@ -83,15 +65,7 @@ function createConfirmDialog(): void {
          * @see
          * MUST ADD NEW INPUT MODELS HERE (Provide/Inject)
          */
-        await createRow({
-          id: idModel.value,
-          createdDate: createdDateModel.value,
-          name: nameModel.value,
-          description: descriptionModel.value,
-          parentId: parentIdModel.value,
-          value: valueModel.value,
-          // rounds: roundsModel.value,
-        })
+        await createRow(temporary.item)
         emits('on-create')
       } else {
         log.error('Missing createRow action', { name: 'PageCreate:createConfirmDialog' })

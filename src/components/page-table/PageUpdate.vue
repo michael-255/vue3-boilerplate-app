@@ -1,61 +1,31 @@
 <script setup lang="ts">
 import { AppTable, Field } from '@/constants/data-enums.js'
-import type { DataObject } from '@/constants/types-interfaces'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { onMounted } from 'vue'
 import { getFieldComponent } from '@/helpers/field-components'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { useProvideTableInputs } from '@/use/useProvideTableInputs'
 import { useLogger } from '@/use/useLogger'
 import { useTable } from '@/use/useTable'
+import { useTemporaryItemStore } from '@/stores/temporary'
+import { useSelectedItemStore } from '@/stores/selected'
+import { useValidateItemStore } from '@/stores/validate'
+
+const validate = useValidateItemStore()
+const selected = useSelectedItemStore()
+const temporary = useTemporaryItemStore()
 
 /**
  * Component for handling table item Updates using Provide/Inject for the inputs.
  * @param table
- * @param item Row selected in the table
  */
-const props = defineProps<{
-  table: AppTable
-  item: DataObject | undefined
-}>()
+const props = defineProps<{ table: AppTable }>()
 const emits = defineEmits<{ (eventName: 'on-update'): void }>()
 
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
 const { getFields, getActions, getSingularLabel } = useTable()
-const {
-  // Models
-  idModel,
-  createdDateModel,
-  nameModel,
-  descriptionModel,
-  parentIdModel,
-  valueModel,
-  // roundsModel,
-  areExampleInputsValid,
-  areExampleRecordInputsValid,
-} = useProvideTableInputs()
 
 /**
- * Sets the inputs models with the current values from the selected row in the table.
- */
-onMounted(async () => {
-  if (props.item) {
-    const { id, createdDate, name, description, parentId, value, rounds } = props.item
-    idModel.value = id
-    createdDateModel.value = createdDate
-    nameModel.value = name
-    descriptionModel.value = description
-    parentIdModel.value = parentId
-    valueModel.value = value
-    // roundsModel.value = rounds
-  } else {
-    log.error('Item is undefined', { name: 'PageUpdate:onMounted' })
-  }
-})
-
-/**
- * Determines how the update operation will proceed based on validation results.
+ * Determines how the update operation will proceed based on validate results.
  */
 function onUpdate() {
   try {
@@ -64,8 +34,8 @@ function onUpdate() {
      * MUST DEFINE TABLES BELOW
      */
     const areInputsValid = {
-      [AppTable.EXAMPLES]: areExampleInputsValid(),
-      [AppTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
+      [AppTable.EXAMPLES]: validate.isExampleValid,
+      [AppTable.EXAMPLE_RECORDS]: validate.isExampleRecordValid,
       [AppTable.LOGS]: false,
     }[props.table]
 
@@ -80,7 +50,7 @@ function onUpdate() {
 }
 
 /**
- * Dismiss dialog due to validation failure.
+ * Dismiss dialog due to validate failure.
  */
 function updateDismissDialog(): void {
   dismissDialog(
@@ -107,16 +77,7 @@ function updateConfirmDialog(): void {
          * @see
          * MUST ADD NEW INPUT MODELS HERE (Provide/Inject)
          */
-        await updateRow({
-          originalId: props.item?.id,
-          id: idModel.value,
-          createdDate: createdDateModel.value,
-          name: nameModel.value,
-          description: descriptionModel.value,
-          parentId: parentIdModel.value,
-          value: valueModel.value,
-          // rounds: roundsModel.value,
-        })
+        await updateRow({ originalId: selected.item.id, ...temporary.item })
         emits('on-update')
       } else {
         log.error('Missing updateRow action', { name: 'PageUpdate:updateConfirmDialog' })
