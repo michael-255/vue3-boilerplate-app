@@ -1,6 +1,6 @@
 import type { ColumnProps } from '@/constants/types-interfaces'
 import { AppTable, Field, Operation } from '@/constants/data-enums'
-import { getFieldColumnProps } from '@/helpers/field-column-props'
+import getFieldColumnProps from '@/helpers/field-column-props'
 import { _Entity, type IEntity } from '@/models/_Entity'
 
 export interface IExample extends IEntity {

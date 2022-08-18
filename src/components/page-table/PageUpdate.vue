@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AppTable, Field } from '@/constants/data-enums.js'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { getFieldComponent } from '@/helpers/field-components'
+import getFieldComponent from '@/helpers/field-components'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { useLogger } from '@/use/useLogger'
 import { useTable } from '@/use/useTable'

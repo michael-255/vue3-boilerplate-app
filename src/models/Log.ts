@@ -1,6 +1,6 @@
 import type { ColumnProps } from '@/constants/types-interfaces'
 import { Field, Operation } from '@/constants/data-enums'
-import { getFieldColumnProps } from '@/helpers/field-column-props'
+import getFieldColumnProps from '@/helpers/field-column-props'
 import { _Entity } from '@/models/_Entity'
 import type { Severity } from '@/constants/data-enums'
 import { v4 as createId } from 'uuid'

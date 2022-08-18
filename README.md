@@ -7,7 +7,7 @@ have a better understanding of how this project is setup.
 
 - [ ] `Refactor`
 
-  - [ ] `TEST - Components` build out DB using components (Start with Create, NO provide/inject)
+  - [ ] Using Stores to improve the app
 
 - [ ] `Examples`
 

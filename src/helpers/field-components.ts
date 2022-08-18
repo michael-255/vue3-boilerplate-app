@@ -6,7 +6,7 @@ import { defineAsyncComponent } from 'vue'
  * @param field
  * @returns Lazy loaded Vue Component
  */
-export function getFieldComponent(field: Field): any | undefined {
+export default function getFieldComponent(field: Field): any | undefined {
   return {
     [Field.ID]: defineAsyncComponent(() => import('@/components/page-table/inputs/IdInput.vue')),
     [Field.CREATED_DATE]: defineAsyncComponent(
