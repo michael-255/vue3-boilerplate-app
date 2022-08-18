@@ -5,7 +5,7 @@ import { ExampleRecord } from '@/models/ExampleRecord'
 import { DB } from '@/services/LocalDatabase'
 import { isoToDisplayDate } from '@/utils/luxon'
 
-export default function getTableActions(table: AppTable): TableActions | null {
+export function getTableActions(table: AppTable): TableActions {
   return {
     [AppTable.EXAMPLES]: getExampleActions(table),
     [AppTable.EXAMPLE_RECORDS]: getExampleRecordActions(table),
@@ -16,7 +16,6 @@ export default function getTableActions(table: AppTable): TableActions | null {
 function getExampleActions(table: AppTable): TableActions {
   return {
     getRows: async () => await DB.getAll(table),
-    generateTempItem: () => true, // #todo
     createRow: async (data: DataObject) => {
       await DB.add(
         AppTable.EXAMPLES,

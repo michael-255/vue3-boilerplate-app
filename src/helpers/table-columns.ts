@@ -1,9 +1,9 @@
 import type { AppTable, Field } from '@/constants/data-enums'
 import type { ColumnProps } from '@/constants/types-interfaces'
-import getFieldColumnProps from './field-column-props'
-import getTableFields from './table-fields'
+import { getFieldColumnProps } from './field-column-props'
+import { getTableFields } from './table-fields'
 
-export default function getTableColumns(table: AppTable, type: 'props' | 'options'): ColumnProps[] {
+export function getTableColumns(table: AppTable, type: 'props' | 'options'): ColumnProps[] {
   const tableFields = getTableFields(table)
 
   if (tableFields) {

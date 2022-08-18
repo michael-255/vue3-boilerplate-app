@@ -6,10 +6,10 @@ import { DB } from '@/services/LocalDatabase'
 import { truncateString } from '@/utils/common'
 import { isDefined } from '@/utils/validators'
 import { useLogger } from '@/use/useLogger'
-import { useTable } from '@/use/useTable'
 import { useTemporaryItemStore } from '@/stores/temporary'
 import { useSelectedItemStore } from '@/stores/selected'
 import { useValidateItemStore } from '@/stores/validate'
+import { getTableParentTable } from '@/helpers/table-parent-table'
 
 const { log } = useLogger()
 const validate = useValidateItemStore()
@@ -22,8 +22,6 @@ const parentIdInputRef: Ref<any> = ref(null)
  * @param table
  */
 const props = defineProps<{ table: AppTable }>()
-
-const { getRelatedTable } = useTable()
 const options: Ref<any[]> = ref([])
 
 /**
@@ -32,7 +30,7 @@ const options: Ref<any[]> = ref([])
  * NEEDED: async setup and Suspense component
  */
 onMounted(async () => {
-  const relatedTable = getRelatedTable(props.table)
+  const relatedTable = getTableParentTable(props.table)
 
   if (relatedTable) {
     const relatedTableData = await DB.getAll(relatedTable)

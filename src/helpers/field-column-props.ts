@@ -8,7 +8,7 @@ import type { ColumnProps } from '@/constants/types-interfaces'
  * @param field
  * @returns Object with properties for QTable columns
  */
-export default function getFieldColumnProps(field: Field): ColumnProps {
+export function getFieldColumnProps(field: Field): ColumnProps {
   /**
    * @see
    * MUST ADD NEW FIELDS BELOW

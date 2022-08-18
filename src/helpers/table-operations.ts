@@ -29,8 +29,8 @@ export function getTableOperations(table: AppTable): Operation[] {
  */
 export function isSupported(table: AppTable, operation: Operation): boolean {
   return {
-    [AppTable.EXAMPLES]: getTableOperations(table)?.includes(operation),
-    [AppTable.EXAMPLE_RECORDS]: getTableOperations(table)?.includes(operation),
-    [AppTable.LOGS]: getTableOperations(table)?.includes(operation),
+    [AppTable.EXAMPLES]: getTableOperations(table).includes(operation),
+    [AppTable.EXAMPLE_RECORDS]: getTableOperations(table).includes(operation),
+    [AppTable.LOGS]: getTableOperations(table).includes(operation),
   }[table]
 }

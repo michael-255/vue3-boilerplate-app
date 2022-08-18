@@ -7,7 +7,6 @@ import type { DataObject } from '@/constants/types-interfaces'
 import { DB } from '@/services/LocalDatabase'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { useTable } from '@/use/useTable'
 import PageDialog from '@/components/dialogs/PageDialog.vue'
 import PageInspect from '@/components/page-table/PageInspect.vue'
 import PageCreate from '@/components/page-table/PageCreate.vue'
@@ -17,6 +16,11 @@ import { useSelectedItemStore } from '@/stores/selected'
 import { useUIStore } from '@/stores/ui'
 import { useValidateItemStore } from '@/stores/validate'
 import { useTemporaryItemStore } from '@/stores/temporary'
+import { getTableActions } from '@/helpers/table-actions'
+import { getTableColumns } from '@/helpers/table-columns'
+import { getTableVisibleColumns } from '@/helpers/table-visible-columns'
+import { getTableLabel } from '@/helpers/table-label'
+import { isSupported } from '@/helpers/table-operations'
 
 const ui = useUIStore()
 const selected = useSelectedItemStore()
@@ -31,15 +35,6 @@ const props = defineProps<{ table: AppTable }>()
 
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
-const {
-  getActions,
-  getColumns,
-  getColumnOptions,
-  getVisibleColumns,
-  getSingularLabel,
-  getPluralLabel,
-  isSupported,
-} = useTable()
 
 // Page Refs
 const searchFilter: Ref<string> = ref('')
@@ -53,10 +48,10 @@ const visibleColumns: Ref<Field[]> = ref([])
  * Sets table properties and gets the latest data.
  */
 onMounted(async () => {
-  columns.value = getColumns(props.table)
-  columnOptions.value = getColumnOptions(props.table)
-  visibleColumns.value = getVisibleColumns(props.table)
-  ui.pageTable.itemLabel = getSingularLabel(props.table)
+  columns.value = getTableColumns(props.table, 'props')
+  columnOptions.value = getTableColumns(props.table, 'options')
+  visibleColumns.value = getTableVisibleColumns(props.table)
+  ui.pageTable.itemLabel = getTableLabel(props.table, 'singular')
   await updateRows()
 })
 
@@ -64,7 +59,7 @@ onMounted(async () => {
  * Loads the latest data into the data table rows.
  */
 async function updateRows(): Promise<void> {
-  const { getRows } = getActions(props.table)
+  const { getRows } = getTableActions(props.table)
   if (getRows) {
     rows.value = await getRows()
   } else {
@@ -130,7 +125,7 @@ async function onClear(): Promise<void> {
   if (isSupported(props.table, Operation.CLEAR)) {
     confirmDialog(
       'Clear',
-      `Permanently delete all ${getPluralLabel(props.table)}?`,
+      `Permanently delete all ${getTableLabel(props.table, 'plural')}?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {
@@ -143,7 +138,7 @@ async function onClear(): Promise<void> {
       }
     )
   } else {
-    log.warn(`Clear not supported for ${getPluralLabel(props.table)} table`)
+    log.warn(`Clear not supported for ${getTableLabel(props.table, 'plural')} table`)
   }
 }
 
@@ -154,7 +149,7 @@ async function onDelete(id: string): Promise<void> {
   if (isSupported(props.table, Operation.DELETE)) {
     confirmDialog(
       'Delete',
-      `Permanently delete "${id}" from ${getPluralLabel(props.table)}?`,
+      `Permanently delete "${id}" from ${getTableLabel(props.table, 'plural')}?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {
@@ -167,7 +162,7 @@ async function onDelete(id: string): Promise<void> {
       }
     )
   } else {
-    log.warn(`Delete not supported for ${getPluralLabel(props.table)} table`)
+    log.warn(`Delete not supported for ${getTableLabel(props.table, 'plural')} table`)
   }
 }
 </script>
@@ -185,7 +180,7 @@ async function onDelete(id: string): Promise<void> {
   >
     <!-- Table Heading -->
     <template v-slot:top>
-      <div class="q-table__title text-weight-bold">{{ getPluralLabel(table) }}</div>
+      <div class="q-table__title text-weight-bold">{{ getTableLabel(table, 'plural') }}</div>
       <QSpace />
 
       <!-- Search Input -->

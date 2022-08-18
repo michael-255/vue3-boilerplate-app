@@ -1,6 +1,6 @@
 import { AppTable, Field } from '@/constants/data-enums'
 
-export default function getTableFields(table: AppTable): Field[] {
+export function getTableFields(table: AppTable): Field[] {
   return {
     [AppTable.EXAMPLES]: [Field.ID, Field.CREATED_DATE, Field.NAME, Field.DESCRIPTION],
     [AppTable.EXAMPLE_RECORDS]: [Field.ID, Field.CREATED_DATE, Field.PARENT_ID, Field.VALUE],

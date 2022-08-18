@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { AppTable, Field } from '@/constants/data-enums.js'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import getFieldComponent from '@/helpers/field-components'
+import { getFieldComponent } from '@/helpers/field-components'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { useLogger } from '@/use/useLogger'
-import { useTable } from '@/use/useTable'
 import { useTemporaryItemStore } from '@/stores/temporary'
 import { useSelectedItemStore } from '@/stores/selected'
 import { useValidateItemStore } from '@/stores/validate'
+import { getTableFields } from '@/helpers/table-fields'
+import { getTableActions } from '@/helpers/table-actions'
+import { getTableLabel } from '@/helpers/table-label'
 
 const validate = useValidateItemStore()
 const selected = useSelectedItemStore()
@@ -22,7 +24,6 @@ const emits = defineEmits<{ (eventName: 'on-update'): void }>()
 
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
-const { getFields, getActions, getSingularLabel } = useTable()
 
 /**
  * Determines how the update operation will proceed based on validate results.
@@ -67,11 +68,11 @@ function updateDismissDialog(): void {
 function updateConfirmDialog(): void {
   confirmDialog(
     'Update',
-    `Are you sure you want to update this ${getSingularLabel(props.table)}?`,
+    `Are you sure you want to update this ${getTableLabel(props.table, 'singular')}?`,
     Icon.SAVE,
     NotifyColor.INFO,
     async () => {
-      const { updateRow } = getActions(props.table)
+      const { updateRow } = getTableActions(props.table)
       if (updateRow) {
         /**
          * @see
@@ -89,7 +90,7 @@ function updateConfirmDialog(): void {
 
 <template>
   <!-- Dynamically load components for each input -->
-  <div v-for="(field, i) in getFields(table)" :key="i">
+  <div v-for="(field, i) in getTableFields(table)" :key="i">
     <component v-if="field === Field.PARENT_ID" :is="getFieldComponent(field)" :table="table" />
     <component v-else :is="getFieldComponent(field)" />
   </div>
@@ -98,7 +99,7 @@ function updateConfirmDialog(): void {
     class="q-mt-lg"
     color="primary"
     :icon="Icon.SAVE"
-    :label="`Update ${getSingularLabel(table)}`"
+    :label="`Update ${getTableLabel(table, 'singular')}`"
     @click="onUpdate()"
   />
 </template>

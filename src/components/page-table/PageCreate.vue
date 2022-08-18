@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { AppTable, Field } from '@/constants/data-enums'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import getFieldComponent from '@/helpers/field-components'
+import { getFieldComponent } from '@/helpers/field-components'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { useLogger } from '@/use/useLogger'
-import { useTable } from '@/use/useTable'
 import { useTemporaryItemStore } from '@/stores/temporary'
 import { useValidateItemStore } from '@/stores/validate'
+import { getTableFields } from '@/helpers/table-fields'
+import { getTableActions } from '@/helpers/table-actions'
+import { getTableLabel } from '@/helpers/table-label'
 
 const validate = useValidateItemStore()
 const temporary = useTemporaryItemStore()
@@ -20,7 +22,6 @@ const emits = defineEmits<{ (eventName: 'on-create'): void }>()
 
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
-const { getFields, getActions, getSingularLabel } = useTable()
 
 /**
  * Determines how the create operation will proceed based on validate results.
@@ -55,11 +56,11 @@ function createDismissDialog(): void {
 function createConfirmDialog(): void {
   confirmDialog(
     'Create',
-    `Are you sure you want to create this ${getSingularLabel(props.table)}?`,
+    `Are you sure you want to create this ${getTableLabel(props.table, 'singular')}?`,
     Icon.SAVE,
     NotifyColor.INFO,
     async () => {
-      const { createRow } = getActions(props.table)
+      const { createRow } = getTableActions(props.table)
       if (createRow) {
         /**
          * @see
@@ -77,7 +78,7 @@ function createConfirmDialog(): void {
 
 <template>
   <!-- Dynamically load components for each input -->
-  <div v-for="(field, i) in getFields(table)" :key="i">
+  <div v-for="(field, i) in getTableFields(table)" :key="i">
     <component v-if="field === Field.PARENT_ID" :is="getFieldComponent(field)" :table="table" />
     <component v-else :is="getFieldComponent(field)" />
   </div>
@@ -86,7 +87,7 @@ function createConfirmDialog(): void {
     class="q-mt-lg"
     color="primary"
     :icon="Icon.SAVE"
-    :label="`Create ${getSingularLabel(props.table)}`"
+    :label="`Create ${getTableLabel(props.table, 'singular')}`"
     @click="onCreate()"
   />
 </template>

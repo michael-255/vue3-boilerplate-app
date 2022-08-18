@@ -1,6 +1,6 @@
 import { AppTable } from '@/constants/data-enums'
 
-export default function getTableLabel(table: AppTable, type: 'singular' | 'plural'): string {
+export function getTableLabel(table: AppTable, type: 'singular' | 'plural'): string {
   if (type === 'singular') {
     return {
       [AppTable.EXAMPLES]: 'Example',
