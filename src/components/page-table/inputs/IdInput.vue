@@ -22,7 +22,6 @@ onMounted(() => {
 
 function generateId(): void {
   temporary.item.id = createId()
-  console.log(idInputRef.value.modelValue)
   validateInput()
 }
 

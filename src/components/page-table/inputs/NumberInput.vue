@@ -9,25 +9,25 @@ import { onMounted, ref, type Ref } from 'vue'
 const validate = useValidateItemStore()
 const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
-const valueInputRef: Ref<any> = ref(null)
+const numberInputRef: Ref<any> = ref(null)
 
 // Setup
-temporary.item.value = selected.item?.value ? selected.item.value : 1
+temporary.item.number = selected.item?.value ? selected.item.number : 1
 
 onMounted(() => {
   validateInput()
 })
 
 function validateInput(): void {
-  validate.item.value = !!valueInputRef?.value?.validate()
+  validate.item.number = !!numberInputRef?.value?.validate()
 }
 </script>
 
 <template>
   <QInput
-    v-model.number="temporary.item.value"
-    ref="valueInputRef"
-    label="Value"
+    v-model.number="temporary.item.number"
+    ref="numberInputRef"
+    label="Number"
     :rules="[(val: number) => isPositiveNumber(val) || 'Positive number not exceeding 1,000,000,000 is required']"
     dense
     outlined

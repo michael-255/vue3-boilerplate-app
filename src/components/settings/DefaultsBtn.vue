@@ -67,7 +67,7 @@ async function createExampleDefaults(): Promise<void> {
           id: createId(),
           createdDate: date.toISOString(),
           parentId: ids[i],
-          value: Number(Math.random().toString(10).substring(2, 3)) + i + j, // Increment value
+          number: Number(Math.random().toString(10).substring(2, 3)) + i + j, // Increment value
         })
       )
     }

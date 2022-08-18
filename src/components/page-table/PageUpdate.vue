@@ -30,17 +30,7 @@ const { confirmDialog, dismissDialog } = useSimpleDialogs()
  */
 function onUpdate() {
   try {
-    /**
-     * @see
-     * MUST DEFINE TABLES BELOW
-     */
-    const areInputsValid = {
-      [AppTable.EXAMPLES]: validate.isExampleValid,
-      [AppTable.EXAMPLE_RECORDS]: validate.isExampleRecordValid,
-      [AppTable.LOGS]: false,
-    }[props.table]
-
-    if (!areInputsValid) {
+    if (!validate.tableItem(props.table)) {
       updateDismissDialog()
     } else {
       updateConfirmDialog()

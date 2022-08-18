@@ -2,10 +2,7 @@ export enum AppTable {
   EXAMPLES = 'examples',
   EXAMPLE_RECORDS = 'exampleRecords',
   LOGS = 'logs',
-}
-
-export enum SettingsTable {
-  NAME = 'settings',
+  SETTINGS = 'settings',
 }
 
 export enum Field {
@@ -15,7 +12,9 @@ export enum Field {
   DESCRIPTION = 'description',
   // ROUNDS = 'rounds',
   PARENT_ID = 'parentId',
+  KEY = 'key',
   VALUE = 'value',
+  NUMBER = 'number',
   SEVERITY = 'severity',
   DETAILS = 'details',
   MESSAGE = 'message',

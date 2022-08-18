@@ -10,7 +10,7 @@ export const useTemporaryItemStore: StoreDefinition = defineStore({
       name: null,
       description: null,
       parentId: null,
-      value: null,
+      number: null,
       rounds: null,
     },
   }),

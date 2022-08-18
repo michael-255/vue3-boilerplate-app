@@ -18,6 +18,7 @@ export function getTableOperations(table: AppTable): Operation[] {
       Operation.INSPECT,
     ],
     [AppTable.LOGS]: [Operation.DELETE, Operation.CLEAR, Operation.INSPECT],
+    [AppTable.SETTINGS]: [],
   }[table]
 }
 
@@ -28,9 +29,5 @@ export function getTableOperations(table: AppTable): Operation[] {
  * @returns boolean
  */
 export function isSupported(table: AppTable, operation: Operation): boolean {
-  return {
-    [AppTable.EXAMPLES]: getTableOperations(table).includes(operation),
-    [AppTable.EXAMPLE_RECORDS]: getTableOperations(table).includes(operation),
-    [AppTable.LOGS]: getTableOperations(table).includes(operation),
-  }[table]
+  return getTableOperations(table).includes(operation)
 }

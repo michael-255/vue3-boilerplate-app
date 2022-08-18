@@ -5,5 +5,6 @@ export function getTableParentTable(table: AppTable): AppTable | null {
     [AppTable.EXAMPLES]: null,
     [AppTable.EXAMPLE_RECORDS]: AppTable.EXAMPLES,
     [AppTable.LOGS]: null,
+    [AppTable.SETTINGS]: null,
   }[table]
 }

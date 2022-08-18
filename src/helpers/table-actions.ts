@@ -10,6 +10,7 @@ export function getTableActions(table: AppTable): TableActions {
     [AppTable.EXAMPLES]: getExampleActions(table),
     [AppTable.EXAMPLE_RECORDS]: getExampleRecordActions(table),
     [AppTable.LOGS]: getLogActions(table),
+    [AppTable.SETTINGS]: {},
   }[table]
 }
 
@@ -38,7 +39,7 @@ function getExampleActions(table: AppTable): TableActions {
     generateReport: async (id: string) => {
       const records: ExampleRecord[] = await DB.getByParentId(AppTable.EXAMPLE_RECORDS, id)
       const labels = records.map(() => '')
-      const data = records.map((r: ExampleRecord) => r.value)
+      const data = records.map((r: ExampleRecord) => r.number)
       const firstDate = isoToDisplayDate(records[0]?.createdDate)
       const lastDate = isoToDisplayDate(records[records.length - 1]?.createdDate)
       return { firstDate, lastDate, labels, data }
@@ -56,7 +57,7 @@ function getExampleRecordActions(table: AppTable): TableActions {
           id: data.id,
           createdDate: data.createdDate,
           parentId: data.parentId,
-          value: data.value,
+          number: data.number,
           // rounds: JSON.parse(JSON.stringify(data.rounds)), // JSON to fix Dexie cloning error
         })
       )
@@ -66,7 +67,7 @@ function getExampleRecordActions(table: AppTable): TableActions {
         id: data.id,
         createdDate: data.createdDate,
         parentId: data.parentId,
-        value: data.value,
+        number: data.number,
         // rounds: data.rounds,
       })
     },

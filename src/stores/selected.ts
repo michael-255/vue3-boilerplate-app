@@ -10,7 +10,7 @@ export const useSelectedItemStore: StoreDefinition = defineStore({
       name: null,
       description: null,
       parentId: null,
-      value: null,
+      number: null,
       rounds: null,
     },
   }),

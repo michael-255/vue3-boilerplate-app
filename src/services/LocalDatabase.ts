@@ -1,5 +1,5 @@
 import Dexie, { type IndexableType, type Table } from 'dexie'
-import { AppTable, SettingsTable, SettingKey, Field } from '@/constants/data-enums'
+import { AppTable, SettingKey, Field } from '@/constants/data-enums'
 import { Example, type IExample } from '@/models/Example'
 import { ExampleRecord, type IExampleRecord } from '@/models/ExampleRecord'
 import { Log, type ILog } from '@/models/Log'
@@ -17,7 +17,7 @@ export class LocalDatabase extends Dexie {
   [AppTable.EXAMPLES]!: Table<IExample>;
   [AppTable.EXAMPLE_RECORDS]!: Table<IExampleRecord>;
   [AppTable.LOGS]!: Table<ILog>;
-  [SettingsTable.NAME]!: Table<ISetting>
+  [AppTable.SETTINGS]!: Table<ISetting>
 
   constructor(name: string) {
     super(name)
@@ -27,14 +27,14 @@ export class LocalDatabase extends Dexie {
       [AppTable.EXAMPLES]: `&${Field.ID}, ${Field.NAME}`,
       [AppTable.EXAMPLE_RECORDS]: `&${Field.ID}, ${Field.PARENT_ID}`,
       [AppTable.LOGS]: `&${Field.ID}`,
-      [SettingsTable.NAME]: '&key',
+      [AppTable.SETTINGS]: `&${Field.KEY}`,
     })
 
     // REQUIRED
     this[AppTable.EXAMPLES].mapToClass(Example)
     this[AppTable.EXAMPLE_RECORDS].mapToClass(ExampleRecord)
     this[AppTable.LOGS].mapToClass(Log)
-    this[SettingsTable.NAME].mapToClass(Setting)
+    this[AppTable.SETTINGS].mapToClass(Setting)
   }
 
   /**
@@ -169,19 +169,19 @@ export class LocalDatabase extends Dexie {
    * Initializes setting keys in the settings table with default values if needed.
    */
   async initSettings(): Promise<void> {
-    const settings = await this.table(SettingsTable.NAME).toArray()
-    const DEBUG = settings.find((s) => s.key === SettingKey.DEBUG)
-    const NOTIFY = settings.find((s) => s.key === SettingKey.NOTIFY)
-    const INFO = settings.find((s) => s.key === SettingKey.INFO)
+    const settings = await this.table(AppTable.SETTINGS).toArray()
+    const DEBUG = settings.find((s) => s[Field.KEY] === SettingKey.DEBUG)
+    const NOTIFY = settings.find((s) => s[Field.KEY] === SettingKey.NOTIFY)
+    const INFO = settings.find((s) => s[Field.KEY] === SettingKey.INFO)
 
     if (!DEBUG) {
-      await this.table(SettingsTable.NAME).add({ key: SettingKey.DEBUG, value: false })
+      await this.table(AppTable.SETTINGS).add({ key: SettingKey.DEBUG, value: false })
     }
     if (!NOTIFY) {
-      await this.table(SettingsTable.NAME).add({ key: SettingKey.NOTIFY, value: false })
+      await this.table(AppTable.SETTINGS).add({ key: SettingKey.NOTIFY, value: false })
     }
     if (!INFO) {
-      await this.table(SettingsTable.NAME).add({ key: SettingKey.INFO, value: false })
+      await this.table(AppTable.SETTINGS).add({ key: SettingKey.INFO, value: false })
     }
   }
 
@@ -191,7 +191,7 @@ export class LocalDatabase extends Dexie {
    * @returns Setting item
    */
   async getSetting(key: SettingKey): Promise<Setting> {
-    return await this.table(SettingsTable.NAME).where('key').equalsIgnoreCase(key).first()
+    return await this.table(AppTable.SETTINGS).where(Field.KEY).equalsIgnoreCase(key).first()
   }
 
   /**
@@ -201,7 +201,7 @@ export class LocalDatabase extends Dexie {
    * @returns 1 on a successful update
    */
   async updateSetting(key: SettingKey, value: SettingValue): Promise<IndexableType> {
-    return await this.table(SettingsTable.NAME).update(key, { value })
+    return await this.table(AppTable.SETTINGS).update(key, { value })
   }
 }
 

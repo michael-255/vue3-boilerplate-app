@@ -5,7 +5,9 @@ import { AppTable } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
+import { useSettingsStore } from '@/stores/settings'
 
+const settings = useSettingsStore()
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
 
@@ -21,10 +23,7 @@ async function onClearAll(): Promise<void> {
     async (): Promise<void> => {
       try {
         await Promise.all(Object.values(AppTable).map((table) => DB.clear(table as AppTable)))
-        /**
-         * @see
-         * COULD DEFAULT SETTINGS HERE IF DESIRED
-         */
+        await settings.initSettings() // Default settings after clear finishes
       } catch (error) {
         log.error('onClearAll', error)
       }

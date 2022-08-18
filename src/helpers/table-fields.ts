@@ -3,7 +3,7 @@ import { AppTable, Field } from '@/constants/data-enums'
 export function getTableFields(table: AppTable): Field[] {
   return {
     [AppTable.EXAMPLES]: [Field.ID, Field.CREATED_DATE, Field.NAME, Field.DESCRIPTION],
-    [AppTable.EXAMPLE_RECORDS]: [Field.ID, Field.CREATED_DATE, Field.PARENT_ID, Field.VALUE],
+    [AppTable.EXAMPLE_RECORDS]: [Field.ID, Field.CREATED_DATE, Field.PARENT_ID, Field.NUMBER],
     [AppTable.LOGS]: [
       Field.ID,
       Field.CREATED_DATE,
@@ -13,5 +13,6 @@ export function getTableFields(table: AppTable): Field[] {
       Field.MESSAGE,
       Field.STACK,
     ],
+    [AppTable.SETTINGS]: [],
   }[table]
 }

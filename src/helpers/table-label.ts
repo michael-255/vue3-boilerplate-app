@@ -6,12 +6,14 @@ export function getTableLabel(table: AppTable, type: 'singular' | 'plural'): str
       [AppTable.EXAMPLES]: 'Example',
       [AppTable.EXAMPLE_RECORDS]: 'Example Record',
       [AppTable.LOGS]: 'Log',
+      [AppTable.SETTINGS]: 'Setting',
     }[table]
   } else {
     return {
       [AppTable.EXAMPLES]: 'Examples',
       [AppTable.EXAMPLE_RECORDS]: 'Example Records',
       [AppTable.LOGS]: 'Logs',
+      [AppTable.SETTINGS]: 'Settings',
     }[table]
   }
 }
