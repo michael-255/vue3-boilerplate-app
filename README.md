@@ -5,14 +5,14 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `Refactor`
-
-  - [ ] Using Stores to improve the app
-
 - [ ] `Examples`
 
   - [ ] `Rounds` Similar to Exercise sets (multiple data points)
   - [ ] `Reports` Find a way to handle those extra data points on the charts
+
+- [ ] `Tests`
+
+  - [ ] Tests for new stores and updating old tests
 
 - [ ] `README`
 
