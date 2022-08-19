@@ -5,7 +5,7 @@ import { AppTable } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { useSettingsStore } from '@/stores/settings'
+import useSettingsStore from '@/stores/settings'
 
 const settings = useSettingsStore()
 const { log } = useLogger()

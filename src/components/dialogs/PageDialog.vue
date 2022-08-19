@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { QDialog, QCard, QCardSection, QCardActions, QBtn } from 'quasar'
 import { Icon } from '@/constants/ui-enums'
-import { useUIStore } from '@/stores/ui'
-import { useTemporaryItemStore } from '@/stores/temporary-item'
-import { useSelectedItemStore } from '@/stores/selected-item'
-import { useValidateItemStore } from '@/stores/validate-item'
+import usePageTableStore from '@/stores/page-table'
+import useTemporaryItemStore from '@/stores/temporary-item'
+import useSelectedItemStore from '@/stores/selected-item'
+import useValidateItemStore from '@/stores/validate-item'
 
-const ui = useUIStore()
 const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
 const validate = useValidateItemStore()
+const pageTable = usePageTableStore()
 
 async function closeDialog(): Promise<void> {
-  ui.pageTable.dialog = false
+  pageTable.dialog = false
   selected.$reset()
   temporary.$reset()
   validate.$reset()
@@ -21,7 +21,7 @@ async function closeDialog(): Promise<void> {
 
 <template>
   <QDialog
-    v-model="ui.pageTable.dialog"
+    v-model="pageTable.dialog"
     persistent
     maximized
     transition-show="slide-up"
@@ -30,7 +30,7 @@ async function closeDialog(): Promise<void> {
     <QCard>
       <QCardActions class="bg-primary text-white">
         <div class="q-table__title text-weight-bold q-ml-sm">
-          {{ ui.pageTable.operation }} {{ ui.pageTable.itemLabel }}
+          {{ pageTable.operation }} {{ pageTable.itemLabel }}
         </div>
         <QSpace />
         <QBtn flat round :icon="Icon.CLOSE" @click="closeDialog()" />

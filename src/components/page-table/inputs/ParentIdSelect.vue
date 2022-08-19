@@ -6,9 +6,9 @@ import { DB } from '@/services/LocalDatabase'
 import { truncateString } from '@/utils/common'
 import { isDefined } from '@/utils/validators'
 import { useLogger } from '@/use/useLogger'
-import { useTemporaryItemStore } from '@/stores/temporary-item'
-import { useSelectedItemStore } from '@/stores/selected-item'
-import { useValidateItemStore } from '@/stores/validate-item'
+import useTemporaryItemStore from '@/stores/temporary-item'
+import useSelectedItemStore from '@/stores/selected-item'
+import useValidateItemStore from '@/stores/validate-item'
 import { getTableParentTable } from '@/helpers/table-parent-table'
 
 const { log } = useLogger()

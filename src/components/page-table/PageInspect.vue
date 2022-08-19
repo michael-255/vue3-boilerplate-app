@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import type { DataObject } from '@/constants/types-interfaces'
+import type { ColumnProps, DataObject } from '@/constants/types-interfaces'
 import { type Ref, ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
-import { useSelectedItemStore } from '@/stores/selected-item'
+import useSelectedItemStore from '@/stores/selected-item'
+import usePageTableStore from '@/stores/page-table'
 
 const selected = useSelectedItemStore()
-
-/**
- * Component displays each data field and value.
- * @param columns Needed to get each field name and label
- */
-const props = defineProps<{ columns: any[] }>()
+const pageTable = usePageTableStore()
 const inspectionValues: Ref<DataObject[]> = ref([])
 const { log } = useLogger()
 
@@ -18,7 +14,7 @@ try {
   Object.entries(selected.item).forEach((entry) => {
     if (entry[1]) {
       inspectionValues.value.push({
-        label: props.columns.find((i) => i?.name === entry[0])?.label,
+        label: pageTable.columns.find((col: ColumnProps) => col.name === entry[0])?.label,
         value: entry[1] || '-',
       })
     }

@@ -1,6 +1,6 @@
 import { defineStore, type StoreDefinition } from 'pinia'
 
-export const useSelectedItemStore: StoreDefinition = defineStore({
+const useSelectedItemStore: StoreDefinition = defineStore({
   id: 'selected-item',
 
   state: () => ({
@@ -14,6 +14,6 @@ export const useSelectedItemStore: StoreDefinition = defineStore({
       rounds: null,
     },
   }),
-
-  actions: {},
 })
+
+export default useSelectedItemStore

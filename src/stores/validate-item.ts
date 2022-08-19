@@ -1,7 +1,7 @@
 import { AppTable } from '@/constants/data-enums'
 import { defineStore, type StoreDefinition } from 'pinia'
 
-export const useValidateItemStore: StoreDefinition = defineStore({
+const useValidateItemStore: StoreDefinition = defineStore({
   id: 'validate-item',
 
   /**
@@ -20,7 +20,6 @@ export const useValidateItemStore: StoreDefinition = defineStore({
     },
   }),
 
-  actions: {},
   getters: {
     /**
      * @todo
@@ -41,3 +40,5 @@ export const useValidateItemStore: StoreDefinition = defineStore({
       state.item.id && state.item.createdDate && state.item.parentId && state.item.number,
   },
 })
+
+export default useValidateItemStore

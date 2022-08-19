@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { QInput } from 'quasar'
 import { isOptionalLongText } from '@/utils/validators'
-import { useTemporaryItemStore } from '@/stores/temporary-item'
-import { useSelectedItemStore } from '@/stores/selected-item'
-import { useValidateItemStore } from '@/stores/validate-item'
+import useTemporaryItemStore from '@/stores/temporary-item'
+import useSelectedItemStore from '@/stores/selected-item'
+import useValidateItemStore from '@/stores/validate-item'
 import { ref, type Ref } from 'vue'
 
 const validate = useValidateItemStore()

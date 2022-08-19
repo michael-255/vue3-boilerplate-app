@@ -2,9 +2,9 @@
 import { QInput } from 'quasar'
 import { ref, type Ref } from 'vue'
 import { isShortText } from '@/utils/validators'
-import { useTemporaryItemStore } from '@/stores/temporary-item'
-import { useSelectedItemStore } from '@/stores/selected-item'
-import { useValidateItemStore } from '@/stores/validate-item'
+import useTemporaryItemStore from '@/stores/temporary-item'
+import useSelectedItemStore from '@/stores/selected-item'
+import useValidateItemStore from '@/stores/validate-item'
 
 const validate = useValidateItemStore()
 const selected = useSelectedItemStore()

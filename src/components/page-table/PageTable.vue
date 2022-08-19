@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { QSelect, QInput, QIcon } from 'quasar'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { type AppTable, Operation, Field } from '@/constants/data-enums'
-import { type Ref, ref, onMounted } from 'vue'
-import type { DataObject } from '@/constants/types-interfaces'
+import { type AppTable, Operation } from '@/constants/data-enums'
+import { type Ref, ref, onMounted, onUnmounted } from 'vue'
 import { DB } from '@/services/LocalDatabase'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
@@ -12,20 +11,20 @@ import PageInspect from '@/components/page-table/PageInspect.vue'
 import PageCreate from '@/components/page-table/PageCreate.vue'
 import PageUpdate from '@/components/page-table/PageUpdate.vue'
 import PageReport from '@/components/page-table/PageReport.vue'
-import { useSelectedItemStore } from '@/stores/selected-item'
-import { useUIStore } from '@/stores/ui'
-import { useValidateItemStore } from '@/stores/validate-item'
-import { useTemporaryItemStore } from '@/stores/temporary-item'
+import usePageTableStore from '@/stores/page-table'
+import useSelectedItemStore from '@/stores/selected-item'
+import useValidateItemStore from '@/stores/validate-item'
+import useTemporaryItemStore from '@/stores/temporary-item'
 import { getTableActions } from '@/helpers/table-actions'
 import { getTableColumns } from '@/helpers/table-columns'
 import { getTableVisibleColumns } from '@/helpers/table-visible-columns'
 import { getTableLabel } from '@/helpers/table-label'
 import { isSupported } from '@/helpers/table-operations'
 
-const ui = useUIStore()
 const selected = useSelectedItemStore()
 const validate = useValidateItemStore()
 const temporary = useTemporaryItemStore()
+const pageTable = usePageTableStore()
 
 /**
  * Component allows viewing of table data and actions on that data.
@@ -38,21 +37,20 @@ const { confirmDialog } = useSimpleDialogs()
 
 // Page Refs
 const searchFilter: Ref<string> = ref('')
-// Table Refs
-const rows: Ref<DataObject[]> = ref([])
-const columns: Ref<any[]> = ref([])
-const columnOptions: Ref<any[]> = ref([])
-const visibleColumns: Ref<Field[]> = ref([])
 
 /**
  * Sets table properties and gets the latest data.
  */
 onMounted(async () => {
-  columns.value = getTableColumns(props.table, 'props')
-  columnOptions.value = getTableColumns(props.table, 'options')
-  visibleColumns.value = getTableVisibleColumns(props.table)
-  ui.pageTable.itemLabel = getTableLabel(props.table, 'singular')
+  pageTable.columns = getTableColumns(props.table, 'props')
+  pageTable.columnOptions = getTableColumns(props.table, 'options')
+  pageTable.visibleColumns = getTableVisibleColumns(props.table)
+  pageTable.itemLabel = getTableLabel(props.table, 'singular')
   await updateRows()
+})
+
+onUnmounted(() => {
+  pageTable.$reset()
 })
 
 /**
@@ -61,7 +59,7 @@ onMounted(async () => {
 async function updateRows(): Promise<void> {
   const { getRows } = getTableActions(props.table)
   if (getRows) {
-    rows.value = await getRows()
+    pageTable.rows = await getRows()
   } else {
     log.critical('Missing getRows action', { name: 'PageTable:updateRows' })
   }
@@ -76,8 +74,8 @@ async function updateDialog(bool: boolean): Promise<void> {
   selected.$reset()
   validate.$reset()
   temporary.$reset()
-  ui.pageTable.operation = Operation.NO_OP
-  ui.pageTable.dialog = !!bool // Always last so everything else is updated before dialog changes
+  pageTable.operation = Operation.NO_OP
+  pageTable.dialog = !!bool // Always last so everything else is updated before dialog changes
 }
 
 /**
@@ -87,8 +85,8 @@ async function onCreate(): Promise<void> {
   selected.$reset()
   validate.$reset()
   temporary.$reset()
-  ui.pageTable.operation = Operation.CREATE
-  ui.pageTable.dialog = true
+  pageTable.operation = Operation.CREATE
+  pageTable.dialog = true
 }
 
 /**
@@ -98,8 +96,8 @@ async function onUpdate(id: string): Promise<void> {
   validate.$reset()
   temporary.$reset()
   selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
-  ui.pageTable.operation = Operation.UPDATE
-  ui.pageTable.dialog = true
+  pageTable.operation = Operation.UPDATE
+  pageTable.dialog = true
 }
 
 /**
@@ -109,8 +107,8 @@ async function onReport(id: string): Promise<void> {
   validate.$reset()
   temporary.$reset()
   selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
-  ui.pageTable.operation = Operation.REPORT
-  ui.pageTable.dialog = true
+  pageTable.operation = Operation.REPORT
+  pageTable.dialog = true
 }
 
 /**
@@ -120,8 +118,8 @@ async function onInspect(id: string): Promise<void> {
   validate.$reset()
   temporary.$reset()
   selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
-  ui.pageTable.operation = Operation.INSPECT
-  ui.pageTable.dialog = true
+  pageTable.operation = Operation.INSPECT
+  pageTable.dialog = true
 }
 
 /**
@@ -175,13 +173,13 @@ async function onDelete(id: string): Promise<void> {
 
 <template>
   <QTable
-    :rows="rows"
-    :columns="columns"
+    :rows="pageTable.rows"
+    :columns="pageTable.columns"
     :rows-per-page-options="[0]"
     virtual-scroll
     style="height: 85vh"
     row-key="id"
-    :visible-columns="visibleColumns"
+    :visible-columns="pageTable.visibleColumns"
     :filter="searchFilter"
   >
     <!-- Table Heading -->
@@ -191,7 +189,7 @@ async function onDelete(id: string): Promise<void> {
 
       <!-- Search Input -->
       <QInput
-        :disable="!rows.length"
+        :disable="!pageTable.rows.length"
         outlined
         dense
         debounce="300"
@@ -206,8 +204,8 @@ async function onDelete(id: string): Promise<void> {
 
       <!-- Column Select -->
       <QSelect
-        v-model="visibleColumns"
-        :disable="!rows.length"
+        v-model="pageTable.visibleColumns"
+        :disable="!pageTable.rows.length"
         multiple
         outlined
         dense
@@ -215,7 +213,7 @@ async function onDelete(id: string): Promise<void> {
         display-value="Columns"
         emit-value
         map-options
-        :options="columnOptions"
+        :options="pageTable.columnOptions"
         option-value="name"
         options-cover
         style="min-width: 150px"
@@ -233,7 +231,7 @@ async function onDelete(id: string): Promise<void> {
         <!-- Clear Btn -->
         <QBtn
           v-if="isSupported(table, Operation.CLEAR)"
-          :disable="!rows.length"
+          :disable="!pageTable.rows.length"
           color="negative"
           label="Clear"
           @click="onClear()"
@@ -310,18 +308,18 @@ async function onDelete(id: string): Promise<void> {
 
   <!-- Fullscreen Dialog -->
   <PageDialog>
-    <PageInspect v-if="ui.pageTable.operation === Operation.INSPECT" :columns="columns" />
+    <PageInspect v-if="pageTable.operation === Operation.INSPECT" />
     <PageCreate
-      v-else-if="ui.pageTable.operation === Operation.CREATE"
+      v-else-if="pageTable.operation === Operation.CREATE"
       :table="table"
       @on-create="updateDialog(false)"
     />
     <PageUpdate
-      v-else-if="ui.pageTable.operation === Operation.UPDATE"
+      v-else-if="pageTable.operation === Operation.UPDATE"
       :table="table"
       @on-update="updateDialog(false)"
     />
-    <PageReport v-else-if="ui.pageTable.operation === Operation.REPORT" :table="table" />
+    <PageReport v-else-if="pageTable.operation === Operation.REPORT" :table="table" />
     <div v-else>Selected operation is not supported</div>
   </PageDialog>
 </template>

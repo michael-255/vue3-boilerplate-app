@@ -1,6 +1,6 @@
 import { defineStore, type StoreDefinition } from 'pinia'
 
-export const useTemporaryItemStore: StoreDefinition = defineStore({
+const useTemporaryItemStore: StoreDefinition = defineStore({
   id: 'temporary-item',
 
   state: () => ({
@@ -14,6 +14,6 @@ export const useTemporaryItemStore: StoreDefinition = defineStore({
       rounds: null,
     },
   }),
-
-  actions: {},
 })
+
+export default useTemporaryItemStore
