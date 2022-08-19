@@ -12,10 +12,10 @@ import PageInspect from '@/components/page-table/PageInspect.vue'
 import PageCreate from '@/components/page-table/PageCreate.vue'
 import PageUpdate from '@/components/page-table/PageUpdate.vue'
 import PageReport from '@/components/page-table/PageReport.vue'
-import { useSelectedItemStore } from '@/stores/selected'
+import { useSelectedItemStore } from '@/stores/selected-item'
 import { useUIStore } from '@/stores/ui'
-import { useValidateItemStore } from '@/stores/validate'
-import { useTemporaryItemStore } from '@/stores/temporary'
+import { useValidateItemStore } from '@/stores/validate-item'
+import { useTemporaryItemStore } from '@/stores/temporary-item'
 import { getTableActions } from '@/helpers/table-actions'
 import { getTableColumns } from '@/helpers/table-columns'
 import { getTableVisibleColumns } from '@/helpers/table-visible-columns'
@@ -95,6 +95,8 @@ async function onCreate(): Promise<void> {
  * Update row action opens the dialog with the settings below.
  */
 async function onUpdate(id: string): Promise<void> {
+  validate.$reset()
+  temporary.$reset()
   selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
   ui.pageTable.operation = Operation.UPDATE
   ui.pageTable.dialog = true
@@ -104,6 +106,8 @@ async function onUpdate(id: string): Promise<void> {
  * Report row action opens the dialog with the settings below.
  */
 async function onReport(id: string): Promise<void> {
+  validate.$reset()
+  temporary.$reset()
   selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
   ui.pageTable.operation = Operation.REPORT
   ui.pageTable.dialog = true
@@ -113,6 +117,8 @@ async function onReport(id: string): Promise<void> {
  * Inspect row action opens the dialog with the settings below.
  */
 async function onInspect(id: string): Promise<void> {
+  validate.$reset()
+  temporary.$reset()
   selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
   ui.pageTable.operation = Operation.INSPECT
   ui.pageTable.dialog = true

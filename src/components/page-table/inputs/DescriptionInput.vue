@@ -1,33 +1,30 @@
 <script setup lang="ts">
 import { QInput } from 'quasar'
 import { isOptionalLongText } from '@/utils/validators'
-import { useTemporaryItemStore } from '@/stores/temporary'
-import { useSelectedItemStore } from '@/stores/selected'
-import { useValidateItemStore } from '@/stores/validate'
-import { onMounted, ref, type Ref } from 'vue'
+import { useTemporaryItemStore } from '@/stores/temporary-item'
+import { useSelectedItemStore } from '@/stores/selected-item'
+import { useValidateItemStore } from '@/stores/validate-item'
+import { ref, type Ref } from 'vue'
 
 const validate = useValidateItemStore()
 const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
-const descriptionInputRef: Ref<any> = ref(null)
+const inputRef: Ref<any> = ref(null)
 const maxLength = 500
 
 // Setup
 temporary.item.description = selected.item?.description ? selected.item.description : ''
-
-onMounted(() => {
-  validateInput()
-})
+validate.item.description = true
 
 function validateInput(): void {
-  validate.item.description = !!descriptionInputRef?.value?.validate()
+  validate.item.description = !!inputRef?.value?.validate()
 }
 </script>
 
 <template>
   <QInput
     v-model="temporary.item.description"
-    ref="descriptionInputRef"
+    ref="inputRef"
     label="Description"
     :rules="[(val: string) => isOptionalLongText(val) || 'Description is limited to 500 characters']"
     :maxlength="maxLength"

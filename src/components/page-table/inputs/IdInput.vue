@@ -1,39 +1,36 @@
 <script setup lang="ts">
 import { QInput } from 'quasar'
-import { onMounted, ref, type Ref } from 'vue'
+import { ref, type Ref } from 'vue'
 import { v4 as createId } from 'uuid'
 import { Icon } from '@/constants/ui-enums'
 import { isId } from '@/utils/validators'
-import { useTemporaryItemStore } from '@/stores/temporary'
-import { useSelectedItemStore } from '@/stores/selected'
-import { useValidateItemStore } from '@/stores/validate'
+import { useTemporaryItemStore } from '@/stores/temporary-item'
+import { useSelectedItemStore } from '@/stores/selected-item'
+import { useValidateItemStore } from '@/stores/validate-item'
 
 const validate = useValidateItemStore()
 const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
-const idInputRef: Ref<any> = ref(null)
+const inputRef: Ref<any> = ref(null)
 
 // Setup
 temporary.item.id = selected.item?.id ? selected.item.id : createId()
-
-onMounted(() => {
-  validateInput()
-})
+validate.item.id = true
 
 function generateId(): void {
   temporary.item.id = createId()
-  validateInput()
+  validate.item.id = true
 }
 
 function validateInput(): void {
-  validate.item.id = !!idInputRef?.value?.validate()
+  validate.item.id = !!inputRef?.value?.validate()
 }
 </script>
 
 <template>
   <QInput
     v-model="temporary.item.id"
-    ref="idInputRef"
+    ref="inputRef"
     label="Id"
     :rules="[(val: string) => isId(val) || 'Id must be between 1 and 40 characters']"
     :maxlength="40"

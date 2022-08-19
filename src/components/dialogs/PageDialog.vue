@@ -2,20 +2,20 @@
 import { QDialog, QCard, QCardSection, QCardActions, QBtn } from 'quasar'
 import { Icon } from '@/constants/ui-enums'
 import { useUIStore } from '@/stores/ui'
-import { useTemporaryItemStore } from '@/stores/temporary'
-import { useSelectedItemStore } from '@/stores/selected'
-import { useValidateItemStore } from '@/stores/validate'
+import { useTemporaryItemStore } from '@/stores/temporary-item'
+import { useSelectedItemStore } from '@/stores/selected-item'
+import { useValidateItemStore } from '@/stores/validate-item'
 
 const ui = useUIStore()
 const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
 const validate = useValidateItemStore()
 
-async function deleteTemporaryItem(): Promise<void> {
+async function closeDialog(): Promise<void> {
+  ui.pageTable.dialog = false
   selected.$reset()
   temporary.$reset()
   validate.$reset()
-  ui.pageTable.dialog = false
 }
 </script>
 
@@ -33,7 +33,7 @@ async function deleteTemporaryItem(): Promise<void> {
           {{ ui.pageTable.operation }} {{ ui.pageTable.itemLabel }}
         </div>
         <QSpace />
-        <QBtn flat round :icon="Icon.CLOSE" @click="deleteTemporaryItem()" />
+        <QBtn flat round :icon="Icon.CLOSE" @click="closeDialog()" />
       </QCardActions>
 
       <QCardSection>

@@ -14,7 +14,7 @@ export const useValidateItemStore: StoreDefinition = defineStore({
       createdDate: null,
       name: null,
       description: null,
-      parentId: true, // @todo - async setup with Suspense
+      parentId: null,
       number: null,
       rounds: null,
     },
@@ -38,6 +38,6 @@ export const useValidateItemStore: StoreDefinition = defineStore({
     isExampleValid: (state: any): boolean =>
       state.item.id && state.item.createdDate && state.item.name && state.item.description,
     isExampleRecordValid: (state: any): boolean =>
-      state.item.id && state.item.createdDate && state.item.parentId && state.item.value,
+      state.item.id && state.item.createdDate && state.item.parentId && state.item.number,
   },
 })

@@ -2,7 +2,7 @@
 import type { DataObject } from '@/constants/types-interfaces'
 import { type Ref, ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
-import { useSelectedItemStore } from '@/stores/selected'
+import { useSelectedItemStore } from '@/stores/selected-item'
 
 const selected = useSelectedItemStore()
 

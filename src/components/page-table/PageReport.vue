@@ -4,7 +4,7 @@ import { onMounted, computed, ref, type Ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
 import { LineChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
-import { useSelectedItemStore } from '@/stores/selected'
+import { useSelectedItemStore } from '@/stores/selected-item'
 import { getTableActions } from '@/helpers/table-actions'
 
 const selected = useSelectedItemStore()
