@@ -2,7 +2,7 @@
 import { QBtn } from 'quasar'
 import { NotifyColor } from '@/constants/ui-enums'
 import { useLogger } from '@/use/useLogger'
-import { useSettingsStore } from '@/stores/settings'
+import useSettingsStore from '@/stores/settings'
 
 const { log } = useLogger()
 const settings = useSettingsStore()

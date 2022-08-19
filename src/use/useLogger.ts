@@ -4,7 +4,7 @@ import { NotifyColor, Icon } from '@/constants/ui-enums'
 import { DB } from '@/services/LocalDatabase'
 import { Log } from '@/models/Log'
 import { useNotifications } from '@/use/useNotifications'
-import { useSettingsStore } from '@/stores/settings'
+import useSettingsStore from '@/stores/settings'
 
 /**
  * Composable with utilities for logging, notifications, and basic dialogs.

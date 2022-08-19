@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { AppTable, Field } from '@/constants/data-enums'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
+import { getFieldComponent } from '@/helpers/field-components'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { useProvideTableInputs } from '@/use/useProvideTableInputs'
 import { useLogger } from '@/use/useLogger'
-import { useTable } from '@/use/useTable'
-import { useFields } from '@/use/useFields'
+import useTemporaryItemStore from '@/stores/temporary-item'
+import useValidateItemStore from '@/stores/validate-item'
+import { getTableFields } from '@/helpers/table-fields'
+import { getTableActions } from '@/helpers/table-actions'
+import { getTableLabel } from '@/helpers/table-label'
+
+const validate = useValidateItemStore()
+const temporary = useTemporaryItemStore()
 
 /**
  * Component for handling table item Creates using Provide/Inject for the inputs.
@@ -16,37 +22,13 @@ const emits = defineEmits<{ (eventName: 'on-create'): void }>()
 
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
-const { getFieldComponent } = useFields()
-const { getFields, getActions, getSingularLabel } = useTable()
-const {
-  // Models
-  idModel,
-  createdDateModel,
-  nameModel,
-  descriptionModel,
-  parentIdModel,
-  valueModel,
-  roundsModel,
-  areExampleInputsValid,
-  areExampleRecordInputsValid,
-} = useProvideTableInputs()
 
 /**
- * Determines how the create operation will proceed based on validation results.
+ * Determines how the create operation will proceed based on validate results.
  */
 function onCreate() {
   try {
-    /**
-     * @see
-     * MUST DEFINE TABLES BELOW
-     */
-    const areInputsValid = {
-      [AppTable.EXAMPLES]: areExampleInputsValid(),
-      [AppTable.EXAMPLE_RECORDS]: areExampleRecordInputsValid(),
-      [AppTable.LOGS]: false,
-    }[props.table]
-
-    if (!areInputsValid) {
+    if (!validate.tableItem(props.table)) {
       createDismissDialog()
     } else {
       createConfirmDialog()
@@ -57,7 +39,7 @@ function onCreate() {
 }
 
 /**
- * Dismiss dialog due to validation failure.
+ * Dismiss dialog due to validate failure.
  */
 function createDismissDialog(): void {
   dismissDialog(
@@ -74,25 +56,17 @@ function createDismissDialog(): void {
 function createConfirmDialog(): void {
   confirmDialog(
     'Create',
-    `Are you sure you want to create this ${getSingularLabel(props.table)}?`,
+    `Are you sure you want to create this ${getTableLabel(props.table, 'singular')}?`,
     Icon.SAVE,
     NotifyColor.INFO,
     async () => {
-      const { createRow } = getActions(props.table)
+      const { createRow } = getTableActions(props.table)
       if (createRow) {
         /**
          * @see
          * MUST ADD NEW INPUT MODELS HERE (Provide/Inject)
          */
-        await createRow({
-          id: idModel.value,
-          createdDate: createdDateModel.value,
-          name: nameModel.value,
-          description: descriptionModel.value,
-          parentId: parentIdModel.value,
-          value: valueModel.value,
-          rounds: roundsModel.value,
-        })
+        await createRow(temporary.item)
         emits('on-create')
       } else {
         log.error('Missing createRow action', { name: 'PageCreate:createConfirmDialog' })
@@ -104,7 +78,7 @@ function createConfirmDialog(): void {
 
 <template>
   <!-- Dynamically load components for each input -->
-  <div v-for="(field, i) in getFields(table)" :key="i">
+  <div v-for="(field, i) in getTableFields(table)" :key="i">
     <component v-if="field === Field.PARENT_ID" :is="getFieldComponent(field)" :table="table" />
     <component v-else :is="getFieldComponent(field)" />
   </div>
@@ -113,7 +87,7 @@ function createConfirmDialog(): void {
     class="q-mt-lg"
     color="primary"
     :icon="Icon.SAVE"
-    :label="`Create ${getSingularLabel(props.table)}`"
+    :label="`Create ${getTableLabel(props.table, 'singular')}`"
     @click="onCreate()"
   />
 </template>

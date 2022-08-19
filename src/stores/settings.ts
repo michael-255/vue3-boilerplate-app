@@ -2,7 +2,7 @@ import { SettingKey } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { defineStore, type StoreDefinition } from 'pinia'
 
-export const useSettingsStore: StoreDefinition = defineStore({
+const useSettingsStore: StoreDefinition = defineStore({
   id: 'settings',
 
   state: () => ({
@@ -38,3 +38,5 @@ export const useSettingsStore: StoreDefinition = defineStore({
     },
   },
 })
+
+export default useSettingsStore

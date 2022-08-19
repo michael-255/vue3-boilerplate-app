@@ -1,18 +1,30 @@
 <script setup lang="ts">
 import { QSelect, QInput, QIcon } from 'quasar'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { type AppTable, Operation, Field } from '@/constants/data-enums'
-import { type Ref, ref, onMounted } from 'vue'
-import type { DataObject } from '@/constants/types-interfaces'
+import { type AppTable, Operation } from '@/constants/data-enums'
+import { type Ref, ref, onMounted, onUnmounted } from 'vue'
 import { DB } from '@/services/LocalDatabase'
 import { useLogger } from '@/use/useLogger'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
-import { useTable } from '@/use/useTable'
 import PageDialog from '@/components/dialogs/PageDialog.vue'
-import PageInspect from '@/components/data-table/PageInspect.vue'
-import PageCreate from '@/components/data-table/PageCreate.vue'
-import PageUpdate from '@/components/data-table/PageUpdate.vue'
-import PageReport from '@/components/data-table/PageReport.vue'
+import PageInspect from '@/components/page-table/PageInspect.vue'
+import PageCreate from '@/components/page-table/PageCreate.vue'
+import PageUpdate from '@/components/page-table/PageUpdate.vue'
+import PageReport from '@/components/page-table/PageReport.vue'
+import usePageTableStore from '@/stores/page-table'
+import useSelectedItemStore from '@/stores/selected-item'
+import useValidateItemStore from '@/stores/validate-item'
+import useTemporaryItemStore from '@/stores/temporary-item'
+import { getTableActions } from '@/helpers/table-actions'
+import { getTableColumns } from '@/helpers/table-columns'
+import { getTableVisibleColumns } from '@/helpers/table-visible-columns'
+import { getTableLabel } from '@/helpers/table-label'
+import { isSupported } from '@/helpers/table-operations'
+
+const selected = useSelectedItemStore()
+const validate = useValidateItemStore()
+const temporary = useTemporaryItemStore()
+const pageTable = usePageTableStore()
 
 /**
  * Component allows viewing of table data and actions on that data.
@@ -22,47 +34,32 @@ const props = defineProps<{ table: AppTable }>()
 
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
-const {
-  getActions,
-  getColumns,
-  getColumnOptions,
-  getVisibleColumns,
-  getSingularLabel,
-  getPluralLabel,
-  isSupported,
-} = useTable()
 
 // Page Refs
 const searchFilter: Ref<string> = ref('')
-// Table Refs
-const rows: Ref<DataObject[]> = ref([])
-const columns: Ref<any[]> = ref([])
-const columnOptions: Ref<any[]> = ref([])
-const visibleColumns: Ref<Field[]> = ref([])
-// Dialog Refs
-const pageDialog: Ref<boolean> = ref(false)
-const dialogItem: Ref<DataObject | undefined> = ref({})
-const dialogOperation: Ref<Operation> = ref(Operation.NO_OP)
-const dialogLabel: Ref<string> = ref('')
 
 /**
  * Sets table properties and gets the latest data.
  */
 onMounted(async () => {
-  columns.value = getColumns(props.table)
-  columnOptions.value = getColumnOptions(props.table)
-  visibleColumns.value = getVisibleColumns(props.table)
-  dialogLabel.value = getSingularLabel(props.table)
+  pageTable.columns = getTableColumns(props.table, 'props')
+  pageTable.columnOptions = getTableColumns(props.table, 'options')
+  pageTable.visibleColumns = getTableVisibleColumns(props.table)
+  pageTable.itemLabel = getTableLabel(props.table, 'singular')
   await updateRows()
+})
+
+onUnmounted(() => {
+  pageTable.$reset()
 })
 
 /**
  * Loads the latest data into the data table rows.
  */
 async function updateRows(): Promise<void> {
-  const { getRows } = getActions(props.table)
+  const { getRows } = getTableActions(props.table)
   if (getRows) {
-    rows.value = await getRows()
+    pageTable.rows = await getRows()
   } else {
     log.critical('Missing getRows action', { name: 'PageTable:updateRows' })
   }
@@ -70,50 +67,59 @@ async function updateRows(): Promise<void> {
 
 /**
  * Update dialog event resets page dialog refs and sets dialog to casted boolean of event result.
- * @param event
+ * @param bool
  */
-async function updateDialog(event: any): Promise<void> {
+async function updateDialog(bool: boolean): Promise<void> {
   await updateRows()
-  dialogItem.value = {}
-  dialogOperation.value = Operation.NO_OP
-  dialogLabel.value = ''
-  pageDialog.value = !!event // Always last so everything else is updated before dialog changes
+  selected.$reset()
+  validate.$reset()
+  temporary.$reset()
+  pageTable.operation = Operation.NO_OP
+  pageTable.dialog = !!bool // Always last so everything else is updated before dialog changes
 }
 
 /**
  * Create row action opens the dialog with the settings below.
  */
 async function onCreate(): Promise<void> {
-  dialogItem.value = {}
-  dialogOperation.value = Operation.CREATE
-  pageDialog.value = true
+  selected.$reset()
+  validate.$reset()
+  temporary.$reset()
+  pageTable.operation = Operation.CREATE
+  pageTable.dialog = true
 }
 
 /**
  * Update row action opens the dialog with the settings below.
  */
 async function onUpdate(id: string): Promise<void> {
-  dialogItem.value = await DB.getById(props.table, id)
-  dialogOperation.value = Operation.UPDATE
-  pageDialog.value = true
+  validate.$reset()
+  temporary.$reset()
+  selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
+  pageTable.operation = Operation.UPDATE
+  pageTable.dialog = true
 }
 
 /**
  * Report row action opens the dialog with the settings below.
  */
 async function onReport(id: string): Promise<void> {
-  dialogItem.value = await DB.getById(props.table, id)
-  dialogOperation.value = Operation.REPORT
-  pageDialog.value = true
+  validate.$reset()
+  temporary.$reset()
+  selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
+  pageTable.operation = Operation.REPORT
+  pageTable.dialog = true
 }
 
 /**
  * Inspect row action opens the dialog with the settings below.
  */
 async function onInspect(id: string): Promise<void> {
-  dialogItem.value = await DB.getById(props.table, id)
-  dialogOperation.value = Operation.INSPECT
-  pageDialog.value = true
+  validate.$reset()
+  temporary.$reset()
+  selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
+  pageTable.operation = Operation.INSPECT
+  pageTable.dialog = true
 }
 
 /**
@@ -123,7 +129,7 @@ async function onClear(): Promise<void> {
   if (isSupported(props.table, Operation.CLEAR)) {
     confirmDialog(
       'Clear',
-      `Permanently delete all ${getPluralLabel(props.table)}?`,
+      `Permanently delete all ${getTableLabel(props.table, 'plural')}?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {
@@ -136,7 +142,7 @@ async function onClear(): Promise<void> {
       }
     )
   } else {
-    log.warn(`Clear not supported for ${getPluralLabel(props.table)} table`)
+    log.warn(`Clear not supported for ${getTableLabel(props.table, 'plural')} table`)
   }
 }
 
@@ -147,7 +153,7 @@ async function onDelete(id: string): Promise<void> {
   if (isSupported(props.table, Operation.DELETE)) {
     confirmDialog(
       'Delete',
-      `Permanently delete "${id}" from ${getPluralLabel(props.table)}?`,
+      `Permanently delete "${id}" from ${getTableLabel(props.table, 'plural')}?`,
       Icon.DELETE,
       NotifyColor.ERROR,
       async () => {
@@ -160,30 +166,30 @@ async function onDelete(id: string): Promise<void> {
       }
     )
   } else {
-    log.warn(`Delete not supported for ${getPluralLabel(props.table)} table`)
+    log.warn(`Delete not supported for ${getTableLabel(props.table, 'plural')} table`)
   }
 }
 </script>
 
 <template>
   <QTable
-    :rows="rows"
-    :columns="columns"
+    :rows="pageTable.rows"
+    :columns="pageTable.columns"
     :rows-per-page-options="[0]"
     virtual-scroll
     style="height: 85vh"
     row-key="id"
-    :visible-columns="visibleColumns"
+    :visible-columns="pageTable.visibleColumns"
     :filter="searchFilter"
   >
     <!-- Table Heading -->
     <template v-slot:top>
-      <div class="q-table__title text-weight-bold">{{ getPluralLabel(table) }}</div>
+      <div class="q-table__title text-weight-bold">{{ getTableLabel(table, 'plural') }}</div>
       <QSpace />
 
       <!-- Search Input -->
       <QInput
-        :disable="!rows.length"
+        :disable="!pageTable.rows.length"
         outlined
         dense
         debounce="300"
@@ -198,8 +204,8 @@ async function onDelete(id: string): Promise<void> {
 
       <!-- Column Select -->
       <QSelect
-        v-model="visibleColumns"
-        :disable="!rows.length"
+        v-model="pageTable.visibleColumns"
+        :disable="!pageTable.rows.length"
         multiple
         outlined
         dense
@@ -207,7 +213,7 @@ async function onDelete(id: string): Promise<void> {
         display-value="Columns"
         emit-value
         map-options
-        :options="columnOptions"
+        :options="pageTable.columnOptions"
         option-value="name"
         options-cover
         style="min-width: 150px"
@@ -225,7 +231,7 @@ async function onDelete(id: string): Promise<void> {
         <!-- Clear Btn -->
         <QBtn
           v-if="isSupported(table, Operation.CLEAR)"
-          :disable="!rows.length"
+          :disable="!pageTable.rows.length"
           color="negative"
           label="Clear"
           @click="onClear()"
@@ -301,33 +307,19 @@ async function onDelete(id: string): Promise<void> {
   </QTable>
 
   <!-- Fullscreen Dialog -->
-  <PageDialog
-    :dialog="pageDialog"
-    :operation="dialogOperation"
-    :label="dialogLabel"
-    @update:dialog="updateDialog($event)"
-  >
-    <PageInspect
-      v-if="dialogOperation === Operation.INSPECT"
-      :item="dialogItem"
-      :columns="columns"
-    />
+  <PageDialog>
+    <PageInspect v-if="pageTable.operation === Operation.INSPECT" />
     <PageCreate
-      v-else-if="dialogOperation === Operation.CREATE"
+      v-else-if="pageTable.operation === Operation.CREATE"
       :table="table"
       @on-create="updateDialog(false)"
     />
     <PageUpdate
-      v-else-if="dialogOperation === Operation.UPDATE"
+      v-else-if="pageTable.operation === Operation.UPDATE"
       :table="table"
-      :item="dialogItem"
       @on-update="updateDialog(false)"
     />
-    <PageReport
-      v-else-if="dialogOperation === Operation.REPORT"
-      :table="table"
-      :item="dialogItem"
-    />
+    <PageReport v-else-if="pageTable.operation === Operation.REPORT" :table="table" />
     <div v-else>Selected operation is not supported</div>
   </PageDialog>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { QToggle } from 'quasar'
-import { useSettingsStore } from '@/stores/settings'
+import useSettingsStore from '@/stores/settings'
 import { computed } from 'vue'
 
 const settings = useSettingsStore()

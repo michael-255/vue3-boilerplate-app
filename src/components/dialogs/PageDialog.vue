@@ -1,25 +1,27 @@
 <script setup lang="ts">
 import { QDialog, QCard, QCardSection, QCardActions, QBtn } from 'quasar'
-import type { Operation } from '@/constants/data-enums'
 import { Icon } from '@/constants/ui-enums'
-import { useVModel } from '@vueuse/core'
+import usePageTableStore from '@/stores/page-table'
+import useTemporaryItemStore from '@/stores/temporary-item'
+import useSelectedItemStore from '@/stores/selected-item'
+import useValidateItemStore from '@/stores/validate-item'
 
-/**
- * Full page dialog that has a slot for custom content.
- */
-const props = defineProps<{
-  dialog: boolean // Ref<boolean>
-  operation: Operation // Displayed in the top left of the dialog
-  label: string // Displayed below the operation
-}>()
-const emits = defineEmits<{ (event: 'update:dialog', bool: boolean): void }>()
+const selected = useSelectedItemStore()
+const temporary = useTemporaryItemStore()
+const validate = useValidateItemStore()
+const pageTable = usePageTableStore()
 
-const dialog = useVModel(props, 'dialog', emits)
+async function closeDialog(): Promise<void> {
+  pageTable.dialog = false
+  selected.$reset()
+  temporary.$reset()
+  validate.$reset()
+}
 </script>
 
 <template>
   <QDialog
-    v-model="dialog"
+    v-model="pageTable.dialog"
     persistent
     maximized
     transition-show="slide-up"
@@ -27,12 +29,12 @@ const dialog = useVModel(props, 'dialog', emits)
   >
     <QCard>
       <QCardActions class="bg-primary text-white">
-        <div class="q-table__title text-weight-bold q-ml-sm">{{ operation }}</div>
+        <div class="q-table__title text-weight-bold q-ml-sm">
+          {{ pageTable.operation }} {{ pageTable.itemLabel }}
+        </div>
         <QSpace />
-        <QBtn flat round :icon="Icon.CLOSE" v-close-popup />
+        <QBtn flat round :icon="Icon.CLOSE" @click="closeDialog()" />
       </QCardActions>
-
-      <QCardSection class="q-table__title text-weight-bold">{{ label }}</QCardSection>
 
       <QCardSection>
         <slot />
