@@ -12,7 +12,7 @@ const temporary = useTemporaryItemStore()
 const inputRef: Ref<any> = ref(null)
 
 // Setup
-temporary.item.number = selected.item?.value ? selected.item.number : 1
+temporary.item.number = selected.item?.number ? selected.item.number : 1
 validate.item.number = true
 
 function validateInput(): void {

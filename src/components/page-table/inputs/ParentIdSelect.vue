@@ -45,10 +45,17 @@ onMounted(async () => {
     }))
 
     // Set the current option
+    // must do this first so it can be null if parent was deleted versus being the first option
     if (selected.item?.parentId) {
-      temporary.item.parentId = options.value?.find((o) => o.value === selected.item.parentId)
-      validate.item.parentId = true
-    } else if (options.value?.length) {
+      const parent = options.value?.find((opt) => opt.value === selected.item.parentId)?.value
+      if (parent) {
+        temporary.item.parentId = parent
+        validate.item.parentId = true
+      } else {
+        temporary.item.parentId = null
+        validate.item.parentId = false
+      }
+    } else if (options.value?.length > 0) {
       temporary.item.parentId = options.value[0].value
       validate.item.parentId = true
     } else {

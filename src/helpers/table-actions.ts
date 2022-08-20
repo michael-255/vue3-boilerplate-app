@@ -63,6 +63,7 @@ function getExampleRecordActions(table: AppTable): TableActions {
       )
     },
     updateRow: async (data: DataObject) => {
+      console.log(data)
       await DB.updateById(AppTable.EXAMPLE_RECORDS, data.originalId, {
         id: data.id,
         createdDate: data.createdDate,

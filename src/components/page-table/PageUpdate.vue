@@ -64,10 +64,6 @@ function updateConfirmDialog(): void {
     async () => {
       const { updateRow } = getTableActions(props.table)
       if (updateRow) {
-        /**
-         * @see
-         * MUST ADD NEW INPUT MODELS HERE (Provide/Inject)
-         */
         await updateRow({ originalId: selected.item.id, ...temporary.item })
         emits('on-update')
       } else {

@@ -62,10 +62,6 @@ function createConfirmDialog(): void {
     async () => {
       const { createRow } = getTableActions(props.table)
       if (createRow) {
-        /**
-         * @see
-         * MUST ADD NEW INPUT MODELS HERE (Provide/Inject)
-         */
         await createRow(temporary.item)
         emits('on-create')
       } else {
