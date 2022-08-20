@@ -19,7 +19,7 @@ export function getFieldComponent(field: Field): any {
       () => import('@/components/page-table/inputs/DescriptionInput.vue')
     ),
     [Field.ROUNDS]: defineAsyncComponent(
-      () => import('@/components/page-table/inputs/RoundsTable.vue')
+      () => import('@/components/page-table/inputs/RoundsInput.vue')
     ),
     [Field.PARENT_ID]: defineAsyncComponent(
       () => import('@/components/page-table/inputs/ParentIdSelect.vue')
