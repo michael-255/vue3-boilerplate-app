@@ -58,7 +58,7 @@ function getExampleRecordActions(table: AppTable): TableActions {
           createdDate: data.createdDate,
           parentId: data.parentId,
           number: data.number,
-          // rounds: JSON.parse(JSON.stringify(data.rounds)), // JSON to fix Dexie cloning error
+          rounds: JSON.parse(JSON.stringify(data.rounds)), // JSON to fix Dexie cloning error
         })
       )
     },
@@ -69,7 +69,7 @@ function getExampleRecordActions(table: AppTable): TableActions {
         createdDate: data.createdDate,
         parentId: data.parentId,
         number: data.number,
-        // rounds: data.rounds,
+        rounds: data.rounds,
       })
     },
   }

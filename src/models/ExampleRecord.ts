@@ -8,7 +8,7 @@ export type Round = {
 export interface IExampleRecord extends IEntity {
   parentId: string
   number: number
-  // rounds: Round[]
+  rounds: Round[]
 }
 
 /**
@@ -18,12 +18,12 @@ export interface IExampleRecord extends IEntity {
 export class ExampleRecord extends _Entity {
   parentId: string
   number: number
-  // rounds: Round[]
+  rounds: Round[]
 
   constructor(params: IExampleRecord) {
     super({ id: params.id, createdDate: params.createdDate })
     this.parentId = params.parentId
     this.number = params.number
-    // this.rounds = params.rounds
+    this.rounds = params.rounds
   }
 }
