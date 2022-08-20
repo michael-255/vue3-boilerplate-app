@@ -6,7 +6,7 @@ const usePageTableStore: StoreDefinition = defineStore({
 
   state: () => ({
     dialog: false,
-    operation: Operation.NO_OP,
+    operation: Operation.NOOP,
     itemLabel: '',
     rows: [],
     columns: [],

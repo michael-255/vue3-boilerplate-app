@@ -22,7 +22,7 @@ export enum Field {
 }
 
 export enum Operation {
-  NO_OP = 'No Operation',
+  NOOP = 'No Operation',
   CREATE = 'Create',
   UPDATE = 'Update',
   DELETE = 'Delete',

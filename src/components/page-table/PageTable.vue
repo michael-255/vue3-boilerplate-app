@@ -74,7 +74,7 @@ async function updateDialog(bool: boolean): Promise<void> {
   selected.$reset()
   validate.$reset()
   temporary.$reset()
-  pageTable.operation = Operation.NO_OP
+  pageTable.operation = Operation.NOOP
   pageTable.dialog = !!bool // Always last so everything else is updated before dialog changes
 }
 
@@ -95,7 +95,7 @@ async function onCreate(): Promise<void> {
 async function onUpdate(id: string): Promise<void> {
   validate.$reset()
   temporary.$reset()
-  selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
+  selected.setItem(await DB.getById(props.table, id))
   pageTable.operation = Operation.UPDATE
   pageTable.dialog = true
 }
@@ -106,7 +106,7 @@ async function onUpdate(id: string): Promise<void> {
 async function onReport(id: string): Promise<void> {
   validate.$reset()
   temporary.$reset()
-  selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
+  selected.setItem(await DB.getById(props.table, id))
   pageTable.operation = Operation.REPORT
   pageTable.dialog = true
 }
@@ -117,7 +117,7 @@ async function onReport(id: string): Promise<void> {
 async function onInspect(id: string): Promise<void> {
   validate.$reset()
   temporary.$reset()
-  selected.item = Object.assign(selected.item, await DB.getById(props.table, id))
+  selected.setItem(await DB.getById(props.table, id))
   pageTable.operation = Operation.INSPECT
   pageTable.dialog = true
 }

@@ -10,11 +10,11 @@ have a better understanding of how this project is setup.
   - [ ] `Rounds` Similar to Exercise sets (multiple data points)
   - [ ] `Reports` Find a way to handle those extra data points on the charts
 
-- [ ] `Tests`
+- [ ] `Commenting Files`
 
-  - [ ] Tests for new stores and updating old tests
+- [ ] `Update Tests`
 
-- [ ] `README`
+- [ ] `Update README`
 
   - [ ] Steps for adding models, fields, and their data table functionality
   - [ ] Notes on repo name in `vite.config.ts`

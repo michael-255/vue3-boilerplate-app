@@ -85,7 +85,7 @@ describe('useTable', () => {
       expect(isSupported(table)).toBeDefined()
     })
 
-    expect(isSupported(AppTable.EXAMPLES, Operation.NO_OP)).toBe(false)
+    expect(isSupported(AppTable.EXAMPLES, Operation.NOOP)).toBe(false)
     expect(isSupported(AppTable.EXAMPLES, Operation.CREATE)).toBe(true)
     expect(isSupported(AppTable.EXAMPLES, Operation.UPDATE)).toBe(true)
     expect(isSupported(AppTable.EXAMPLES, Operation.DELETE)).toBe(true)
@@ -93,7 +93,7 @@ describe('useTable', () => {
     expect(isSupported(AppTable.EXAMPLES, Operation.INSPECT)).toBe(true)
     expect(isSupported(AppTable.EXAMPLES, Operation.REPORT)).toBe(true)
 
-    expect(isSupported(AppTable.EXAMPLE_RECORDS, Operation.NO_OP)).toBe(false)
+    expect(isSupported(AppTable.EXAMPLE_RECORDS, Operation.NOOP)).toBe(false)
     expect(isSupported(AppTable.EXAMPLE_RECORDS, Operation.CREATE)).toBe(true)
     expect(isSupported(AppTable.EXAMPLE_RECORDS, Operation.UPDATE)).toBe(true)
     expect(isSupported(AppTable.EXAMPLE_RECORDS, Operation.DELETE)).toBe(true)
@@ -101,7 +101,7 @@ describe('useTable', () => {
     expect(isSupported(AppTable.EXAMPLE_RECORDS, Operation.INSPECT)).toBe(true)
     expect(isSupported(AppTable.EXAMPLE_RECORDS, Operation.REPORT)).toBe(false)
 
-    expect(isSupported(AppTable.LOGS, Operation.NO_OP)).toBe(false)
+    expect(isSupported(AppTable.LOGS, Operation.NOOP)).toBe(false)
     expect(isSupported(AppTable.LOGS, Operation.CREATE)).toBe(false)
     expect(isSupported(AppTable.LOGS, Operation.UPDATE)).toBe(false)
     expect(isSupported(AppTable.LOGS, Operation.DELETE)).toBe(true)

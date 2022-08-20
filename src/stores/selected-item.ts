@@ -1,3 +1,4 @@
+import type { DataObject } from '@/constants/types-interfaces'
 import { defineStore, type StoreDefinition } from 'pinia'
 
 const useSelectedItemStore: StoreDefinition = defineStore({
@@ -14,6 +15,12 @@ const useSelectedItemStore: StoreDefinition = defineStore({
       rounds: null,
     },
   }),
+
+  actions: {
+    setItem(item: DataObject): void {
+      this.item = Object.assign(this.item, item)
+    },
+  },
 })
 
 export default useSelectedItemStore
