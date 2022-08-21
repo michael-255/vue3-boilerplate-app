@@ -3,7 +3,9 @@ import type { DataObject, TableActions } from '@/constants/types-interfaces'
 import { Example } from '@/models/Example'
 import { ExampleRecord } from '@/models/ExampleRecord'
 import { DB } from '@/services/LocalDatabase'
-import { isoToDisplayDate } from '@/utils/luxon'
+import useReportStore from '@/stores/report'
+
+const report = useReportStore()
 
 export function getTableActions(table: AppTable): TableActions {
   return {
@@ -37,12 +39,7 @@ function getExampleActions(table: AppTable): TableActions {
       })
     },
     generateReport: async (id: string) => {
-      const records: ExampleRecord[] = await DB.getByParentId(AppTable.EXAMPLE_RECORDS, id)
-      const labels = records.map(() => '')
-      const data = records.map((r: ExampleRecord) => r.number)
-      const firstDate = isoToDisplayDate(records[0]?.createdDate)
-      const lastDate = isoToDisplayDate(records[records.length - 1]?.createdDate)
-      return { firstDate, lastDate, labels, data }
+      report.generateExamplesReport(await DB.getByParentId(AppTable.EXAMPLE_RECORDS, id))
     },
   }
 }
@@ -63,13 +60,12 @@ function getExampleRecordActions(table: AppTable): TableActions {
       )
     },
     updateRow: async (data: DataObject) => {
-      console.log(data)
       await DB.updateById(AppTable.EXAMPLE_RECORDS, data.originalId, {
         id: data.id,
         createdDate: data.createdDate,
         parentId: data.parentId,
         number: data.number,
-        rounds: data.rounds,
+        rounds: JSON.parse(JSON.stringify(data.rounds)),
       })
     },
   }

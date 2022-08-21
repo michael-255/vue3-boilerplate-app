@@ -1,73 +1,31 @@
 <script setup lang="ts">
 import type { AppTable } from '@/constants/data-enums.js'
-import { onMounted, computed, ref, type Ref } from 'vue'
+import { onMounted } from 'vue'
 import { useLogger } from '@/use/useLogger'
 import { LineChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 import useSelectedItemStore from '@/stores/selected-item'
 import { getTableActions } from '@/helpers/table-actions'
-
-const selected = useSelectedItemStore()
+import useReportStore from '@/stores/report'
 
 /**
  * Component for handling reports for each supported table.
  * @param table
  */
 const props = defineProps<{ table: AppTable }>()
-
+const selected = useSelectedItemStore()
+const report = useReportStore()
 const { log } = useLogger()
-
-// REPORT
 Chart.register(...registerables)
-
-const firstDate: Ref<string> = ref('')
-const lastDate: Ref<string> = ref('')
-
-const datasetLabels: Ref<string[]> = ref([])
-const datasetData: Ref<number[]> = ref([])
-
-// REPORT OPTIONS
-const chartOptions: { [x: string]: any } = {
-  responsive: true,
-  fill: true,
-  radius: 3,
-  plugins: {
-    legend: {
-      display: false,
-    },
-    title: {
-      display: true,
-      text: selected.item?.name,
-    },
-  },
-}
-
-// REPORT DATA
-const chartData = computed<any>(() => ({
-  labels: datasetLabels.value,
-  datasets: [
-    {
-      data: datasetData.value,
-      borderColor: 'rgb(25, 118, 210)',
-      backgroundColor: 'rgba(25, 118, 210, 0.25)',
-    },
-  ],
-}))
 
 /**
  * Report action called on mount to generate the datasets.
- * @todo
- * Will likely need a table selection object here in the future for different table reports.
  */
 onMounted(async () => {
   try {
     const { generateReport } = getTableActions(props.table)
     if (generateReport) {
-      const dataset = await generateReport(selected.item?.id)
-      datasetLabels.value = dataset.labels
-      datasetData.value = dataset.data
-      firstDate.value = dataset.firstDate
-      lastDate.value = dataset.lastDate
+      await generateReport(selected.item?.id)
     } else {
       log.error('Missing generateReport action', { name: 'PageReport:onMounted' })
     }
@@ -78,14 +36,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <LineChart :options="chartOptions" :chartData="chartData" />
+  <LineChart :options="report.options" :chartData="report.chartData" />
   <!-- Dates below report -->
   <div class="q-mb-sm">
     <div class="text-subtitle1 text-weight-bold">First Record Date</div>
-    <div>{{ firstDate || '-' }}</div>
+    <div>{{ report.firstDate || '-' }}</div>
   </div>
   <div class="q-mb-sm">
     <div class="text-subtitle1 text-weight-bold">Last Record Date</div>
-    <div>{{ lastDate || '-' }}</div>
+    <div>{{ report.lastDate || '-' }}</div>
   </div>
 </template>

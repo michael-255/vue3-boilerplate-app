@@ -20,7 +20,7 @@ const temporary = useTemporaryItemStore()
  * @param table
  */
 const props = defineProps<{ table: AppTable }>()
-const emits = defineEmits<{ (eventName: 'on-update'): void }>()
+const emits = defineEmits<{ (eventName: 'on-update-confired'): void }>()
 
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
@@ -31,7 +31,7 @@ const { confirmDialog, dismissDialog } = useSimpleDialogs()
 function onUpdate() {
   try {
     if (!validate.tableItem(props.table)) {
-      updateDismissDialog()
+      validationFailedDialog()
     } else {
       updateConfirmDialog()
     }
@@ -43,7 +43,7 @@ function onUpdate() {
 /**
  * Dismiss dialog due to validate failure.
  */
-function updateDismissDialog(): void {
+function validationFailedDialog(): void {
   dismissDialog(
     'Validation Failed',
     'Unable to update item. Ensure all of the inputs have valid entries.',
@@ -64,8 +64,11 @@ function updateConfirmDialog(): void {
     async () => {
       const { updateRow } = getTableActions(props.table)
       if (updateRow) {
-        await updateRow({ originalId: selected.item.id, ...temporary.item })
-        emits('on-update')
+        await updateRow({
+          originalId: selected.item.id,
+          ...JSON.parse(JSON.stringify(temporary.item)),
+        })
+        emits('on-update-confired')
       } else {
         log.error('Missing updateRow action', { name: 'PageUpdate:updateConfirmDialog' })
       }

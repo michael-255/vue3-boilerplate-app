@@ -2,21 +2,9 @@
 import { QDialog, QCard, QCardSection, QCardActions, QBtn } from 'quasar'
 import { Icon } from '@/constants/ui-enums'
 import usePageTableStore from '@/stores/page-table'
-import useTemporaryItemStore from '@/stores/temporary-item'
-import useSelectedItemStore from '@/stores/selected-item'
-import useValidateItemStore from '@/stores/validate-item'
 
-const selected = useSelectedItemStore()
-const temporary = useTemporaryItemStore()
-const validate = useValidateItemStore()
+const emits = defineEmits<{ (eventName: 'on-dialog-close'): void }>()
 const pageTable = usePageTableStore()
-
-async function closeDialog(): Promise<void> {
-  pageTable.dialog = false
-  selected.$reset()
-  temporary.$reset()
-  validate.$reset()
-}
 </script>
 
 <template>
@@ -33,7 +21,7 @@ async function closeDialog(): Promise<void> {
           {{ pageTable.operation }} {{ pageTable.itemLabel }}
         </div>
         <QSpace />
-        <QBtn flat round :icon="Icon.CLOSE" @click="closeDialog()" />
+        <QBtn flat round :icon="Icon.CLOSE" @click="emits('on-dialog-close')" />
       </QCardActions>
 
       <QCardSection>

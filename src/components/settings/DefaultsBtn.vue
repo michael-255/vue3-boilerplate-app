@@ -37,7 +37,7 @@ function onDefaults(): void {
  */
 async function createExampleDefaults(): Promise<void> {
   let date = new Date('2022/01/01')
-  const limit = 5
+  const limit = 2
 
   // Generating unique ids for the main Example items
   const ids = []
@@ -58,7 +58,7 @@ async function createExampleDefaults(): Promise<void> {
       })
     )
 
-    for (let j = 0; j < 45; j++) {
+    for (let j = 0; j < 30; j++) {
       // Increment the date by 1 day each iteration
       date = new Date(date.setDate(date.getDate() + 1))
       // Add the Example Record item

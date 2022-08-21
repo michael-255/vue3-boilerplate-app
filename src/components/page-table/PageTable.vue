@@ -15,6 +15,7 @@ import usePageTableStore from '@/stores/page-table'
 import useSelectedItemStore from '@/stores/selected-item'
 import useValidateItemStore from '@/stores/validate-item'
 import useTemporaryItemStore from '@/stores/temporary-item'
+import useReportStore from '@/stores/report'
 import { getTableActions } from '@/helpers/table-actions'
 import { getTableColumns } from '@/helpers/table-columns'
 import { getTableVisibleColumns } from '@/helpers/table-visible-columns'
@@ -32,6 +33,7 @@ const { confirmDialog } = useSimpleDialogs()
 const selected = useSelectedItemStore()
 const validate = useValidateItemStore()
 const temporary = useTemporaryItemStore()
+const report = useReportStore()
 const pageTable = usePageTableStore()
 const searchFilter: Ref<string> = ref('')
 
@@ -64,24 +66,21 @@ async function updateRows(): Promise<void> {
 
 /**
  * Update dialog event resets page dialog refs and sets dialog to casted boolean of event result.
- * @param bool
  */
-async function updateDialog(bool: boolean): Promise<void> {
+async function closeDialog(): Promise<void> {
   await updateRows()
   selected.$reset()
   validate.$reset()
   temporary.$reset()
+  report.$reset()
   pageTable.operation = Operation.NOOP
-  pageTable.dialog = !!bool // Always last so everything else is updated before dialog changes
+  pageTable.dialog = false // Always last so everything else is updated before dialog changes
 }
 
 /**
  * Create row action opens the dialog with the settings below.
  */
 async function onCreate(): Promise<void> {
-  selected.$reset()
-  validate.$reset()
-  temporary.$reset()
   pageTable.operation = Operation.CREATE
   pageTable.dialog = true
 }
@@ -90,8 +89,6 @@ async function onCreate(): Promise<void> {
  * Update row action opens the dialog with the settings below.
  */
 async function onUpdate(id: string): Promise<void> {
-  validate.$reset()
-  temporary.$reset()
   selected.setItem(await DB.getById(props.table, id))
   pageTable.operation = Operation.UPDATE
   pageTable.dialog = true
@@ -101,8 +98,6 @@ async function onUpdate(id: string): Promise<void> {
  * Report row action opens the dialog with the settings below.
  */
 async function onReport(id: string): Promise<void> {
-  validate.$reset()
-  temporary.$reset()
   selected.setItem(await DB.getById(props.table, id))
   pageTable.operation = Operation.REPORT
   pageTable.dialog = true
@@ -112,8 +107,6 @@ async function onReport(id: string): Promise<void> {
  * Inspect row action opens the dialog with the settings below.
  */
 async function onInspect(id: string): Promise<void> {
-  validate.$reset()
-  temporary.$reset()
   selected.setItem(await DB.getById(props.table, id))
   pageTable.operation = Operation.INSPECT
   pageTable.dialog = true
@@ -304,19 +297,23 @@ async function onDelete(id: string): Promise<void> {
   </QTable>
 
   <!-- Fullscreen Dialog -->
-  <PageDialog>
+  <PageDialog @on-dialog-close="closeDialog()">
     <PageInspect v-if="pageTable.operation === Operation.INSPECT" />
+
     <PageCreate
       v-else-if="pageTable.operation === Operation.CREATE"
       :table="table"
-      @on-create="updateDialog(false)"
+      @on-create-confired="closeDialog()"
     />
+
     <PageUpdate
       v-else-if="pageTable.operation === Operation.UPDATE"
       :table="table"
-      @on-update="updateDialog(false)"
+      @on-update-confired="closeDialog()"
     />
+
     <PageReport v-else-if="pageTable.operation === Operation.REPORT" :table="table" />
+
     <div v-else>Selected operation is not supported</div>
   </PageDialog>
 </template>

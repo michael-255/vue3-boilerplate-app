@@ -18,7 +18,7 @@ const temporary = useTemporaryItemStore()
  * @param table
  */
 const props = defineProps<{ table: AppTable }>()
-const emits = defineEmits<{ (eventName: 'on-create'): void }>()
+const emits = defineEmits<{ (eventName: 'on-create-confired'): void }>()
 
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
@@ -29,7 +29,7 @@ const { confirmDialog, dismissDialog } = useSimpleDialogs()
 function onCreate() {
   try {
     if (!validate.tableItem(props.table)) {
-      createDismissDialog()
+      validationFailedDialog()
     } else {
       createConfirmDialog()
     }
@@ -41,7 +41,7 @@ function onCreate() {
 /**
  * Dismiss dialog due to validate failure.
  */
-function createDismissDialog(): void {
+function validationFailedDialog(): void {
   dismissDialog(
     'Validation Failed',
     'Unable to create item. Ensure all of the inputs have valid entries.',
@@ -63,7 +63,7 @@ function createConfirmDialog(): void {
       const { createRow } = getTableActions(props.table)
       if (createRow) {
         await createRow(temporary.item)
-        emits('on-create')
+        emits('on-create-confired')
       } else {
         log.error('Missing createRow action', { name: 'PageCreate:createConfirmDialog' })
       }
