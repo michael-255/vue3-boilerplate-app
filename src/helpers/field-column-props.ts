@@ -57,7 +57,7 @@ export function getFieldColumnProps(field: Field): ColumnProps {
       sortable: true,
       required: false,
       field: (row: any) => row[Field.ROUNDS],
-      format: (val: string) => truncateString(val),
+      format: (val: any[]) => truncateString(JSON.stringify(val)),
     },
     [Field.PARENT_ID]: {
       name: Field.PARENT_ID,

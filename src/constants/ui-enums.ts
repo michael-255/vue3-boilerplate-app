@@ -20,6 +20,8 @@ export enum Icon {
   CLOSE = 'close',
   EDIT = 'edit',
   DELETE = 'delete',
+  ADD = 'add',
+  REMOVE = 'remove',
   // Pages
   EXAMPLE = 'smart_toy',
   ACTIVE = 'play_arrow',
