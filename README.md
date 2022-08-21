@@ -7,7 +7,7 @@ have a better understanding of how this project is setup.
 
 - [ ] `Examples`
 
-  - [ ] `Rounds` Similar to Exercise sets (multiple data points)
+  - [x] `Rounds` Similar to Exercise sets (multiple data points)
   - [ ] `Reports` Find a way to handle those extra data points on the charts
 
 - [ ] `Commenting Files`
