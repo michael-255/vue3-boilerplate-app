@@ -21,11 +21,6 @@ import { getTableVisibleColumns } from '@/helpers/table-visible-columns'
 import { getTableLabel } from '@/helpers/table-label'
 import { isSupported } from '@/helpers/table-operations'
 
-const selected = useSelectedItemStore()
-const validate = useValidateItemStore()
-const temporary = useTemporaryItemStore()
-const pageTable = usePageTableStore()
-
 /**
  * Component allows viewing of table data and actions on that data.
  * @param table
@@ -34,8 +29,10 @@ const props = defineProps<{ table: AppTable }>()
 
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
-
-// Page Refs
+const selected = useSelectedItemStore()
+const validate = useValidateItemStore()
+const temporary = useTemporaryItemStore()
+const pageTable = usePageTableStore()
 const searchFilter: Ref<string> = ref('')
 
 /**
