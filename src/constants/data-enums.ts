@@ -10,7 +10,7 @@ export enum Field {
   CREATED_DATE = 'createdDate',
   NAME = 'name',
   DESCRIPTION = 'description',
-  // ROUNDS = 'rounds',
+  ROUNDS = 'rounds',
   PARENT_ID = 'parentId',
   KEY = 'key',
   VALUE = 'value',

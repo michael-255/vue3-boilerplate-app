@@ -68,6 +68,16 @@ async function createExampleDefaults(): Promise<void> {
           createdDate: date.toISOString(),
           parentId: ids[i],
           number: Number(Math.random().toString(10).substring(2, 3)) + i + j, // Increment value
+          rounds: [
+            {
+              primary: Number(Math.random().toString(10).substring(2, 3)) + i,
+              secondary: Number(Math.random().toString(10).substring(2, 3)) + i,
+            },
+            {
+              primary: Number(Math.random().toString(10).substring(2, 3)) + i,
+              secondary: Number(Math.random().toString(10).substring(2, 3)) + i,
+            },
+          ],
         })
       )
     }

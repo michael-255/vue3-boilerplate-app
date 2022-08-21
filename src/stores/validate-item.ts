@@ -37,7 +37,11 @@ const useValidateItemStore: StoreDefinition = defineStore({
     isExampleValid: (state: any): boolean =>
       state.item.id && state.item.createdDate && state.item.name && state.item.description,
     isExampleRecordValid: (state: any): boolean =>
-      state.item.id && state.item.createdDate && state.item.parentId && state.item.number,
+      state.item.id &&
+      state.item.createdDate &&
+      state.item.parentId &&
+      state.item.number &&
+      state.item.rounds,
   },
 })
 

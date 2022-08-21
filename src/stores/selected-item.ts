@@ -18,7 +18,7 @@ const useSelectedItemStore: StoreDefinition = defineStore({
 
   actions: {
     setItem(item: DataObject): void {
-      this.item = Object.assign(this.item, item)
+      this.item = JSON.parse(JSON.stringify(Object.assign({}, this.item, item)))
     },
   },
 })

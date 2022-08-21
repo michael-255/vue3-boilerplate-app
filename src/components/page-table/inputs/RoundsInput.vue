@@ -1,80 +1,99 @@
 <script setup lang="ts">
-import { QInput, QTable } from 'quasar'
-import { useInjectTableInputs } from '@/use/useInjectTableInputs'
-import { ref, type Ref } from 'vue'
+import { QBtn, QSpace, QCard, QCardSection, QSeparator } from 'quasar'
+import RoundsItem from '@/components/page-table/inputs/RoundsItem.vue'
+import useTemporaryItemStore from '@/stores/temporary-item'
+import useSelectedItemStore from '@/stores/selected-item'
+import useValidateItemStore from '@/stores/validate-item'
+import { useSimpleDialogs } from '@/use/useSimpleDialogs'
+import { Icon, NotifyColor } from '@/constants/ui-enums'
 
-/**
- * @todo
- * - Not going to use an InputRef for validate (just too difficult to implement)
- * - Going to cast the value to undefined if it is not a positive number
- * - Going to use a data table to ADD and REMOVE buttons for the rounds
- * - Will need to determine what the ROWS and COLUMNS need to be for the table
- * - Add ROUNDS to ingored fields in your tests
- * - Don't worry about reusing this component for the Active Page (that will be a different component)
- * - What do I do when multiple components need the same ref (sets)???
- */
+const { confirmDialog, dismissDialog } = useSimpleDialogs()
+const validate = useValidateItemStore()
+const selected = useSelectedItemStore()
+const temporary = useTemporaryItemStore()
 
-const { roundsModel } = useInjectTableInputs()
+// Setup
+temporary.item.rounds = selected.item?.rounds
+  ? JSON.parse(JSON.stringify(selected.item.rounds))
+  : []
+validate.item.rounds = true
 
-const primary: Ref<number> = ref(0)
-const secondary: Ref<number> = ref(0)
+function addRound(): void {
+  temporary.item.rounds.push({
+    primary: undefined,
+    secondary: undefined,
+  })
+}
 
-const rows = ref([])
-const columns = ref([])
-
-function updateRounds(): void {
-  roundsModel.value = [
-    {
-      primary: primary.value && primary.value > 0 ? primary.value : undefined,
-      secondary: secondary.value && secondary.value > 0 ? secondary.value : undefined,
-    },
-  ]
-
-  console.log(roundsModel.value)
+function removeRound(): void {
+  if (validate.item.rounds) {
+    confirmDialog(
+      'Remove Round',
+      'Are you sure you want to remove the last round?',
+      Icon.DELETE,
+      NotifyColor.ERROR,
+      () => {
+        temporary.item.rounds.pop()
+      }
+    )
+  } else {
+    dismissDialog(
+      'Validation Failed',
+      'Cannot remove any rounds until validation errors are cleared.',
+      Icon.WARN,
+      NotifyColor.WARN
+    )
+  }
 }
 </script>
 
 <template>
-  <QTable title="Rounds" :rows="rows" :columns="columns">
-    <!-- Column Headers -->
-    <template v-slot:header>
-      <QTr>
-        <QTh> Round </QTh>
-        <QTh>
-          <QInput
-            v-model.number="primary"
-            label="Primary"
-            dense
-            outlined
-            type="number"
-            color="primary"
-            class="q-mb-xs"
-            @blur="updateRounds()"
-          />
-        </QTh>
-        <QTh>
-          <QInput
-            v-model.number="secondary"
-            label="Secondary"
-            dense
-            outlined
-            type="number"
-            color="primary"
-            class="q-mb-xs"
-            @blur="updateRounds()"
-          />
-        </QTh>
-        <QTh auto-width />
-      </QTr>
-    </template>
+  <QCard>
+    <QCardSection class="row items-start">
+      <div class="text-h6">Rounds</div>
+      <QSpace />
+      <QBtn
+        :disable="temporary.item.rounds.length >= 20"
+        round
+        color="positive"
+        size="sm"
+        :icon="Icon.ADD"
+        @click="addRound()"
+      />
+    </QCardSection>
 
-    <!-- Rows -->
-    <template v-slot:body>
-      <QTr>
-        <QTd> 1 </QTd>
-        <QTd> 2 </QTd>
-        <QTd> 3 </QTd>
-      </QTr>
-    </template>
-  </QTable>
+    <QSeparator />
+
+    <QCardSection class="q-gutter-md row items-start">
+      <div>#</div>
+      <QSeparator vertical />
+      <div class="col">Primary</div>
+      <QSeparator vertical />
+      <div class="col">Secondary</div>
+    </QCardSection>
+
+    <QSeparator />
+
+    <QCardSection>
+      <div
+        v-for="(round, index) in temporary.item.rounds"
+        :key="index"
+        class="q-gutter-md row items-start q-mb-sm"
+      >
+        <div class="text-bold q-mt-lg">{{ index + 1 }}</div>
+        <RoundsItem :index="index" :primary="round.primary" :secondary="round.secondary" />
+      </div>
+
+      <div align="right">
+        <QBtn
+          :disable="!temporary.item.rounds.length"
+          round
+          color="negative"
+          size="sm"
+          :icon="Icon.REMOVE"
+          @click="removeRound()"
+        />
+      </div>
+    </QCardSection>
+  </QCard>
 </template>
