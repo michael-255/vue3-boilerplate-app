@@ -1,7 +1,7 @@
-import type { Field } from './data-enums'
+import type { ExactField } from './data-enums'
 
 export type ColumnProps = {
-  name: Field
+  name: ExactField
   label: string
   align: string
   sortable: boolean

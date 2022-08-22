@@ -13,32 +13,33 @@ const selected = useSelectedItemStore()
 const temporary = useTemporaryItemStore()
 
 // Setup
-temporary.item.rounds = selected.item?.rounds
-  ? JSON.parse(JSON.stringify(selected.item.rounds))
+temporary.item.primaryRounds = selected.item?.primaryRounds ? [...selected.item.primaryRounds] : []
+temporary.item.secondaryRounds = selected.item?.secondaryRounds
+  ? [...selected.item.secondaryRounds]
   : []
-validate.item.rounds = true
+validate.item.primaryRounds = true
+validate.item.secondaryRounds = true
 
 function addRound(): void {
-  temporary.item.rounds.push({
-    primary: undefined,
-    secondary: undefined,
-  })
+  temporary.item.primaryRounds.push(undefined)
+  temporary.item.secondaryRounds.push(undefined)
 }
 
 function removeRound(): void {
-  if (validate.item.rounds) {
+  if (validate.item.primaryRounds && validate.item.secondaryRounds) {
     confirmDialog(
       'Remove Round',
       'Are you sure you want to remove the last round?',
       Icon.DELETE,
       NotifyColor.ERROR,
       () => {
-        temporary.item.rounds.pop()
+        temporary.item.primaryRounds.pop()
+        temporary.item.secondaryRounds.pop()
       }
     )
   } else {
     dismissDialog(
-      'Validation Failed',
+      'Validation Errors',
       'Cannot remove any rounds until validation errors are cleared.',
       Icon.WARN,
       NotifyColor.WARN
@@ -53,7 +54,7 @@ function removeRound(): void {
       <div class="text-h6">Rounds</div>
       <QSpace />
       <QBtn
-        :disable="temporary.item.rounds.length >= 20"
+        :disable="temporary.item.primaryRounds.length >= 20"
         round
         color="positive"
         size="sm"
@@ -76,17 +77,21 @@ function removeRound(): void {
 
     <QCardSection>
       <div
-        v-for="(round, index) in temporary.item.rounds"
+        v-for="(round, index) in temporary.item.primaryRounds"
         :key="index"
         class="q-gutter-md row items-start q-mb-sm"
       >
         <div class="text-bold q-mt-lg">{{ index + 1 }}</div>
-        <RoundsItem :index="index" :primary="round.primary" :secondary="round.secondary" />
+        <RoundsItem
+          :index="index"
+          :primary="temporary.item.primaryRounds[index]"
+          :secondary="temporary.item.secondaryRounds[index]"
+        />
       </div>
 
       <div align="right">
         <QBtn
-          :disable="!temporary.item.rounds.length"
+          :disable="!temporary.item.primaryRounds.length"
           round
           color="negative"
           size="sm"

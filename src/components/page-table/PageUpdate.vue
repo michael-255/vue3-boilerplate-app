@@ -1,19 +1,15 @@
 <script setup lang="ts">
-import { AppTable, Field } from '@/constants/data-enums.js'
+import { AppTable, InputField } from '@/constants/data-enums.js'
 import { Icon, NotifyColor } from '@/constants/ui-enums'
-import { getFieldComponent } from '@/helpers/field-components'
+import { getInputFieldComponent } from '@/helpers/field-components'
 import { useSimpleDialogs } from '@/use/useSimpleDialogs'
 import { useLogger } from '@/use/useLogger'
 import useTemporaryItemStore from '@/stores/temporary-item'
 import useSelectedItemStore from '@/stores/selected-item'
 import useValidateItemStore from '@/stores/validate-item'
-import { getTableFields } from '@/helpers/table-fields'
+import { getTableInputFields } from '@/helpers/table-fields'
 import { getTableActions } from '@/helpers/table-actions'
 import { getTableLabel } from '@/helpers/table-label'
-
-const validate = useValidateItemStore()
-const selected = useSelectedItemStore()
-const temporary = useTemporaryItemStore()
 
 /**
  * Component for handling table item Updates using Provide/Inject for the inputs.
@@ -21,7 +17,9 @@ const temporary = useTemporaryItemStore()
  */
 const props = defineProps<{ table: AppTable }>()
 const emits = defineEmits<{ (eventName: 'on-update-confired'): void }>()
-
+const validate = useValidateItemStore()
+const selected = useSelectedItemStore()
+const temporary = useTemporaryItemStore()
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
 
@@ -79,9 +77,13 @@ function updateConfirmDialog(): void {
 
 <template>
   <!-- Dynamically load components for each input -->
-  <div v-for="(field, i) in getTableFields(table)" :key="i">
-    <component v-if="field === Field.PARENT_ID" :is="getFieldComponent(field)" :table="table" />
-    <component v-else :is="getFieldComponent(field)" />
+  <div v-for="(field, i) in getTableInputFields(table)" :key="i">
+    <component
+      v-if="field === InputField.PARENT_ID"
+      :is="getInputFieldComponent(field)"
+      :table="table"
+    />
+    <component v-else :is="getInputFieldComponent(field)" />
   </div>
 
   <QBtn

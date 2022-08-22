@@ -5,20 +5,31 @@ export enum AppTable {
   SETTINGS = 'settings',
 }
 
-export enum Field {
+export enum ExactField {
   ID = 'id',
   CREATED_DATE = 'createdDate',
   NAME = 'name',
   DESCRIPTION = 'description',
-  ROUNDS = 'rounds',
   PARENT_ID = 'parentId',
-  KEY = 'key',
-  VALUE = 'value',
   NUMBER = 'number',
+  PRIMARY_ROUNDS = 'primaryRounds',
+  SECONDARY_ROUNDS = 'secondaryRounds',
   SEVERITY = 'severity',
   DETAILS = 'details',
   MESSAGE = 'message',
   STACK = 'stack',
+  KEY = 'key',
+  VALUE = 'value',
+}
+
+export enum InputField {
+  ID = 'id',
+  CREATED_DATE = 'createdDate',
+  NAME = 'name',
+  DESCRIPTION = 'description',
+  PARENT_ID = 'parentId',
+  ROUNDS = 'rounds',
+  NUMBER = 'number',
 }
 
 export enum Operation {

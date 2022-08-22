@@ -20,20 +20,14 @@ const secondaryModel: Ref<number | undefined> = ref(props.secondary)
 const rulesMessage = 'Invalid'
 
 function updateTemporaryRound(): void {
-  temporary.item.rounds[props.index].primary = primaryModel.value
-  temporary.item.rounds[props.index].secondary = secondaryModel.value
+  temporary.item.primaryRounds[props.index] = primaryModel.value
+  temporary.item.secondaryRounds[props.index] = secondaryModel.value
   validateInput()
 }
 
 function validateInput(): void {
-  const primaryValid = !!primaryInputRef?.value?.validate()
-  const secondaryValid = !!secondaryInputRef?.value?.validate()
-
-  if (primaryValid && secondaryValid) {
-    validate.item.rounds = true
-  } else {
-    validate.item.rounds = false
-  }
+  validate.item.primaryRounds = !!primaryInputRef?.value?.validate()
+  validate.item.secondaryRounds = !!secondaryInputRef?.value?.validate()
 }
 </script>
 

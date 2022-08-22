@@ -1,10 +1,15 @@
-import { AppTable, Field } from '@/constants/data-enums'
+import { AppTable, ExactField } from '@/constants/data-enums'
 
-export function getTableVisibleColumns(table: AppTable): Field[] {
+export function getTableVisibleColumns(table: AppTable): ExactField[] {
   return {
-    [AppTable.EXAMPLES]: [Field.CREATED_DATE, Field.NAME],
-    [AppTable.EXAMPLE_RECORDS]: [Field.CREATED_DATE, Field.NUMBER],
-    [AppTable.LOGS]: [Field.CREATED_DATE, Field.SEVERITY, Field.DETAILS, Field.NAME],
+    [AppTable.EXAMPLES]: [ExactField.CREATED_DATE, ExactField.NAME],
+    [AppTable.EXAMPLE_RECORDS]: [ExactField.CREATED_DATE, ExactField.NUMBER],
+    [AppTable.LOGS]: [
+      ExactField.CREATED_DATE,
+      ExactField.SEVERITY,
+      ExactField.DETAILS,
+      ExactField.NAME,
+    ],
     [AppTable.SETTINGS]: [],
   }[table]
 }

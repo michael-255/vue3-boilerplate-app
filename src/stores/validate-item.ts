@@ -16,7 +16,8 @@ const useValidateItemStore: StoreDefinition = defineStore({
       description: null,
       parentId: null,
       number: null,
-      rounds: null,
+      primaryRounds: null,
+      secondaryRounds: null,
     },
   }),
 
@@ -41,7 +42,8 @@ const useValidateItemStore: StoreDefinition = defineStore({
       state.item.createdDate &&
       state.item.parentId &&
       state.item.number &&
-      state.item.rounds,
+      state.item.primaryRounds &&
+      state.item.secondaryRounds,
   },
 })
 

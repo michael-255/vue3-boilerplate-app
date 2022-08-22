@@ -1,5 +1,5 @@
 import Dexie, { type IndexableType, type Table } from 'dexie'
-import { AppTable, SettingKey, Field } from '@/constants/data-enums'
+import { AppTable, SettingKey, ExactField } from '@/constants/data-enums'
 import { Example, type IExample } from '@/models/Example'
 import { ExampleRecord, type IExampleRecord } from '@/models/ExampleRecord'
 import { Log, type ILog } from '@/models/Log'
@@ -24,10 +24,10 @@ export class LocalDatabase extends Dexie {
 
     this.version(1).stores({
       // REQUIRED
-      [AppTable.EXAMPLES]: `&${Field.ID}, ${Field.NAME}`,
-      [AppTable.EXAMPLE_RECORDS]: `&${Field.ID}, ${Field.PARENT_ID}`,
-      [AppTable.LOGS]: `&${Field.ID}`,
-      [AppTable.SETTINGS]: `&${Field.KEY}`,
+      [AppTable.EXAMPLES]: `&${ExactField.ID}, ${ExactField.NAME}`,
+      [AppTable.EXAMPLE_RECORDS]: `&${ExactField.ID}, ${ExactField.PARENT_ID}`,
+      [AppTable.LOGS]: `&${ExactField.ID}`,
+      [AppTable.SETTINGS]: `&${ExactField.KEY}`,
     })
 
     // REQUIRED
@@ -53,7 +53,7 @@ export class LocalDatabase extends Dexie {
    * @returns Single item or undefined
    */
   async getById<T>(table: AppTable, id: string): Promise<T | undefined> {
-    return await this.table(table).where(Field.ID).equalsIgnoreCase(id).first()
+    return await this.table(table).where(ExactField.ID).equalsIgnoreCase(id).first()
   }
 
   /**
@@ -63,7 +63,7 @@ export class LocalDatabase extends Dexie {
    * @returns Array of items
    */
   async getByName<T>(table: AppTable, name: string): Promise<T[]> {
-    return await this.table(table).where(Field.NAME).equalsIgnoreCase(name).toArray()
+    return await this.table(table).where(ExactField.NAME).equalsIgnoreCase(name).toArray()
   }
 
   /**
@@ -74,9 +74,9 @@ export class LocalDatabase extends Dexie {
    */
   async getByParentId<T>(table: AppTable, parentId: string): Promise<T[]> {
     return await this.table(table)
-      .where(Field.PARENT_ID)
+      .where(ExactField.PARENT_ID)
       .equalsIgnoreCase(parentId)
-      .sortBy(Field.CREATED_DATE)
+      .sortBy(ExactField.CREATED_DATE)
   }
 
   /**
@@ -88,9 +88,9 @@ export class LocalDatabase extends Dexie {
   async getNewestByParentId<T>(table: AppTable, parentId: string): Promise<T | undefined> {
     return (
       await this.table(table)
-        .where(Field.PARENT_ID)
+        .where(ExactField.PARENT_ID)
         .equalsIgnoreCase(parentId)
-        .sortBy(Field.CREATED_DATE)
+        .sortBy(ExactField.CREATED_DATE)
     ).reverse()[0]
   }
 
@@ -113,7 +113,7 @@ export class LocalDatabase extends Dexie {
    */
   async deleteById<T>(table: AppTable, id: string): Promise<T | undefined> {
     const itemToDelete: T | undefined = await this.table(table)
-      .where(Field.ID)
+      .where(ExactField.ID)
       .equalsIgnoreCase(id)
       .first()
 
@@ -170,9 +170,9 @@ export class LocalDatabase extends Dexie {
    */
   async initSettings(): Promise<void> {
     const settings = await this.table(AppTable.SETTINGS).toArray()
-    const DEBUG = settings.find((s) => s[Field.KEY] === SettingKey.DEBUG)
-    const NOTIFY = settings.find((s) => s[Field.KEY] === SettingKey.NOTIFY)
-    const INFO = settings.find((s) => s[Field.KEY] === SettingKey.INFO)
+    const DEBUG = settings.find((s) => s[ExactField.KEY] === SettingKey.DEBUG)
+    const NOTIFY = settings.find((s) => s[ExactField.KEY] === SettingKey.NOTIFY)
+    const INFO = settings.find((s) => s[ExactField.KEY] === SettingKey.INFO)
 
     if (!DEBUG) {
       await this.table(AppTable.SETTINGS).add({ key: SettingKey.DEBUG, value: false })
@@ -191,7 +191,7 @@ export class LocalDatabase extends Dexie {
    * @returns Setting item
    */
   async getSetting(key: SettingKey): Promise<Setting> {
-    return await this.table(AppTable.SETTINGS).where(Field.KEY).equalsIgnoreCase(key).first()
+    return await this.table(AppTable.SETTINGS).where(ExactField.KEY).equalsIgnoreCase(key).first()
   }
 
   /**
