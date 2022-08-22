@@ -5,10 +5,7 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `Examples`
-
-  - [x] `Rounds` Similar to Exercise sets (multiple data points)
-  - [ ] `Reports` Find a way to handle those extra data points on the charts
+- [ ] `Cleanup & Better Types`
 
 - [ ] `Commenting Files`
 

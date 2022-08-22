@@ -1,17 +1,17 @@
-import type { AppTable, Field } from '@/constants/data-enums'
+import type { AppTable, ExactField } from '@/constants/data-enums'
 import type { ColumnProps } from '@/constants/types-interfaces'
-import { getFieldColumnProps } from './field-column-props'
-import { getTableFields } from './table-fields'
+import { getExactFieldColumnProps } from '@/helpers/field-column-props'
+import { getTableExactFields } from '@/helpers/table-fields'
 
 export function getTableColumns(table: AppTable, type: 'props' | 'options'): ColumnProps[] {
-  const tableFields = getTableFields(table)
+  const tableFields = getTableExactFields(table)
 
   if (tableFields) {
     if (type === 'props') {
-      return tableFields.map((field: Field) => getFieldColumnProps(field))
+      return tableFields.map((field: ExactField) => getExactFieldColumnProps(field))
     } else {
       return tableFields
-        .map((field: Field) => getFieldColumnProps(field))
+        .map((field: ExactField) => getExactFieldColumnProps(field))
         .filter((col: ColumnProps) => !col.required)
     }
   } else {

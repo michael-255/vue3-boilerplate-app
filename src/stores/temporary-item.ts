@@ -11,7 +11,8 @@ const useTemporaryItemStore: StoreDefinition = defineStore({
       description: null,
       parentId: null,
       number: null,
-      rounds: null,
+      primaryRounds: null,
+      secondaryRounds: null,
     },
   }),
 })

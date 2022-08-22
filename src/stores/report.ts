@@ -11,7 +11,6 @@ const useReportStore: StoreDefinition = defineStore({
   id: 'report',
 
   state: () => ({
-    workingData: [],
     options: {
       responsive: true,
       radius: 3,
@@ -35,46 +34,32 @@ const useReportStore: StoreDefinition = defineStore({
 
   actions: {
     generateExamplesReport(records: any[]) {
-      const highestPrimaries = (data: any[]) => {
-        return data.map((d) => {
-          return d.rounds
-            .map((round: any) => {
-              return round?.primary
-            })
-            .sort((a: number, b: number) => b - a)[0] // largest item
-        })
-      }
+      const highestPrimaries = records.map((r) => {
+        return r.primaryRounds.sort((a: number, b: number) => b - a)[0] // largest item
+      })
 
-      const lowestSecondaries = (data: any[]) => {
-        return data.map((d) => {
-          return d.rounds
-            .map((round: any) => {
-              return round?.secondary
-            })
-            .sort((a: number, b: number) => a - b)[0] // smallest item
-        })
-      }
+      const lowestSecondaries = records.map((r) => {
+        return r.secondaryRounds.sort((a: number, b: number) => a - b)[0] // smallest item
+      })
 
-      const numbers = (data: any[]) => {
-        return data.map((d: any) => d?.number)
-      }
+      const numbers = records.map((d: any) => d?.number)
 
       const datasets: Dataset[] = []
 
       datasets.push({
         label: 'Highest Primaries',
         borderColor: 'rgb(25, 118, 210)',
-        data: highestPrimaries(records),
+        data: highestPrimaries,
       })
       datasets.push({
         label: 'Lowest Secondaries',
         borderColor: 'rgb(25, 40, 220)',
-        data: lowestSecondaries(records),
+        data: lowestSecondaries,
       })
       datasets.push({
         label: 'Number',
         borderColor: 'rgb(200, 80, 130)',
-        data: numbers(records),
+        data: numbers,
       })
 
       this.options.plugins.title.text = 'Example Report'

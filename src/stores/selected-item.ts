@@ -12,13 +12,14 @@ const useSelectedItemStore: StoreDefinition = defineStore({
       description: null,
       parentId: null,
       number: null,
-      rounds: null,
+      primaryRounds: null,
+      secondaryRounds: null,
     },
   }),
 
   actions: {
     setItem(item: DataObject): void {
-      this.item = JSON.parse(JSON.stringify(Object.assign({}, this.item, item)))
+      this.item = Object.assign({}, this.item, item)
     },
   },
 })

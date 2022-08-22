@@ -63,20 +63,19 @@ async function createExampleDefaults(): Promise<void> {
       date = new Date(date.setDate(date.getDate() + 1))
       // Add the Example Record item
       defaultExampleRecords.push(
+        // Building random values that trend so reports look interesting
         new ExampleRecord({
           id: createId(),
           createdDate: date.toISOString(),
           parentId: ids[i],
-          number: Number(Math.random().toString(10).substring(2, 3)) + i + j, // Increment value
-          rounds: [
-            {
-              primary: Number(Math.random().toString(10).substring(2, 3)) + i,
-              secondary: Number(Math.random().toString(10).substring(2, 3)) + i,
-            },
-            {
-              primary: Number(Math.random().toString(10).substring(2, 3)) + i,
-              secondary: Number(Math.random().toString(10).substring(2, 3)) + i,
-            },
+          number: Number(Math.random().toString(10).substring(2, 3)) + i + j,
+          primaryRounds: [
+            Number(Math.random().toString(10).substring(2, 3)) + i + 50 - j,
+            Number(Math.random().toString(10).substring(2, 3)) + i,
+          ],
+          secondaryRounds: [
+            Number(Math.random().toString(10).substring(2, 3)) + i + 50 - j,
+            Number(Math.random().toString(10).substring(2, 3)) + i,
           ],
         })
       )

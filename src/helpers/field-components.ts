@@ -1,4 +1,4 @@
-import { Field } from '@/constants/data-enums'
+import { InputField } from '@/constants/data-enums'
 import { defineAsyncComponent } from 'vue'
 
 /**
@@ -6,28 +6,28 @@ import { defineAsyncComponent } from 'vue'
  * @param field
  * @returns Lazy loaded Vue Component
  */
-export function getFieldComponent(field: Field): any {
+export function getInputFieldComponent(inputField: InputField): any {
   return {
-    [Field.ID]: defineAsyncComponent(() => import('@/components/page-table/inputs/IdInput.vue')),
-    [Field.CREATED_DATE]: defineAsyncComponent(
+    [InputField.ID]: defineAsyncComponent(
+      () => import('@/components/page-table/inputs/IdInput.vue')
+    ),
+    [InputField.CREATED_DATE]: defineAsyncComponent(
       () => import('@/components/page-table/inputs/CreatedDateInput.vue')
     ),
-    [Field.NAME]: defineAsyncComponent(
+    [InputField.NAME]: defineAsyncComponent(
       () => import('@/components/page-table/inputs/NameInput.vue')
     ),
-    [Field.DESCRIPTION]: defineAsyncComponent(
+    [InputField.DESCRIPTION]: defineAsyncComponent(
       () => import('@/components/page-table/inputs/DescriptionInput.vue')
     ),
-    [Field.ROUNDS]: defineAsyncComponent(
-      () => import('@/components/page-table/inputs/RoundsInput.vue')
-    ),
-    [Field.PARENT_ID]: defineAsyncComponent(
+    [InputField.PARENT_ID]: defineAsyncComponent(
       () => import('@/components/page-table/inputs/ParentIdSelect.vue')
     ),
-    [Field.KEY]: null,
-    [Field.VALUE]: null,
-    [Field.NUMBER]: defineAsyncComponent(
+    [InputField.NUMBER]: defineAsyncComponent(
       () => import('@/components/page-table/inputs/NumberInput.vue')
     ),
-  }[field as string] // As string so fields without a value will return undefined
+    [InputField.ROUNDS]: defineAsyncComponent(
+      () => import('@/components/page-table/inputs/RoundsInput.vue')
+    ),
+  }[inputField]
 }

@@ -1,135 +1,144 @@
-import { Field } from '@/constants/data-enums'
+import { ExactField } from '@/constants/data-enums'
 import { isoToDisplayDate } from '@/utils/luxon'
 import { truncateString } from '@/utils/common'
 import type { ColumnProps } from '@/constants/types-interfaces'
 
 /**
  * Get field display properties for columns in QTables.
- * @param field
+ * @param exactField
  * @returns Object with properties for QTable columns
  */
-export function getFieldColumnProps(field: Field): ColumnProps {
+export function getExactFieldColumnProps(exactField: ExactField): ColumnProps {
   /**
    * @see
    * MUST ADD NEW FIELDS BELOW
    */
   return {
-    [Field.ID]: {
-      name: Field.ID,
+    [ExactField.ID]: {
+      name: ExactField.ID,
       label: 'Id',
       align: 'left',
       sortable: true,
       required: true,
-      field: (row: any) => row[Field.ID],
+      field: (row: any) => row[ExactField.ID],
       format: (val: string) => val,
     },
-    [Field.CREATED_DATE]: {
-      name: Field.CREATED_DATE,
+    [ExactField.CREATED_DATE]: {
+      name: ExactField.CREATED_DATE,
       label: 'Created Date',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.CREATED_DATE],
+      field: (row: any) => row[ExactField.CREATED_DATE],
       format: (val: string) => isoToDisplayDate(val),
     },
-    [Field.NAME]: {
-      name: Field.NAME,
+    [ExactField.NAME]: {
+      name: ExactField.NAME,
       label: 'Name',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.NAME],
+      field: (row: any) => row[ExactField.NAME],
       format: (val: string) => truncateString(val),
     },
-    [Field.DESCRIPTION]: {
-      name: Field.DESCRIPTION,
+    [ExactField.DESCRIPTION]: {
+      name: ExactField.DESCRIPTION,
       label: 'Description',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.DESCRIPTION],
+      field: (row: any) => row[ExactField.DESCRIPTION],
       format: (val: string) => truncateString(val),
     },
-    [Field.ROUNDS]: {
-      name: Field.ROUNDS,
-      label: 'Rounds',
-      align: 'left',
-      sortable: true,
-      required: false,
-      field: (row: any) => row[Field.ROUNDS],
-      format: (val: any[]) => truncateString(JSON.stringify(val)),
-    },
-    [Field.PARENT_ID]: {
-      name: Field.PARENT_ID,
+    [ExactField.PARENT_ID]: {
+      name: ExactField.PARENT_ID,
       label: 'Parent',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.PARENT_ID],
+      field: (row: any) => row[ExactField.PARENT_ID],
       format: (val: string) => val,
     },
-    [Field.KEY]: {
-      name: Field.KEY,
+    [ExactField.PRIMARY_ROUNDS]: {
+      name: ExactField.PRIMARY_ROUNDS,
+      label: 'Primary',
+      align: 'left',
+      sortable: true,
+      required: false,
+      field: (row: any) => row[ExactField.PRIMARY_ROUNDS],
+      format: (val: number[]) => truncateString(JSON.stringify(val)),
+    },
+    [ExactField.SECONDARY_ROUNDS]: {
+      name: ExactField.SECONDARY_ROUNDS,
+      label: 'Secondary',
+      align: 'left',
+      sortable: true,
+      required: false,
+      field: (row: any) => row[ExactField.SECONDARY_ROUNDS],
+      format: (val: number[]) => truncateString(JSON.stringify(val)),
+    },
+    [ExactField.KEY]: {
+      name: ExactField.KEY,
       label: 'Key',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.KEY],
+      field: (row: any) => row[ExactField.KEY],
       format: (val: string) => val,
     },
-    [Field.VALUE]: {
-      name: Field.VALUE,
+    [ExactField.VALUE]: {
+      name: ExactField.VALUE,
       label: 'Value',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.VALUE],
+      field: (row: any) => row[ExactField.VALUE],
       format: (val: boolean | string | number) => val,
     },
-    [Field.NUMBER]: {
-      name: Field.NUMBER,
+    [ExactField.NUMBER]: {
+      name: ExactField.NUMBER,
       label: 'Number',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.NUMBER],
+      field: (row: any) => row[ExactField.NUMBER],
       format: (val: number) => val,
     },
-    [Field.SEVERITY]: {
-      name: Field.SEVERITY,
+    [ExactField.SEVERITY]: {
+      name: ExactField.SEVERITY,
       label: 'Severity',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.SEVERITY],
+      field: (row: any) => row[ExactField.SEVERITY],
       format: (val: string) => val,
     },
-    [Field.DETAILS]: {
-      name: Field.DETAILS,
+    [ExactField.DETAILS]: {
+      name: ExactField.DETAILS,
       label: 'Details',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.DETAILS],
+      field: (row: any) => row[ExactField.DETAILS],
       format: (val: string) => truncateString(val),
     },
-    [Field.MESSAGE]: {
-      name: Field.MESSAGE,
+    [ExactField.MESSAGE]: {
+      name: ExactField.MESSAGE,
       label: 'Messages',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.MESSAGE],
+      field: (row: any) => row[ExactField.MESSAGE],
       format: (val: string) => truncateString(val),
     },
-    [Field.STACK]: {
-      name: Field.STACK,
+    [ExactField.STACK]: {
+      name: ExactField.STACK,
       label: 'Stack',
       align: 'left',
       sortable: true,
       required: false,
-      field: (row: any) => row[Field.STACK],
+      field: (row: any) => row[ExactField.STACK],
       format: (val: string) => truncateString(val),
     },
-  }[field]
+  }[exactField]
 }
