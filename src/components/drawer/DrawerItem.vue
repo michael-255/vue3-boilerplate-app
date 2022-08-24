@@ -2,6 +2,9 @@
 import { QItem, QItemSection, QIcon } from 'quasar'
 import type { Icon } from '@/constants/ui-enums'
 
+/**
+ * Drawer list item that is used by MenuLayout.
+ */
 defineProps<{
   to: string | { [x: string]: any }
   icon: Icon

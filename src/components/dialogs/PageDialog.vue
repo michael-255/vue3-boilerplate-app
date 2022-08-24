@@ -4,9 +4,9 @@ import { Icon } from '@/constants/ui-enums'
 import usePageTableStore from '@/stores/page-table'
 
 /**
- * @todo where this is used and the overall intent
+ * PageDialog is a fullscreen dialog for views that use the PageTable components. You load
+ * components needed for operations like Create, Update, and Report inside of its slot.
  */
-
 const emits = defineEmits<{ (eventName: 'on-dialog-close'): void }>()
 const pageTable = usePageTableStore()
 </script>

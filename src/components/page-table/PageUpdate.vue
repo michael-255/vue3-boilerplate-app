@@ -12,7 +12,7 @@ import { getTableActions } from '@/helpers/table-actions'
 import { getTableLabel } from '@/helpers/table-label'
 
 /**
- * Component for handling table item Updates using Provide/Inject for the inputs.
+ * Component for displaying inputs for the updating an existing data item.
  * @param table
  */
 const props = defineProps<{ table: AppTable }>()
@@ -23,37 +23,28 @@ const temporary = useTemporaryItemStore()
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
 
-/**
- * Determines how the update operation will proceed based on validate results.
- */
 function onUpdate() {
   try {
     if (!validate.tableItem(props.table)) {
       validationFailedDialog()
     } else {
-      updateConfirmDialog()
+      confirmUpdateDialog()
     }
   } catch (error) {
     log.error('PageUpdate:onUpdate', error)
   }
 }
 
-/**
- * Dismiss dialog due to validate failure.
- */
 function validationFailedDialog(): void {
   dismissDialog(
-    'Validation Failed',
+    'Validation Error',
     'Unable to update item. Ensure all of the inputs have valid entries.',
     Icon.WARN,
     NotifyColor.WARN
   )
 }
 
-/**
- * Confirm that you want to update the item with the current values entered into the input models.
- */
-function updateConfirmDialog(): void {
+function confirmUpdateDialog(): void {
   confirmDialog(
     'Update',
     `Are you sure you want to update this ${getTableLabel(props.table, 'singular')}?`,
@@ -68,7 +59,7 @@ function updateConfirmDialog(): void {
         })
         emits('on-update-confired')
       } else {
-        log.error('Missing updateRow action', { name: 'PageUpdate:updateConfirmDialog' })
+        log.error('Missing updateRow action', { name: 'PageUpdate:confirmUpdateDialog' })
       }
     }
   )
@@ -76,7 +67,7 @@ function updateConfirmDialog(): void {
 </script>
 
 <template>
-  <!-- Dynamically load components for each input -->
+  <!-- Dynamically load components for each input with any needed custom props -->
   <div v-for="(field, i) in getTableInputFields(table)" :key="i">
     <component
       v-if="field === InputField.PARENT_ID"

@@ -23,11 +23,10 @@ import { getTableLabel } from '@/helpers/table-label'
 import { isSupported } from '@/helpers/table-operations'
 
 /**
- * Component allows viewing of table data and actions on that data.
+ * Component allows you to view and perform operations on table data.
  * @param table
  */
 const props = defineProps<{ table: AppTable }>()
-
 const { log } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
 const selected = useSelectedItemStore()
@@ -38,14 +37,18 @@ const pageTable = usePageTableStore()
 const searchFilter: Ref<string> = ref('')
 
 /**
- * Sets table properties and gets the latest data.
+ * Sets the page-table store up and loads the table rows.
  */
 onMounted(async () => {
-  pageTable.columns = getTableColumns(props.table, 'props')
-  pageTable.columnOptions = getTableColumns(props.table, 'options')
-  pageTable.visibleColumns = getTableVisibleColumns(props.table)
-  pageTable.itemLabel = getTableLabel(props.table, 'singular')
-  await updateRows()
+  try {
+    pageTable.columns = getTableColumns(props.table, 'props')
+    pageTable.columnOptions = getTableColumns(props.table, 'options')
+    pageTable.visibleColumns = getTableVisibleColumns(props.table)
+    pageTable.itemLabel = getTableLabel(props.table, 'singular')
+    await updateRows()
+  } catch (error) {
+    log.error('PageTable:onMounted', error)
+  }
 })
 
 onUnmounted(() => {
@@ -60,61 +63,66 @@ async function updateRows(): Promise<void> {
   if (getRows) {
     pageTable.rows = await getRows()
   } else {
-    log.critical('Missing getRows action', { name: 'PageTable:updateRows' })
+    log.error('Missing getRows action', { name: 'PageTable:updateRows' })
   }
 }
 
 /**
- * Update dialog event resets page dialog refs and sets dialog to casted boolean of event result.
+ * Closes the fullscreen dialog after reseting the stores and updating the table rows.
  */
 async function closeDialog(): Promise<void> {
-  await updateRows()
-  selected.$reset()
-  validate.$reset()
-  temporary.$reset()
-  report.$reset()
-  pageTable.operation = Operation.NOOP
-  pageTable.dialog = false // Always last so everything else is updated before dialog changes
+  try {
+    await updateRows()
+    selected.$reset()
+    validate.$reset()
+    temporary.$reset()
+    report.$reset()
+    pageTable.operation = Operation.NOOP
+    pageTable.dialog = false // Always last so everything else is updated before dialog changes
+  } catch (error) {
+    log.error('PageTable:closeDialog', error)
+  }
 }
 
-/**
- * Create row action opens the dialog with the settings below.
- */
 async function onCreate(): Promise<void> {
-  pageTable.operation = Operation.CREATE
-  pageTable.dialog = true
+  try {
+    pageTable.operation = Operation.CREATE
+    pageTable.dialog = true
+  } catch (error) {
+    log.error('PageTable:onCreate', error)
+  }
 }
 
-/**
- * Update row action opens the dialog with the settings below.
- */
 async function onUpdate(id: string): Promise<void> {
-  selected.setItem(await DB.getById(props.table, id))
-  pageTable.operation = Operation.UPDATE
-  pageTable.dialog = true
+  try {
+    selected.setItem(await DB.getById(props.table, id))
+    pageTable.operation = Operation.UPDATE
+    pageTable.dialog = true
+  } catch (error) {
+    log.error('PageTable:onUpdate', error)
+  }
 }
 
-/**
- * Report row action opens the dialog with the settings below.
- */
 async function onReport(id: string): Promise<void> {
-  selected.setItem(await DB.getById(props.table, id))
-  pageTable.operation = Operation.REPORT
-  pageTable.dialog = true
+  try {
+    selected.setItem(await DB.getById(props.table, id))
+    pageTable.operation = Operation.REPORT
+    pageTable.dialog = true
+  } catch (error) {
+    log.error('PageTable:onReport', error)
+  }
 }
 
-/**
- * Inspect row action opens the dialog with the settings below.
- */
 async function onInspect(id: string): Promise<void> {
-  selected.setItem(await DB.getById(props.table, id))
-  pageTable.operation = Operation.INSPECT
-  pageTable.dialog = true
+  try {
+    selected.setItem(await DB.getById(props.table, id))
+    pageTable.operation = Operation.INSPECT
+    pageTable.dialog = true
+  } catch (error) {
+    log.error('PageTable:onInspect', error)
+  }
 }
 
-/**
- * Confirm clearing all data in this table.
- */
 async function onClear(): Promise<void> {
   if (isSupported(props.table, Operation.CLEAR)) {
     confirmDialog(
@@ -127,7 +135,7 @@ async function onClear(): Promise<void> {
           await DB.clear(props.table)
           await updateRows()
         } catch (error) {
-          log.error('onClear', error)
+          log.error('PageTable:onClear', error)
         }
       }
     )
@@ -136,9 +144,6 @@ async function onClear(): Promise<void> {
   }
 }
 
-/**
- * Confirm deleting the clicked item.
- */
 async function onDelete(id: string): Promise<void> {
   if (isSupported(props.table, Operation.DELETE)) {
     confirmDialog(
@@ -151,7 +156,7 @@ async function onDelete(id: string): Promise<void> {
           await DB.deleteById(props.table, id)
           await updateRows()
         } catch (error) {
-          log.error('onDelete', error)
+          log.error('PageTable:onDelete', error)
         }
       }
     )
@@ -298,7 +303,7 @@ async function onDelete(id: string): Promise<void> {
 
   <!-- Fullscreen Dialog -->
   <PageDialog @on-dialog-close="closeDialog()">
-    <PageInspect v-if="pageTable.operation === Operation.INSPECT" />
+    <PageInspect v-if="pageTable.operation === Operation.INSPECT" :table="table" />
 
     <PageCreate
       v-else-if="pageTable.operation === Operation.CREATE"

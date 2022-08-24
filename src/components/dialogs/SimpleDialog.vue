@@ -4,14 +4,10 @@ import { QDialog, QCard, QCardSection, QCardActions, QIcon, QBtn } from 'quasar'
 import { useDialogPluginComponent } from 'quasar'
 
 /**
- * @todo better explanation
- *
- * Available methods to hook into when using this dialog:
- * - onOk
- * - onCancel
- * - onDismiss (called on OK or Cancel)
+ * Small dialogs used for confirming operations or providing information that can be dismissed.
  *
  * @example
+ * // You can hook into the methods below:
  * $q.dialog({...})
  *   .onOk(() => {
  *     console.log('OK')

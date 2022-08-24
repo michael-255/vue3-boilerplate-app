@@ -1,22 +1,35 @@
 <script setup lang="ts">
-import type { ColumnProps, DataObject } from '@/constants/types-interfaces'
+import type { DataObject } from '@/constants/types-interfaces'
 import { type Ref, ref } from 'vue'
 import { useLogger } from '@/use/useLogger'
+import type { AppTable, ExactField } from '@/constants/data-enums'
+import { getTableExactFields } from '@/helpers/table-fields'
+import { getExactFieldColumnProps } from '@/helpers/field-column-props'
 import useSelectedItemStore from '@/stores/selected-item'
-import usePageTableStore from '@/stores/page-table'
 
+/**
+ * Component allows you to view the values in each of its internal (Exact) fields.
+ * @param table
+ */
+const props = defineProps<{ table: AppTable }>()
 const selected = useSelectedItemStore()
-const pageTable = usePageTableStore()
 const inspectionValues: Ref<DataObject[]> = ref([])
 const { log } = useLogger()
 
 try {
-  Object.entries(selected.item).forEach((entry) => {
-    if (entry[1]) {
-      inspectionValues.value.push({
-        label: pageTable.columns.find((col: ColumnProps) => col.name === entry[0])?.label,
-        value: entry[1] || '-',
-      })
+  const fields = getTableExactFields(props.table)
+
+  // entry[0] = field name
+  // entry[1] = field value
+  Object.entries(selected.item).forEach((entry: [string, any]) => {
+    // Make sure the field in the store is in the table
+    if (fields.includes(entry[0] as ExactField)) {
+      // Get the display label for the field
+      const label = getExactFieldColumnProps(entry[0] as ExactField)?.label
+      // Get the field value or '-' if its falsy
+      const value = entry[1] || '-'
+
+      inspectionValues.value.push({ label, value })
     }
   })
 } catch (error) {

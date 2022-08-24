@@ -19,7 +19,7 @@ const { log } = useLogger()
 Chart.register(...registerables)
 
 /**
- * Report action called on mount to generate the datasets.
+ * Generating the report on mount for the table item.
  */
 onMounted(async () => {
   try {

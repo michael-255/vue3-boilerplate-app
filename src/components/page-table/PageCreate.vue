@@ -11,7 +11,7 @@ import { getTableActions } from '@/helpers/table-actions'
 import { getTableLabel } from '@/helpers/table-label'
 
 /**
- * Component for handling table item Creates using Provide/Inject for the inputs.
+ * Component for displaying inputs for the creation of new data items.
  * @param table
  */
 const props = defineProps<{ table: AppTable }>()
@@ -21,37 +21,28 @@ const temporary = useTemporaryItemStore()
 const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
 
-/**
- * Determines how the create operation will proceed based on validate results.
- */
 function onCreate() {
   try {
     if (!validate.tableItem(props.table)) {
       validationFailedDialog()
     } else {
-      createConfirmDialog()
+      confirmCreateDialog()
     }
   } catch (error) {
     log.error('PageCreate:onCreate', error)
   }
 }
 
-/**
- * Dismiss dialog due to validate failure.
- */
 function validationFailedDialog(): void {
   dismissDialog(
-    'Validation Failed',
+    'Validation Error',
     'Unable to create item. Ensure all of the inputs have valid entries.',
     Icon.WARN,
     NotifyColor.WARN
   )
 }
 
-/**
- * Confirm that you want to create the item with the current values entered into the input models.
- */
-function createConfirmDialog(): void {
+function confirmCreateDialog(): void {
   confirmDialog(
     'Create',
     `Are you sure you want to create this ${getTableLabel(props.table, 'singular')}?`,
@@ -71,7 +62,7 @@ function createConfirmDialog(): void {
 </script>
 
 <template>
-  <!-- Dynamically load components for each input -->
+  <!-- Dynamically load components for each input with any needed custom props -->
   <div v-for="(field, i) in getTableInputFields(table)" :key="i">
     <component
       v-if="field === InputField.PARENT_ID"
