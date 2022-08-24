@@ -11,17 +11,16 @@ import useSelectedItemStore from '@/stores/selected-item'
 import useValidateItemStore from '@/stores/validate-item'
 import { getTableParentTable } from '@/helpers/table-parent-table'
 
-const { log } = useLogger()
-const validate = useValidateItemStore()
-const selected = useSelectedItemStore()
-const temporary = useTemporaryItemStore()
-const inputRef: Ref<any> = ref(null)
-
 /**
  * Uses the table prop to get access to getRelatedTable.
  * @param table
  */
 const props = defineProps<{ table: AppTable }>()
+const validate = useValidateItemStore()
+const selected = useSelectedItemStore()
+const temporary = useTemporaryItemStore()
+const { log } = useLogger()
+const inputRef: Ref<any> = ref(null)
 const options: Ref<any[]> = ref([])
 
 /**

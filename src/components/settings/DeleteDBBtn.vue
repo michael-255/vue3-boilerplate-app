@@ -9,7 +9,7 @@ const { log } = useLogger()
 const { confirmDialog, dismissDialog } = useSimpleDialogs()
 
 /**
- * @todo
+ * Deletes the underling Dexie Database. This removes all data, and will require a website reload.
  */
 async function onDeleteDB(): Promise<void> {
   confirmDialog(

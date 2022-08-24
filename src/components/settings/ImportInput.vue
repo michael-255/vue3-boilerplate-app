@@ -66,15 +66,19 @@ async function confirmedFileImport(): Promise<void> {
   const appData = new AppData({
     examples: parsedFileData?.examples,
     exampleRecords: parsedFileData?.exampleRecords,
-    logs: parsedFileData?.logs, // Logs can be included to view in the console
+    logs: parsedFileData?.logs, // Included to view in the console
+    settings: parsedFileData?.settings, // Included to view in the console
   })
 
   consoleDebug(appData)
 
+  /**
+   * @see
+   * TABLE NOT LISTED HERE ARE NOT IMPORTED
+   */
   await Promise.all([
     DB.bulkAdd(AppTable.EXAMPLES, appData?.examples),
     DB.bulkAdd(AppTable.EXAMPLE_RECORDS, appData?.examples),
-    // Logs don't get imported
   ])
 }
 </script>

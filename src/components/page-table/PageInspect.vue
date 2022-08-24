@@ -16,6 +16,7 @@ const selected = useSelectedItemStore()
 const inspectionValues: Ref<DataObject[]> = ref([])
 const { log } = useLogger()
 
+// Setup
 try {
   const fields = getTableExactFields(props.table)
 

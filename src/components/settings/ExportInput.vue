@@ -10,7 +10,6 @@ import { Icon, NotifyColor } from '@/constants/ui-enums'
 
 const { log, consoleDebug } = useLogger()
 const { confirmDialog } = useSimpleDialogs()
-
 const exportText: Ref<string> = ref('')
 
 /**
@@ -51,6 +50,7 @@ async function confirmedFileExport(filename: string): Promise<void> {
     examples: await DB.getAll(AppTable.EXAMPLES),
     exampleRecords: await DB.getAll(AppTable.EXAMPLE_RECORDS),
     logs: await DB.getAll(AppTable.LOGS),
+    settings: await DB.getAll(AppTable.SETTINGS),
   })
 
   consoleDebug(appData)

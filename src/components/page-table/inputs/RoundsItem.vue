@@ -10,7 +10,6 @@ const props = defineProps<{
   primary: number | undefined
   secondary: number | undefined
 }>()
-
 const validate = useValidateItemStore()
 const temporary = useTemporaryItemStore()
 const primaryInputRef: Ref<any> = ref(null)

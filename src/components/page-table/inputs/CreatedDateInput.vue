@@ -56,6 +56,7 @@ function validateInput(): void {
     @blur="validateInput()"
   >
     <template v-slot:after>
+      <!-- Date Picker -->
       <QBtn :icon="Icon.CALENDAR_DATE" color="primary" class="q-ml-xs q-px-sm">
         <QPopupProxy cover transition-show="scale" transition-hide="scale">
           <QDate v-model="dateTimePicker" mask="YYYY-MM-DDTHH:mm:ss.000Z">
@@ -66,7 +67,7 @@ function validateInput(): void {
           </QDate>
         </QPopupProxy>
       </QBtn>
-
+      <!-- Time Picker -->
       <QBtn :icon="Icon.TIME" color="primary" class="q-ml-sm q-px-sm">
         <QPopupProxy cover transition-show="scale" transition-hide="scale">
           <QTime v-model="dateTimePicker" now-btn mask="YYYY-MM-DDTHH:mm:ss.000Z">
@@ -77,7 +78,7 @@ function validateInput(): void {
           </QTime>
         </QPopupProxy>
       </QBtn>
-
+      <!-- Set DateTime to now -->
       <QBtn
         :icon="Icon.CALENDAR_CHECK"
         color="positive"
