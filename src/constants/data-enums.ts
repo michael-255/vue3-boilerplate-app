@@ -1,5 +1,6 @@
 /**
- * @todo
+ * These represent the available tables in Dexie for the app and provide the name they are
+ * referenced by.
  */
 export enum AppTable {
   EXAMPLES = 'examples',
@@ -9,7 +10,8 @@ export enum AppTable {
 }
 
 /**
- * @todo
+ * These are the exact fields used internally by all models that are stored in the database. You
+ * should have all the class fields in this enum.
  */
 export enum ExactField {
   ID = 'id',
@@ -29,7 +31,8 @@ export enum ExactField {
 }
 
 /**
- * @todo
+ * These are the fields that have input components mapped to them. Groups of class fields
+ * (ExactField) might have one component that is used to edit them.
  */
 export enum InputField {
   ID = 'id',
@@ -42,7 +45,8 @@ export enum InputField {
 }
 
 /**
- * @todo
+ * These are the operations that are supported within the app. Each table may only support a subset
+ * of these operations.
  */
 export enum Operation {
   NOOP = 'No Operation',
@@ -55,7 +59,7 @@ export enum Operation {
 }
 
 /**
- * @todo
+ * These are the keys for the supported settings within the app.
  */
 export enum SettingKey {
   DEBUG = 'debug-logging',
@@ -64,7 +68,7 @@ export enum SettingKey {
 }
 
 /**
- * @todo
+ * Log severity (also known as Log Level)
  */
 export enum Severity {
   DEBUG = 'Debug',

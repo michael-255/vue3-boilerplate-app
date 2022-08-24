@@ -1,12 +1,12 @@
 /**
- * @todo
+ * Generic strings that could be used throughout the app.
  */
 export enum Strings {
   APP_NAME = 'Boilerplate App',
 }
 
 /**
- * @todo
+ * Colors for notifications and logs.
  */
 export enum NotifyColor {
   LOG = 'blue-grey',
@@ -18,7 +18,7 @@ export enum NotifyColor {
 }
 
 /**
- * @todo
+ * Material Design icons.
  */
 export enum Icon {
   // Severity
@@ -62,7 +62,7 @@ export enum Icon {
 }
 
 /**
- * @todo
+ * App views for the router.
  */
 export enum View {
   DASHBOARD = 'DashboardView',
@@ -75,7 +75,7 @@ export enum View {
 }
 
 /**
- * @todo
+ * App layouts for the router.
  */
 export enum Layout {
   DEFAULT = 'DefaultLayout',
@@ -84,7 +84,7 @@ export enum Layout {
 }
 
 /**
- * @todo Make a site you can use as a shortcut to all of your apps
+ * Any links you might use throughout the app.
  */
 export enum Links {
   GITHUB = 'https://github.com/michael-255',

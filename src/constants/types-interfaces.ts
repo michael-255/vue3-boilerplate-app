@@ -1,17 +1,17 @@
 import type { ExactField } from './data-enums'
 
 /**
- * @todo
+ * Generic type for an object the string based keys storing any value.
  */
 export type DataObject = { [x: string]: any }
 
 /**
- * @todo
+ * App settings currently only support these values.
  */
 export type SettingValue = boolean | string | number
 
 /**
- * @todo
+ * Properties used to display data items in a QTable.
  */
 export type ColumnProps = {
   name: ExactField
@@ -24,7 +24,7 @@ export type ColumnProps = {
 }
 
 /**
- * @todo
+ * The actions you can perform on a table row.
  */
 export type TableActions = {
   getRows?: () => Promise<any[]>
