@@ -5,8 +5,6 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `Cleanup & Better Types`
-
 - [ ] `Commenting Files`
 
 - [ ] `Update Tests`

@@ -1,7 +1,27 @@
 import { defineStore, type StoreDefinition } from 'pinia'
 import { isoToDisplayDate } from '@/utils/luxon'
 
-type Dataset = {
+type ReportState = {
+  options: ReportOptions
+  chartData: ReportChartData
+  firstDate: string
+  lastDate: string
+}
+
+type ReportOptions = {
+  responsive: boolean
+  radius: number
+  plugins: ReportPlugins
+}
+
+type ReportPlugins = { [x: string]: any }
+
+type ReportChartData = {
+  labels: any[]
+  datasets: ReportDataset[]
+}
+
+type ReportDataset = {
   label: string
   borderColor: string
   data: any[]
@@ -10,27 +30,28 @@ type Dataset = {
 const useReportStore: StoreDefinition = defineStore({
   id: 'report',
 
-  state: () => ({
-    options: {
-      responsive: true,
-      radius: 3,
-      plugins: {
-        title: {
-          display: true,
-          text: '',
-        },
-        legend: {
-          display: true,
+  state: () =>
+    ({
+      options: {
+        responsive: true,
+        radius: 3,
+        plugins: {
+          title: {
+            display: true,
+            text: '',
+          },
+          legend: {
+            display: true,
+          },
         },
       },
-    },
-    chartData: {
-      labels: [],
-      datasets: [],
-    },
-    firstDate: '-',
-    lastDate: '-',
-  }),
+      chartData: {
+        labels: [],
+        datasets: [],
+      },
+      firstDate: '-',
+      lastDate: '-',
+    } as ReportState),
 
   actions: {
     generateExamplesReport(records: any[]) {
@@ -44,7 +65,7 @@ const useReportStore: StoreDefinition = defineStore({
 
       const numbers = records.map((d: any) => d?.number)
 
-      const datasets: Dataset[] = []
+      const datasets: ReportDataset[] = []
 
       datasets.push({
         label: 'Highest Primaries',

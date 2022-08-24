@@ -7,6 +7,7 @@ import DefaultsBtn from '@/components/settings/DefaultsBtn.vue'
 import ImportInput from '@/components/settings/ImportInput.vue'
 import ExportInput from '@/components/settings/ExportInput.vue'
 import ClearAllBtn from '@/components/settings/ClearAllBtn.vue'
+import DeleteDBBtn from '@/components/settings/DeleteDBBtn.vue'
 </script>
 
 <template>
@@ -74,11 +75,16 @@ import ClearAllBtn from '@/components/settings/ClearAllBtn.vue'
             <div class="text-h6 q-mb-sm">DANGER ZONE</div>
 
             <div class="q-mb-md">
-              Permanetly delete all of your app data. This action cannot be undone. Export your data
-              if you intend to use it later.
+              Permanetly delete all of your app data or delete the underling Dexie database. This
+              action cannot be undone. Export your data if you intend to use it later.
             </div>
 
-            <ClearAllBtn />
+            <div>
+              <ClearAllBtn />
+            </div>
+            <div class="q-mt-md">
+              <DeleteDBBtn />
+            </div>
           </div>
         </QCardSection>
       </QCard>
