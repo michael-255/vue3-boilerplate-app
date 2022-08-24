@@ -1,9 +1,18 @@
 import type { ExactField } from './data-enums'
 
+/**
+ * @todo
+ */
 export type DataObject = { [x: string]: any }
 
+/**
+ * @todo
+ */
 export type SettingValue = boolean | string | number
 
+/**
+ * @todo
+ */
 export type ColumnProps = {
   name: ExactField
   label: string
@@ -14,6 +23,9 @@ export type ColumnProps = {
   format: (val: any) => any
 }
 
+/**
+ * @todo
+ */
 export type TableActions = {
   getRows?: () => Promise<any[]>
   createRow?: (x: DataObject) => any

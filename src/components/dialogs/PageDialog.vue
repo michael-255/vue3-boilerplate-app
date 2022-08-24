@@ -3,6 +3,10 @@ import { QDialog, QCard, QCardSection, QCardActions, QBtn } from 'quasar'
 import { Icon } from '@/constants/ui-enums'
 import usePageTableStore from '@/stores/page-table'
 
+/**
+ * @todo where this is used and the overall intent
+ */
+
 const emits = defineEmits<{ (eventName: 'on-dialog-close'): void }>()
 const pageTable = usePageTableStore()
 </script>

@@ -1,3 +1,6 @@
+/**
+ * @todo
+ */
 export enum AppTable {
   EXAMPLES = 'examples',
   EXAMPLE_RECORDS = 'exampleRecords',
@@ -5,6 +8,9 @@ export enum AppTable {
   SETTINGS = 'settings',
 }
 
+/**
+ * @todo
+ */
 export enum ExactField {
   ID = 'id',
   CREATED_DATE = 'createdDate',
@@ -22,6 +28,9 @@ export enum ExactField {
   VALUE = 'value',
 }
 
+/**
+ * @todo
+ */
 export enum InputField {
   ID = 'id',
   CREATED_DATE = 'createdDate',
@@ -32,6 +41,9 @@ export enum InputField {
   NUMBER = 'number',
 }
 
+/**
+ * @todo
+ */
 export enum Operation {
   NOOP = 'No Operation',
   CREATE = 'Create',
@@ -42,16 +54,18 @@ export enum Operation {
   REPORT = 'Report',
 }
 
-export enum InjectionKey {
-  TABLE_INPUTS = 'AllTableInputs',
-}
-
+/**
+ * @todo
+ */
 export enum SettingKey {
   DEBUG = 'debug-logging',
   NOTIFY = 'all-alerts',
   INFO = 'save-info-logs',
 }
 
+/**
+ * @todo
+ */
 export enum Severity {
   DEBUG = 'Debug',
   INFO = 'Info',

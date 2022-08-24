@@ -5,7 +5,7 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `Commenting Files`
+- [ ] `Commenting Files / Adding Logs`
 
 - [ ] `Update Tests`
 

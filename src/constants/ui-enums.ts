@@ -1,3 +1,13 @@
+/**
+ * @todo
+ */
+export enum Strings {
+  APP_NAME = 'Boilerplate App',
+}
+
+/**
+ * @todo
+ */
 export enum NotifyColor {
   LOG = 'blue-grey',
   DEBUG = 'deep-purple',
@@ -7,6 +17,9 @@ export enum NotifyColor {
   CRITICAL = 'red-13',
 }
 
+/**
+ * @todo
+ */
 export enum Icon {
   // Severity
   DEBUG = 'bug_report',
@@ -48,6 +61,9 @@ export enum Icon {
   HOME = 'home',
 }
 
+/**
+ * @todo
+ */
 export enum View {
   DASHBOARD = 'DashboardView',
   ACTIVE = 'ActiveView',
@@ -58,14 +74,13 @@ export enum View {
   NOT_FOUND = 'NotFoundView',
 }
 
+/**
+ * @todo
+ */
 export enum Layout {
   DEFAULT = 'DefaultLayout',
   ACTIVE = 'ActiveLayout',
   MENU = 'MenuLayout',
-}
-
-export enum Strings {
-  APP_NAME = 'Boilerplate App',
 }
 
 /**

@@ -4,6 +4,8 @@ import { QDialog, QCard, QCardSection, QCardActions, QIcon, QBtn } from 'quasar'
 import { useDialogPluginComponent } from 'quasar'
 
 /**
+ * @todo better explanation
+ *
  * Available methods to hook into when using this dialog:
  * - onOk
  * - onCancel
@@ -21,7 +23,7 @@ import { useDialogPluginComponent } from 'quasar'
  *     console.log('Called on OK or Cancel')
  *   })
  */
-const props = defineProps<{
+defineProps<{
   type: 'Confirm' | 'Dismiss'
   icon: Icon
   title: string
@@ -30,7 +32,6 @@ const props = defineProps<{
   persistent: boolean // If it can be dismissed by clicking outside it
 }>()
 defineEmits([...useDialogPluginComponent.emits])
-
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
 function onOKClick() {
@@ -41,8 +42,8 @@ function onOKClick() {
 <template>
   <QDialog ref="dialogRef" :persistent="persistent" @hide="onDialogHide">
     <QCard class="q-dialog-plugin">
-      <QCardSection :class="`bg-${props.color} text-white q-mb-sm`">
-        <QIcon :name="props.icon" size="sm" class="q-pb-xs q-mr-md" />
+      <QCardSection :class="`bg-${color} text-white q-mb-sm`">
+        <QIcon :name="icon" size="sm" class="q-pb-xs q-mr-md" />
         <span class="text-h6">{{ title }}</span>
       </QCardSection>
 
@@ -50,7 +51,7 @@ function onOKClick() {
 
       <QCardActions align="right">
         <QBtn v-if="type === 'Confirm'" flat label="Cancel" @click="onDialogCancel" />
-        <QBtn flat :label="type" :color="props.color" @click="onOKClick" />
+        <QBtn flat :label="type" :color="color" @click="onOKClick" />
       </QCardActions>
     </QCard>
   </QDialog>
