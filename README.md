@@ -5,6 +5,8 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
+- [ ] Using Quasar to generate your manifest file?
+
 - [ ] `Commenting Files / Adding Logs`
 
   - [ ] helpers
