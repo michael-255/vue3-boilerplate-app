@@ -7,7 +7,18 @@ have a better understanding of how this project is setup.
 
 - [ ] `Commenting Files / Adding Logs`
 
-- [ ] `Update Tests`
+  - [ ] helpers
+  - [ ] layouts
+  - [ ] models
+  - [ ] router
+  - [ ] services
+  - [ ] stores
+  - [ ] use
+  - [ ] utils
+  - [ ] views
+  - [ ] App.vue
+  - [ ] main.ts
+  - [ ] Additional directory README's?
 
 - [ ] `Update README`
 
@@ -18,6 +29,8 @@ have a better understanding of how this project is setup.
   - [ ] Notes on change App Title in `~/index.html`
   - [ ] Notes on `Imports` and `Exports`
   - [ ] How to work with the `manifest.json`
+
+- [ ] `Update Tests`
 
 - [ ] `HYGEN`
 
