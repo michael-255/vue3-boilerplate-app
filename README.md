@@ -11,11 +11,11 @@ have a better understanding of how this project is setup.
 
   - [ ] Steps for adding models, fields, and their data table functionality
   - [ ] Notes on repo name in `vite.config.ts`
+  - [ ] Notes on repo name in `ui-enums.ts`
   - [ ] Notes on adding es2020 support (`tsconfig.vitest.json`, `tsconfig.vite-config.json`,
         `tsconfig.app.json`)
-  - [ ] Notes on change App Title in `~/index.html`
+  - [ ] Notes on change App Title in `~/index.html` (match Strings enum?)
   - [ ] Notes on `Imports` and `Exports`
-  - [ ] How to work with the `manifest.json`
 
 - [ ] `Update Tests`
 
