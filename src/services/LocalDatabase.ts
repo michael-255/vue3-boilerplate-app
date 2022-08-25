@@ -208,4 +208,4 @@ export class LocalDatabase extends Dexie {
 /**
  * Preconfigured LocalDatabase
  */
-export const DB = new LocalDatabase(Strings.APP_NAME)
+export const DB = new LocalDatabase(`${Strings.APP_NAME} v${Strings.VERSION}`)

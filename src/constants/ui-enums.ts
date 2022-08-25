@@ -3,6 +3,7 @@
  */
 export enum Strings {
   APP_NAME = 'Boilerplate App',
+  VERSION = '1',
 }
 
 /**
