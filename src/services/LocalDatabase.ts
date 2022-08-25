@@ -166,7 +166,7 @@ export class LocalDatabase extends Dexie {
   }
 
   /**
-   * Initializes setting keys in the settings table with default values if needed.
+   * Initializes setting keys in the settings table with default values.
    */
   async initSettings(): Promise<void> {
     const settings = await this.table(AppTable.SETTINGS).toArray()

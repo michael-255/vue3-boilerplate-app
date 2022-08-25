@@ -2,8 +2,8 @@ import { InputField } from '@/constants/data-enums'
 import { defineAsyncComponent } from 'vue'
 
 /**
- * Get field Vue input component.
- * @param field
+ * Vue input component for the specified InputField. Each InputField could be for many ExactFields.
+ * @param inputField
  * @returns Lazy loaded Vue Component
  */
 export function getInputFieldComponent(inputField: InputField): any {

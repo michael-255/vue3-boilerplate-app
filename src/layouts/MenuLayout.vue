@@ -14,6 +14,10 @@ import DrawerItem from '@/components/drawer/DrawerItem.vue'
 import { View, Icon, Strings } from '@/constants/ui-enums'
 import useMainMenuStore from '@/stores/main-menu'
 
+/**
+ * Layout with the title, menu drawer, and settings.
+ */
+
 const mainMenu = useMainMenuStore()
 </script>
 

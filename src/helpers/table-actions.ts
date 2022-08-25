@@ -7,6 +7,11 @@ import useReportStore from '@/stores/report'
 
 const report = useReportStore()
 
+/**
+ * Gets the actions that can be run on a table.
+ * @param table
+ * @returns TableActions object
+ */
 export function getTableActions(table: AppTable): TableActions {
   return {
     [AppTable.EXAMPLES]: getExampleActions(table),

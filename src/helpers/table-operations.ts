@@ -1,5 +1,10 @@
 import { AppTable, Operation } from '@/constants/data-enums'
 
+/**
+ * Gets all the supported operations for a table.
+ * @param table
+ * @returns Operation[]
+ */
 export function getTableOperations(table: AppTable): Operation[] {
   return {
     [AppTable.EXAMPLES]: [

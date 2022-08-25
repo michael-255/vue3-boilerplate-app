@@ -3,6 +3,10 @@ import { QBtn, QLayout, QHeader, QToolbar, QToolbarTitle, QPageContainer } from 
 import { useRouter } from 'vue-router'
 import { Icon, View } from '@/constants/ui-enums'
 
+/**
+ * Layout thats used when no other layout is provided in the routes meta data.
+ */
+
 const router = useRouter()
 </script>
 

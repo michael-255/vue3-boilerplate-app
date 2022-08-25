@@ -7,11 +7,11 @@ have a better understanding of how this project is setup.
 
 - [ ] `Commenting Files / Adding Logs`
 
-  - [ ] helpers
-  - [ ] layouts
-  - [ ] models
-  - [ ] router
-  - [ ] services
+  - [x] helpers
+  - [x] layouts
+  - [x] models
+  - [x] router
+  - [x] services
   - [ ] stores
   - [ ] use
   - [ ] utils

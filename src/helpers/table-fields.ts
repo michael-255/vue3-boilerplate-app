@@ -1,5 +1,10 @@
 import { AppTable, ExactField, InputField } from '@/constants/data-enums'
 
+/**
+ * Get all the fields used internally by a database class.
+ * @param table
+ * @returns ExactField[]
+ */
 export function getTableExactFields(table: AppTable): ExactField[] {
   return {
     [AppTable.EXAMPLES]: [
@@ -29,6 +34,11 @@ export function getTableExactFields(table: AppTable): ExactField[] {
   }[table]
 }
 
+/**
+ * Gets fields that have a related input from the class.
+ * @param table
+ * @returns InputField[]
+ */
 export function getTableInputFields(table: AppTable): InputField[] {
   return {
     [AppTable.EXAMPLES]: [

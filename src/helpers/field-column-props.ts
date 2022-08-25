@@ -4,14 +4,15 @@ import { truncateString } from '@/utils/common'
 import type { ColumnProps } from '@/constants/types-interfaces'
 
 /**
- * Get field display properties for columns in QTables.
+ * Field display properties for columns in QTables. There should be one for every class field for
+ * classes that pair with a database table.
  * @param exactField
  * @returns Object with properties for QTable columns
  */
 export function getExactFieldColumnProps(exactField: ExactField): ColumnProps {
   /**
    * @see
-   * MUST ADD NEW FIELDS BELOW
+   * MUST ADD NEW EXACT FIELDS BELOW
    */
   return {
     [ExactField.ID]: {

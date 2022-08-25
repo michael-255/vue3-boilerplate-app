@@ -1,5 +1,11 @@
 import { AppTable } from '@/constants/data-enums'
 
+/**
+ * Gets the singular or plural label for a table.
+ * @param table
+ * @param type
+ * @returns The label string
+ */
 export function getTableLabel(table: AppTable, type: 'singular' | 'plural'): string {
   if (type === 'singular') {
     return {
