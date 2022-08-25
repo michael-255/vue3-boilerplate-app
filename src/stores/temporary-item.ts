@@ -1,5 +1,8 @@
 import { defineStore, type StoreDefinition } from 'pinia'
 
+/**
+ * PageTable in temporary progress item used for creates and updates.
+ */
 const useTemporaryItemStore: StoreDefinition = defineStore({
   id: 'temporary-item',
 

@@ -5,20 +5,7 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [ ] `Commenting Files / Adding Logs`
-
-  - [x] helpers
-  - [x] layouts
-  - [x] models
-  - [x] router
-  - [x] services
-  - [ ] stores
-  - [ ] use
-  - [ ] utils
-  - [ ] views
-  - [ ] App.vue
-  - [ ] main.ts
-  - [ ] Additional directory README's?
+- [x] `Commenting Files / Adding Logs`
 
 - [ ] `Update README`
 

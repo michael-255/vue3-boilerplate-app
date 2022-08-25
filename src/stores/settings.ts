@@ -2,6 +2,9 @@ import { SettingKey } from '@/constants/data-enums'
 import { DB } from '@/services/LocalDatabase'
 import { defineStore, type StoreDefinition } from 'pinia'
 
+/**
+ * App settings state.
+ */
 const useSettingsStore: StoreDefinition = defineStore({
   id: 'settings',
 

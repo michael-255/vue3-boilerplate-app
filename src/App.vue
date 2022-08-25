@@ -12,10 +12,7 @@ const route = useRoute()
 const layout: Ref<any> = ref(null)
 
 onMounted(async () => {
-  /**
-   * @see
-   * Ideal location to initialize all of your app settings.
-   */
+  // Should initialize app settings here.
   await settings.initSettings()
 })
 

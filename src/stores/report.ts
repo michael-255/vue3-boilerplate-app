@@ -27,6 +27,9 @@ type ReportDataset = {
   data: any[]
 }
 
+/**
+ * All data needed for displaying a specific report should be generated and stored here.
+ */
 const useReportStore: StoreDefinition = defineStore({
   id: 'report',
 

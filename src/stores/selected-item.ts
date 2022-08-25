@@ -1,6 +1,9 @@
 import type { DataObject } from '@/constants/types-interfaces'
 import { defineStore, type StoreDefinition } from 'pinia'
 
+/**
+ * PageTable currently selected item.
+ */
 const useSelectedItemStore: StoreDefinition = defineStore({
   id: 'selected-item',
 

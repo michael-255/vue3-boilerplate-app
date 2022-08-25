@@ -1,6 +1,9 @@
 import { AppTable } from '@/constants/data-enums'
 import { defineStore, type StoreDefinition } from 'pinia'
 
+/**
+ * State of input component validation.
+ */
 const useValidateItemStore: StoreDefinition = defineStore({
   id: 'validate-item',
 
