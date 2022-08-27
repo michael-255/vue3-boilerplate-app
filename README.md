@@ -7,15 +7,7 @@ have a better understanding of how this project is setup.
 
 - [x] `Commenting Files / Adding Logs`
 
-- [ ] `Update README`
-
-  - [ ] Steps for adding models, fields, and their data table functionality
-  - [ ] Notes on repo name in `vite.config.ts`
-  - [ ] Notes on repo name in `ui-enums.ts`
-  - [ ] Notes on adding es2020 support (`tsconfig.vitest.json`, `tsconfig.vite-config.json`,
-        `tsconfig.app.json`)
-  - [ ] Notes on change App Title in `~/index.html` (match Strings enum?)
-  - [ ] Notes on `Imports` and `Exports`
+- [x] `Update README`
 
 - [ ] `Update Tests`
 
@@ -24,36 +16,11 @@ have a better understanding of how this project is setup.
   - [ ] Update `hygen class new`
   - [ ] Update any Hygen docs you have
 
-```bash
-###############################################################################
-#                                                                             #
-#                           POST CLONING REMINDERS:                           #
-#                                                                             #
-#  - Update package.json file                                                 #
-#    - "name"                                                                 #
-#    - "description"                                                          #
-#    - "version"                                                              #
-#    - "repository"                                                           #
-#    - "bugs"                                                                 #
-#    - "homepage"                                                             #
-#  - Update this README.md file                                               #
-#    - Remove unneeded sections (even this one)                               #
-#    - Add detailed project description below heading                         #
-#  - Update GitHub repository settings                                        #
-#    - Description                                                            #
-#    - Website                                                                #
-#    - Topics                                                                 #
-#    - The "Include in the home page" section                                 #
-#  - Change base path in vite.config.ts to your repository name (IMPORTANT!)  #
-#    - Your deployments to GitHub pages will fail without this change         #
-#                                                                             #
-###############################################################################
-```
-
 ## Table of Contents
 
 - [Usage](#usage)
-- [Project Setup](#project-setup)
+- [Post Cloning Steps](#post-cloning-steps)
+- [Project Information](#project-information)
 - [Additional Notes](#additional-notes)
 
 ## Usage
@@ -100,7 +67,58 @@ Update packages based on `package.json` version settings. Test if you update to 
 npm upgrade
 ```
 
-## Project Setup
+## Post Cloning Steps
+
+- [ ] Update `package.json`
+
+  - [ ] `name`
+  - [ ] `description`
+  - [ ] `version`
+  - [ ] `repository`
+  - [ ] `bugs`
+  - [ ] `homepage`
+
+- [ ] Update `README.md`
+
+  - [ ] Remove unneeded sections (even this one)
+  - [ ] Add detailed project description
+
+- [ ] Update `GitHub` repository settings
+
+  - [ ] Description
+  - [ ] Website
+  - [ ] Topics
+  - [ ] The `Include in the home page` section
+
+- [ ] Update `base` in `vite.config.ts` to your repository name for deployments to work
+- [ ] Update `Strings` in `ui-enums.ts` to represent your app
+- [ ] Update `title` in `~/index.html` to reflect the app name you use in `ui-enums.ts`
+
+## Project Information
+
+### Steps for adding models (classes) and fields
+
+Adding a new `model` for use in the database requires some extra steps.
+
+- Create the model in `~/src/models`
+
+- Update `LocalDatabase` with a new table for the model
+
+- Define the field enums in `~/src/constants` > `data-enums.ts`
+
+- Update the field helpers in `~/src/helpers` > `*.ts`
+
+- Update the table helpers in `~/src/helpers` > `*.ts`
+
+- Create components for the input fields in `~/src/components`
+
+### ES2020 Support
+
+Support for ES2020 language features is achieved by adding `es2020` to the following files.
+
+- `tsconfig.vitest.json`
+- `tsconfig.vite-config.json`
+- `tsconfig.app.json`
 
 ### Vue 3 (+Vite)
 

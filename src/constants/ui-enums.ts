@@ -1,12 +1,4 @@
 /**
- * Generic strings that could be used throughout the app.
- */
-export enum Strings {
-  APP_NAME = 'Boilerplate App',
-  VERSION = '1',
-}
-
-/**
  * Colors for notifications and logs.
  */
 export enum NotifyColor {
@@ -90,4 +82,12 @@ export enum Layout {
 export enum Links {
   GITHUB = 'https://github.com/michael-255',
   MYAPPS = 'https://www.example.com',
+}
+
+/**
+ * Generic strings that could be used throughout the app.
+ */
+export enum Strings {
+  APP_NAME = 'Boilerplate App',
+  VERSION = '1',
 }
