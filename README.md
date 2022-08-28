@@ -114,15 +114,6 @@ Support for ES2020 language features is achieved by adding `es2020` to the follo
 - `tsconfig.vite-config.json`
 - `tsconfig.app.json`
 
-### UUID
-
-Use this package to create ids.
-
-```javascript
-import { v4 as createId } from 'uuid'
-const id = createId()
-```
-
 ### Vue 3 (+Vite)
 
 Initialize a new Vue 3 project with Vite and follow the prompts.
