@@ -1,6 +1,6 @@
 {
-  "name": "vue3-boilerplate-app",
-  "description": "Vue 3 Boilerplate app setup with packages I use.",
+  "name": "fitness-tracker-v15",
+  "description": "Fitness Tracker v15",
   "version": "0.0.1",
   "author": "Michael Joy",
   "license": "MIT",
@@ -54,10 +54,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/michael-255/vue3-boilerplate-app.git"
+    "url": "git+https://github.com/michael-255/fitness-tracker-v15.git"
   },
   "bugs": {
-    "url": "https://github.com/michael-255/vue3-boilerplate-app/issues"
+    "url": "https://github.com/michael-255/fitness-tracker-v15/issues"
   },
-  "homepage": "https://github.com/michael-255/vue3-boilerplate-app#readme"
+  "homepage": "https://github.com/michael-255/fitness-tracker-v15#readme"
 }
