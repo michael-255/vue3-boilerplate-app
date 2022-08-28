@@ -3,6 +3,37 @@
 This template should help get you started developing with Vue 3 in Vite. Read through this README to
 have a better understanding of how this project is setup.
 
+## Post Cloning Steps
+
+- [ ] Update `package.json`
+
+  - [ ] `name`
+  - [ ] `description`
+  - [ ] `version`
+  - [ ] `repository`
+  - [ ] `bugs`
+  - [ ] `homepage`
+
+- [ ] Update `base` in `vite.config.ts` to your repository name for deployments to work
+- [ ] Update `Strings` in `ui-enums.ts` to represent your app
+- [ ] Update `title` in `~/index.html` to reflect the app name you use in `ui-enums.ts`
+
+- [ ] Update `GitHub` repository settings
+
+  - [ ] Add a short Description
+  - [ ] Add the GitHub Pages website
+  - [ ] Add Topics
+  - [ ] Update the `Include in the home page` section
+
+    - [ ] Uncheck `Releases`
+    - [ ] Uncheck `Packages`
+    - [ ] Uncheck `Environments`
+
+- [ ] Update `README.md`
+
+  - [ ] Add detailed project description
+  - [ ] Remove unneeded sections (even this one)
+
 ## Todos
 
 `WIP`
@@ -10,7 +41,6 @@ have a better understanding of how this project is setup.
 ## Table of Contents
 
 - [Usage](#usage)
-- [Post Cloning Steps](#post-cloning-steps)
 - [Project Information](#project-information)
 - [Additional Notes](#additional-notes)
 
@@ -57,33 +87,6 @@ Update packages based on `package.json` version settings. Test if you update to 
 ```sh
 npm upgrade
 ```
-
-## Post Cloning Steps
-
-- [ ] Update `package.json`
-
-  - [ ] `name`
-  - [ ] `description`
-  - [ ] `version`
-  - [ ] `repository`
-  - [ ] `bugs`
-  - [ ] `homepage`
-
-- [ ] Update `README.md`
-
-  - [ ] Remove unneeded sections (even this one)
-  - [ ] Add detailed project description
-
-- [ ] Update `GitHub` repository settings
-
-  - [ ] Description
-  - [ ] Website
-  - [ ] Topics
-  - [ ] The `Include in the home page` section
-
-- [ ] Update `base` in `vite.config.ts` to your repository name for deployments to work
-- [ ] Update `Strings` in `ui-enums.ts` to represent your app
-- [ ] Update `title` in `~/index.html` to reflect the app name you use in `ui-enums.ts`
 
 ## Project Information
 
