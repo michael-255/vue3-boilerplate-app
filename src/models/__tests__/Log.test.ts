@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest'
 import { Log } from '@/models/Log'
-import { Field, Operation, Severity } from '@/constants/data-enums'
+import { Severity } from '@/constants/data-enums'
 
 describe('Log', () => {
   const testError = new Error()
@@ -64,70 +64,5 @@ describe('Log', () => {
     expect(log.name).toBeUndefined()
     expect(log.message).toBeUndefined()
     expect(log.stack).toBeUndefined()
-  })
-
-  test('Log static getFields returns correct fields', () => {
-    expect(Log.getFields()).toEqual([
-      Field.ID,
-      Field.CREATED_DATE,
-      Field.SEVERITY,
-      Field.DETAILS,
-      Field.NAME,
-      Field.MESSAGE,
-      Field.STACK,
-    ])
-  })
-
-  test('Log static getColumns returns correct columns', () => {
-    Log.getColumns().forEach((col) => {
-      expect(col).toHaveProperty('name')
-      expect(col).toHaveProperty('label')
-      expect(col).toHaveProperty('align')
-      expect(col).toHaveProperty('sortable')
-      expect(col).toHaveProperty('required')
-      expect(col).toHaveProperty('field')
-      expect(col).toHaveProperty('format')
-    })
-  })
-
-  test('Log static getColumnOptions returns correct column options', () => {
-    Log.getColumnOptions().forEach((col) => {
-      expect(col).toHaveProperty('name')
-      expect(col).toHaveProperty('label')
-      expect(col).toHaveProperty('align')
-      expect(col).toHaveProperty('sortable')
-      expect(col).toHaveProperty('required')
-      expect(col).toHaveProperty('field')
-      expect(col).toHaveProperty('format')
-    })
-  })
-
-  test('Log static getRelatedTable returns null', () => {
-    expect(Log.getRelatedTable()).toBeNull()
-  })
-
-  test('Log static getSingularLabel returns the singular label', () => {
-    expect(Log.getSingularLabel()).toBe('Log')
-  })
-
-  test('Log static getPluralLabel returns the plural label', () => {
-    expect(Log.getPluralLabel()).toBe('Logs')
-  })
-
-  test('Log static getSupportedOperations returns correct operations', () => {
-    expect(Log.getSupportedOperations()).toEqual([
-      Operation.DELETE,
-      Operation.CLEAR,
-      Operation.INSPECT,
-    ])
-  })
-
-  test('Log static getVisibleColumns returns default visible columns', () => {
-    expect(Log.getVisibleColumns()).toEqual([
-      Field.CREATED_DATE,
-      Field.SEVERITY,
-      Field.DETAILS,
-      Field.NAME,
-    ])
   })
 })

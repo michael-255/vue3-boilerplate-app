@@ -1,10 +1,17 @@
 import { describe, test, expect, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { useSettingsStore } from '@/stores/settings'
+import useSettingsStore from '@/stores/settings'
 
 describe('useSettingsStore', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
+  })
+
+  test('expected properties are on the store', () => {
+    const settings = Object.keys(useSettingsStore())
+    expect(settings.includes('DEBUG')).toBe(true)
+    expect(settings.includes('NOTIFY')).toBe(true)
+    expect(settings.includes('INFO')).toBe(true)
   })
 
   /**

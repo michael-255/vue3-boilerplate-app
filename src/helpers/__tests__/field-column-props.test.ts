@@ -1,12 +1,13 @@
 import { describe, test, expect } from 'vitest'
-import { getFieldColumnProps } from '@/helpers/field-column-props'
-import { Field } from '@/constants/data-enums'
+import { getExactFieldColumnProps } from '@/helpers/field-column-props'
+import { ExactField } from '@/constants/data-enums'
 
 describe('field-column-props', () => {
-  test('getFieldColumnProps return correct object for ID', () => {
-    const fields = Object.values(Field) as Field[]
+  test('getExactFieldColumnProps return correct object for ID', () => {
+    const fields = Object.values(ExactField) as ExactField[]
+
     fields.forEach((field) => {
-      const obj = getFieldColumnProps(field)
+      const obj = getExactFieldColumnProps(field)
       expect(obj).toHaveProperty('name')
       expect(obj).toHaveProperty('label')
       expect(obj).toHaveProperty('align')

@@ -26,7 +26,7 @@ const useValidateItemStore: StoreDefinition = defineStore({
 
   getters: {
     /**
-     * @todo
+     * The table item you want to validate the fields for.
      */
     tableItem:
       (state: any) =>
@@ -38,8 +38,10 @@ const useValidateItemStore: StoreDefinition = defineStore({
           [AppTable.SETTINGS]: false,
         }[table]
       },
+
     isExampleValid: (state: any): boolean =>
       state.item.id && state.item.createdDate && state.item.name && state.item.description,
+
     isExampleRecordValid: (state: any): boolean =>
       state.item.id &&
       state.item.createdDate &&

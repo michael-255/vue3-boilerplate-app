@@ -1,5 +1,4 @@
 import { describe, test, expect } from 'vitest'
-import { Field } from '@/constants/data-enums'
 import { _Entity } from '@/models/_Entity'
 
 describe('_Entity', () => {
@@ -23,9 +22,5 @@ describe('_Entity', () => {
     const entity = new _Entity(params)
     expect(entity.id).toBe(testId)
     expect(entity.createdDate).toBe('2022-01-01T00:00:00.000Z')
-  })
-
-  test('_Entity static getFields returns correct fields', () => {
-    expect(_Entity.getFields()).toEqual([Field.ID, Field.CREATED_DATE])
   })
 })

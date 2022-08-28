@@ -29,6 +29,17 @@ describe('isBoolean', () => {
   })
 })
 
+describe('isUndefined', () => {
+  test('should return correct boolean result', () => {
+    expect(val.isUndefined(null)).toBe(true)
+    expect(val.isUndefined(undefined)).toBe(true)
+    expect(val.isUndefined('')).toBe(true)
+    expect(val.isUndefined({})).toBe(false)
+    expect(val.isUndefined([])).toBe(false)
+    expect(val.isUndefined(1)).toBe(false)
+  })
+})
+
 describe('isDefined', () => {
   test('should return correct boolean result', () => {
     expect(val.isDefined(null)).toBe(false)
@@ -40,73 +51,66 @@ describe('isDefined', () => {
   })
 })
 
-describe('isValidNumber', () => {
+describe('isPositiveNumber', () => {
   test('should return correct boolean result', () => {
-    expect(val.isValidNumber(0)).toBe(true)
-    expect(val.isValidNumber(-1)).toBe(false)
-    expect(val.isValidNumber(999999999)).toBe(true)
-    expect(val.isValidNumber(1000000000)).toBe(false)
+    expect(val.isPositiveNumber(0)).toBe(false)
+    expect(val.isPositiveNumber(-1)).toBe(false)
+    expect(val.isPositiveNumber(999999999)).toBe(true)
+    expect(val.isPositiveNumber(1000000000)).toBe(false)
   })
 })
 
-describe('isOptionalNumber', () => {
+describe('isOptionalPositiveNumber', () => {
   test('should return correct boolean result', () => {
-    expect(val.isOptionalNumber(undefined)).toBe(true)
-    expect(val.isOptionalNumber(0)).toBe(true)
-    expect(val.isOptionalNumber(-1)).toBe(false)
-    expect(val.isOptionalNumber(999999999)).toBe(true)
-    expect(val.isOptionalNumber(1000000000)).toBe(false)
+    expect(val.isOptionalPositiveNumber(undefined)).toBe(true)
+    expect(val.isOptionalPositiveNumber(0)).toBe(false)
+    expect(val.isOptionalPositiveNumber(-1)).toBe(false)
+    expect(val.isOptionalPositiveNumber(999999999)).toBe(true)
+    expect(val.isOptionalPositiveNumber(1000000000)).toBe(false)
   })
 })
 
-describe('isBlank', () => {
+describe('isId', () => {
   test('should return correct boolean result', () => {
-    expect(val.isBlank('')).toBe(true)
-    expect(val.isBlank('test')).toBe(false)
+    expect(val.isId('')).toBe(false)
+    expect(val.isId('X')).toBe(true)
+    expect(val.isId('abcdefghijklmnopqrstuvwxyz0123456789TEST')).toBe(true)
+    expect(val.isId('abcdefghijklmnopqrstuvwxyz0123456789TESTX')).toBe(false)
   })
 })
 
-describe('isIdValid', () => {
+describe('isDate', () => {
   test('should return correct boolean result', () => {
-    expect(val.isIdValid('')).toBe(false)
-    expect(val.isIdValid('X')).toBe(true)
-    expect(val.isIdValid('abcdefghijklmnopqrstuvwxyz0123456789TEST')).toBe(true)
-    expect(val.isIdValid('abcdefghijklmnopqrstuvwxyz0123456789TESTX')).toBe(false)
+    expect(val.isDate('')).toBe(false)
+    expect(val.isDate(new Date().toISOString())).toBe(true)
   })
 })
 
-describe('isRequiredDateValid', () => {
+describe('isOptionalDate', () => {
   test('should return correct boolean result', () => {
-    expect(val.isRequiredDateValid('')).toBe(false)
-    expect(val.isRequiredDateValid(new Date().toISOString())).toBe(true)
+    expect(val.isOptionalDate('')).toBe(true)
+    expect(val.isOptionalDate(new Date().toISOString())).toBe(true)
   })
 })
 
-describe('isOptionalDateValid', () => {
-  test('should return correct boolean result', () => {
-    expect(val.isOptionalDateValid('')).toBe(true)
-    expect(val.isOptionalDateValid(new Date().toISOString())).toBe(true)
-  })
-})
-
-describe('isShortTextValid', () => {
+describe('isShortText', () => {
   test('should return correct boolean result', () => {
     const str40 = Array(20).fill('X').toString() + 'X'
     const str41 = Array(21).fill('X').toString()
-    expect(val.isShortTextValid('')).toBe(false)
-    expect(val.isShortTextValid('X')).toBe(true)
-    expect(val.isShortTextValid(str40)).toBe(true)
-    expect(val.isShortTextValid(str41)).toBe(false)
+    expect(val.isShortText('')).toBe(false)
+    expect(val.isShortText('X')).toBe(true)
+    expect(val.isShortText(str40)).toBe(true)
+    expect(val.isShortText(str41)).toBe(false)
   })
 })
 
-describe('isLongTextValid', () => {
+describe('isOptionalLongText', () => {
   test('should return correct boolean result', () => {
     const str500 = Array(250).fill('X').toString() + 'X'
     const str501 = Array(251).fill('X').toString()
-    expect(val.isLongTextValid('')).toBe(true)
-    expect(val.isLongTextValid('X')).toBe(true)
-    expect(val.isLongTextValid(str500)).toBe(true)
-    expect(val.isLongTextValid(str501)).toBe(false)
+    expect(val.isOptionalLongText('')).toBe(true)
+    expect(val.isOptionalLongText('X')).toBe(true)
+    expect(val.isOptionalLongText(str500)).toBe(true)
+    expect(val.isOptionalLongText(str501)).toBe(false)
   })
 })

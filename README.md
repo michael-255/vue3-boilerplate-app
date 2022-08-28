@@ -5,16 +5,7 @@ have a better understanding of how this project is setup.
 
 ## Todos
 
-- [x] `Commenting Files / Adding Logs`
-
-- [x] `Update README`
-
-- [ ] `Update Tests`
-
-- [ ] `HYGEN`
-
-  - [ ] Update `hygen class new`
-  - [ ] Update any Hygen docs you have
+`WIP`
 
 ## Table of Contents
 
@@ -119,6 +110,15 @@ Support for ES2020 language features is achieved by adding `es2020` to the follo
 - `tsconfig.vitest.json`
 - `tsconfig.vite-config.json`
 - `tsconfig.app.json`
+
+### UUID
+
+Use this package to create ids.
+
+```javascript
+import { v4 as createId } from 'uuid'
+const id = createId()
+```
 
 ### Vue 3 (+Vite)
 
@@ -442,10 +442,6 @@ Services you can reuse in other projects located at `~/src/services/*`
 ### Utils
 
 Utilities you can reuse in other projects located at `~/src/utils/*`
-
-- `build-id`
-- `common`
-- `date-time`
 
 ## Additional Notes
 
