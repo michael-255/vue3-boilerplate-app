@@ -9,6 +9,7 @@ describe('Log', () => {
   const testName = 'test-error-name'
   const testMessage = 'test-error-message'
   const testStack = 'test-error-stack'
+
   const testParams = {
     severity: testSeverity,
     details: testDetails,

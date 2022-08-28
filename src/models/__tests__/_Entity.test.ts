@@ -5,22 +5,22 @@ describe('_Entity', () => {
   const testId = 'test-id'
   const testDate = '2022-01-01T00:00:00.000Z'
 
-  test('_Entity should have correct number of properties', () => {
-    const params = {
-      id: testId,
-      createdDate: testDate,
-    }
-    const entity = new _Entity(params)
-    expect(Object.keys(entity).length).toBe(2)
+  const testParams = {
+    id: testId,
+    createdDate: testDate,
+  }
+
+  test('_Entity should have correct properties', () => {
+    const model = new _Entity(testParams)
+    const keys = Object.keys(model)
+    expect(keys.length).toBe(2)
+    expect(keys.includes('id')).toBe(true)
+    expect(keys.includes('createdDate')).toBe(true)
   })
 
   test('create _Entity with params', () => {
-    const params = {
-      id: testId,
-      createdDate: testDate,
-    }
-    const entity = new _Entity(params)
-    expect(entity.id).toBe(testId)
-    expect(entity.createdDate).toBe('2022-01-01T00:00:00.000Z')
+    const model = new _Entity(testParams)
+    expect(model.id).toBe(testId)
+    expect(model.createdDate).toBe(testDate)
   })
 })
