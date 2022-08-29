@@ -7,28 +7,28 @@ describe('Example', () => {
   const testName = 'test-name'
   const testDesc = 'test-desc'
 
+  const testParams = {
+    id: testId,
+    createdDate: testDate,
+    name: testName,
+    description: testDesc,
+  }
+
   test('Example should have correct number of properties', () => {
-    const params = {
-      id: testId,
-      createdDate: testDate,
-      name: testName,
-      description: testDesc,
-    }
-    const example = new Example(params)
-    expect(Object.keys(example).length).toBe(4)
+    const model = new Example(testParams)
+    const keys = Object.keys(model)
+    expect(keys.length).toBe(4)
+    expect(keys.includes('id')).toBe(true)
+    expect(keys.includes('createdDate')).toBe(true)
+    expect(keys.includes('name')).toBe(true)
+    expect(keys.includes('description')).toBe(true)
   })
 
   test('create Example with params', () => {
-    const params = {
-      id: testId,
-      createdDate: testDate,
-      name: testName,
-      description: testDesc,
-    }
-    const example = new Example(params)
-    expect(example.id).toBe(testId)
-    expect(example.createdDate).toBe(testDate)
-    expect(example.name).toBe(testName)
-    expect(example.description).toBe(testDesc)
+    const model = new Example(testParams)
+    expect(model.id).toBe(testId)
+    expect(model.createdDate).toBe(testDate)
+    expect(model.name).toBe(testName)
+    expect(model.description).toBe(testDesc)
   })
 })

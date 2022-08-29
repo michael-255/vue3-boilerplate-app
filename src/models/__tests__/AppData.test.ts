@@ -17,7 +17,7 @@ describe('AppData', () => {
   test('AppData should have correct properties', () => {
     const model = new AppData(testParams)
     const keys = Object.keys(model)
-    expect(keys.length).toBe(8)
+    expect(keys.length).toBe(4)
     expect(model.examples).toBe(testExamples)
     expect(model.exampleRecords).toBe(testExampleRecords)
     expect(model.logs).toBe(testLogs)

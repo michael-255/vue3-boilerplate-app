@@ -17,8 +17,16 @@ describe('Log', () => {
   }
 
   test('Log should have correct number of properties', () => {
-    const log = new Log(testParams)
-    expect(Object.keys(log).length).toBe(7)
+    const model = new Log(testParams)
+    const keys = Object.keys(model)
+    expect(keys.length).toBe(7)
+    expect(keys.includes('id')).toBe(true)
+    expect(keys.includes('createdDate')).toBe(true)
+    expect(keys.includes('severity')).toBe(true)
+    expect(keys.includes('details')).toBe(true)
+    expect(keys.includes('name')).toBe(true)
+    expect(keys.includes('message')).toBe(true)
+    expect(keys.includes('stack')).toBe(true)
   })
 
   test('create Log with Error object', () => {

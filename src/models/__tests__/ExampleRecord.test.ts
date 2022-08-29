@@ -9,34 +9,34 @@ describe('ExampleRecord', () => {
   const testPrimaryRounds = [1, 2]
   const testSecondaryRounds = [4, 8]
 
+  const testParams = {
+    id: testId,
+    createdDate: testDate,
+    parentId: testParentId,
+    number: testNumber,
+    primaryRounds: testPrimaryRounds,
+    secondaryRounds: testSecondaryRounds,
+  }
+
   test('ExampleRecord should have correct number of properties', () => {
-    const params = {
-      id: testId,
-      createdDate: testDate,
-      parentId: testParentId,
-      number: testNumber,
-      primaryRounds: testPrimaryRounds,
-      secondaryRounds: testSecondaryRounds,
-    }
-    const record = new ExampleRecord(params)
-    expect(Object.keys(record).length).toBe(6)
+    const model = new ExampleRecord(testParams)
+    const keys = Object.keys(model)
+    expect(keys.length).toBe(6)
+    expect(keys.includes('id')).toBe(true)
+    expect(keys.includes('createdDate')).toBe(true)
+    expect(keys.includes('parentId')).toBe(true)
+    expect(keys.includes('number')).toBe(true)
+    expect(keys.includes('primaryRounds')).toBe(true)
+    expect(keys.includes('secondaryRounds')).toBe(true)
   })
 
   test('create ExampleRecord with params', () => {
-    const params = {
-      id: testId,
-      createdDate: testDate,
-      parentId: testParentId,
-      number: testNumber,
-      primaryRounds: testPrimaryRounds,
-      secondaryRounds: testSecondaryRounds,
-    }
-    const record = new ExampleRecord(params)
-    expect(record.id).toBe(testId)
-    expect(record.createdDate).toBe(testDate)
-    expect(record.parentId).toBe(testParentId)
-    expect(record.number).toBe(testNumber)
-    expect(record.primaryRounds).toBe(testPrimaryRounds)
-    expect(record.secondaryRounds).toBe(testSecondaryRounds)
+    const model = new ExampleRecord(testParams)
+    expect(model.id).toBe(testId)
+    expect(model.createdDate).toBe(testDate)
+    expect(model.parentId).toBe(testParentId)
+    expect(model.number).toBe(testNumber)
+    expect(model.primaryRounds).toBe(testPrimaryRounds)
+    expect(model.secondaryRounds).toBe(testSecondaryRounds)
   })
 })
