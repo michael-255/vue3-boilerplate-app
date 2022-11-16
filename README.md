@@ -3,9 +3,6 @@
 **Project Archived:** Please go to version 2 of the app:
 <https://github.com/michael-255/vue3-boilerplate-app-v2>
 
-This template should help get you started developing with Vue 3 in Vite. Read through this README to
-have a better understanding of how this project is setup.
-
 ## Post Cloning Steps
 
 - [ ] Update `package.json`
