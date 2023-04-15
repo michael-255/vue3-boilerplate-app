@@ -1,7 +1,8 @@
 # Vue 3 Boilerplate App
 
-**Project Archived:** Please go to version 2 of the app:
-<https://github.com/michael-255/vue3-boilerplate-app-v2>
+_Project Archived_
+
+Please use the following version as a template: <https://github.com/michael-255/vue3-web-app-template-2023>
 
 ## Post Cloning Steps
 
